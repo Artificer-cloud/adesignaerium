@@ -5,154 +5,49 @@ import { projects, categories } from '@/lib/projects'
 
 export default function WorkPage() {
   const [active, setActive] = useState('All')
-
-  const filtered = active === 'All'
-    ? projects
-    : projects.filter(p => p.category.includes(active))
+  const filtered = active === 'All' ? projects : projects.filter(p => p.category.includes(active))
 
   return (
-    <main style={{ paddingTop: '80px' }}>
-      {/* Header */}
-      <section className="px-6 md:px-12 lg:px-20 pt-16 pb-12 max-w-7xl mx-auto">
-        <span
-          className="font-mono block mb-4"
-          style={{ fontSize: '11px', letterSpacing: '3px', color: 'var(--orange)' }}
-        >
-          ✦ THE STUDIO WALL
-        </span>
-        <h1
-          className="font-display tracking-tighter leading-none"
-          style={{ fontSize: 'clamp(52px, 9vw, 120px)', fontWeight: 900, color: 'var(--bone)' }}
-        >
+    <main style={{ paddingTop:'80px' }}>
+      <section style={{ padding:'clamp(40px,6vh,80px) clamp(20px,6vw,80px) clamp(24px,4vh,40px)', maxWidth:'1400px', margin:'0 auto' }}>
+        <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'3px', color:'var(--orange)', display:'block', marginBottom:'16px' }}>✦ THE STUDIO WALL</span>
+        <h1 style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(44px,10vw,120px)', letterSpacing:'-4px', color:'var(--bone)', lineHeight:.88, marginBottom:'16px' }}>
           ALL WORK
         </h1>
-        <p
-          className="font-body mt-4"
-          style={{ fontSize: '18px', fontStyle: 'italic', color: 'var(--muted)', maxWidth: '480px' }}
-        >
-          7+ years of branding, UI/UX, AI design, motion, and creative direction —
-          every project a new obsession.
+        <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(14px,1.6vw,18px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'480px', lineHeight:1.7, marginBottom:'32px' }}>
+          7+ years of branding, UI/UX, AI design, motion, and creative direction.
         </p>
-
-        {/* Filter tabs */}
-        <div className="flex flex-wrap gap-2 mt-10">
+        <div style={{ display:'flex', flexWrap:'wrap', gap:'8px' }}>
           {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setActive(cat)}
-              className="font-mono transition-all duration-200"
-              style={{
-                fontSize: '11px',
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                padding: '8px 16px',
-                borderRadius: '2px',
-                border: active === cat ? '1.5px solid var(--orange)' : '1px solid var(--border)',
-                background: active === cat ? 'var(--orange)' : 'transparent',
-                color: active === cat ? 'var(--ink)' : 'var(--muted)',
-                cursor: 'pointer',
-              }}
-            >
+            <button key={cat} onClick={() => setActive(cat)} style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px', textTransform:'uppercase', padding:'8px 16px', borderRadius:'2px', cursor:'pointer', transition:'all .3s', background:active===cat?'var(--orange)':'transparent', color:active===cat?'var(--ink)':'var(--muted)', border:active===cat?'1px solid var(--orange)':'1px solid var(--border)' }}>
               {cat}
             </button>
           ))}
         </div>
       </section>
 
-      {/* Divider */}
-      <div style={{ borderTop: '1px solid var(--border)', marginBottom: '48px' }} />
+      <div style={{ borderTop:'1px solid var(--border)', marginBottom:'40px' }} />
 
-      {/* Project Grid */}
-      <section className="px-6 md:px-12 lg:px-20 pb-24 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section style={{ padding:'0 clamp(20px,6vw,80px) clamp(60px,8vh,100px)', maxWidth:'1400px', margin:'0 auto' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap:'10px' }}>
           {filtered.map((project, i) => (
-            <Link
-              key={project.id}
-              href={`/work/${project.id}`}
-              className="project-card group block relative overflow-hidden"
-              style={{
-                background: project.color || '#1a1a1a',
-                border: '1px solid var(--border)',
-                borderRadius: '4px',
-                minHeight: i % 5 === 0 ? '480px' : '340px',
-                padding: '28px',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}
-            >
-              {/* Doodle bg */}
-              <svg
-                className="absolute inset-0 w-full h-full pointer-events-none"
-                style={{ opacity: 0.07 }}
-                viewBox="0 0 400 400"
-                preserveAspectRatio="xMidYMid slice"
-              >
-                <path
-                  d={`M${20 + i * 15},${30 + i * 10} Q${150 + i * 5},${10 + i * 8} ${280 + i * 3},${80 + i * 5}`}
-                  fill="none" stroke="#f5f0e8" strokeWidth="1" strokeDasharray="6 4"
-                />
-                <circle
-                  cx={320 + (i % 3) * 20}
-                  cy={60 + (i % 4) * 15}
-                  r={35 + i * 3}
-                  fill="none" stroke="#ff4d00" strokeWidth="0.8" strokeDasharray="4 4"
-                />
+            <Link key={project.id} href={`/work/${project.id}`} className="project-card"
+              style={{ background:project.color||'#1a1a1a', border:'1px solid var(--border)', borderRadius:'6px', minHeight:i%5===0?'clamp(320px,40vw,480px)':'clamp(240px,30vw,340px)', padding:'clamp(20px,2.5vw,28px)', display:'flex', flexDirection:'column', justifyContent:'space-between', position:'relative', overflow:'hidden' }}>
+              <svg aria-hidden style={{ position:'absolute',inset:0,width:'100%',height:'100%',opacity:.06,pointerEvents:'none' }} viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+                <circle cx="340" cy="40" r="70" fill="none" stroke="#ff4d00" strokeWidth="1" strokeDasharray="5 5"/>
               </svg>
-
-              {/* Top: tags + arrow */}
-              <div className="flex items-start justify-between">
-                <div className="flex flex-wrap gap-1">
-                  {project.category.slice(0, 2).map(cat => (
-                    <span
-                      key={cat}
-                      className="font-mono"
-                      style={{
-                        fontSize: '9px',
-                        letterSpacing: '1.5px',
-                        color: 'var(--orange)',
-                        background: 'rgba(255,77,0,0.08)',
-                        border: '1px solid rgba(255,77,0,0.25)',
-                        padding: '3px 8px',
-                        borderRadius: '2px',
-                      }}
-                    >
-                      {cat.toUpperCase()}
-                    </span>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                <div style={{ display:'flex', flexWrap:'wrap', gap:'4px' }}>
+                  {project.category.slice(0,2).map(cat => (
+                    <span key={cat} style={{ fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'1.5px', color:'var(--orange)', background:'rgba(255,77,0,0.08)', border:'1px solid rgba(255,77,0,0.2)', padding:'3px 8px', borderRadius:'2px' }}>{cat.toUpperCase()}</span>
                   ))}
                 </div>
-                <span
-                  className="font-mono transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
-                  style={{ fontSize: '18px', color: 'var(--dim)' }}
-                >
-                  ↗
-                </span>
+                <span style={{ fontFamily:'var(--font-mono)', fontSize:'18px', color:'var(--dim)' }}>↗</span>
               </div>
-
-              {/* Bottom: title + meta */}
               <div>
-                <h2
-                  className="font-display tracking-tighter leading-tight"
-                  style={{
-                    fontSize: 'clamp(22px, 3.5vw, 36px)',
-                    fontWeight: 900,
-                    color: 'var(--bone)',
-                  }}
-                >
-                  {project.title}
-                </h2>
-                <p
-                  className="font-body mt-2"
-                  style={{ fontSize: '13px', fontStyle: 'italic', color: 'var(--muted)', lineHeight: 1.5 }}
-                >
-                  {project.description}
-                </p>
-                <div
-                  className="font-mono mt-4"
-                  style={{ fontSize: '10px', color: 'var(--dim)', letterSpacing: '1px' }}
-                >
-                  {project.year} · {project.client}
-                </div>
+                <h2 style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(22px,3.5vw,36px)', letterSpacing:'-1px', color:'var(--bone)', lineHeight:.95 }}>{project.title}</h2>
+                <p style={{ fontFamily:'var(--font-body)', fontSize:'13px', fontStyle:'italic', color:'var(--muted)', marginTop:'8px', lineHeight:1.5 }}>{project.description}</p>
+                <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--dim)', letterSpacing:'1px', marginTop:'12px' }}>{project.year}</div>
               </div>
             </Link>
           ))}

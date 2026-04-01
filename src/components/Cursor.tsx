@@ -15,7 +15,6 @@ export default function Cursor() {
         dotRef.current.style.top  = my + 'px'
       }
     }
-
     const loop = () => {
       rx += (mx - rx) * 0.1
       ry += (my - ry) * 0.1
@@ -25,26 +24,13 @@ export default function Cursor() {
       }
       raf = requestAnimationFrame(loop)
     }
-
-    const onEnter = () => {
-      dotRef.current?.classList.add('hovered')
-      ringRef.current?.classList.add('hovered')
-    }
-    const onLeave = () => {
-      dotRef.current?.classList.remove('hovered')
-      ringRef.current?.classList.remove('hovered')
-    }
-    const onDown = () => {
-      dotRef.current?.classList.add('clicked')
-      ringRef.current?.classList.add('clicked')
-    }
-    const onUp = () => {
-      dotRef.current?.classList.remove('clicked')
-      ringRef.current?.classList.remove('clicked')
-    }
+    const onEnter = () => { dotRef.current?.classList.add('hovered');  ringRef.current?.classList.add('hovered') }
+    const onLeave = () => { dotRef.current?.classList.remove('hovered'); ringRef.current?.classList.remove('hovered') }
+    const onDown  = () => { dotRef.current?.classList.add('clicked');  ringRef.current?.classList.add('clicked') }
+    const onUp    = () => { dotRef.current?.classList.remove('clicked'); ringRef.current?.classList.remove('clicked') }
 
     const attach = () => {
-      document.querySelectorAll('a,button,[data-magnetic]').forEach(el => {
+      document.querySelectorAll('a,button,[data-cursor]').forEach(el => {
         el.addEventListener('mouseenter', onEnter)
         el.addEventListener('mouseleave', onLeave)
       })
@@ -55,7 +41,6 @@ export default function Cursor() {
     window.addEventListener('mouseup', onUp)
     raf = requestAnimationFrame(loop)
     attach()
-
     const obs = new MutationObserver(attach)
     obs.observe(document.body, { childList: true, subtree: true })
 
@@ -70,7 +55,7 @@ export default function Cursor() {
 
   return (
     <>
-      <div ref={dotRef}  className="cursor-dot" />
+      <div ref={dotRef}  className="cursor-dot"  />
       <div ref={ringRef} className="cursor-ring" />
     </>
   )

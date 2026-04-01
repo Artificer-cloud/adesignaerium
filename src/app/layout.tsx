@@ -4,29 +4,42 @@ import './globals.css'
 import Cursor from '@/components/Cursor'
 import Navbar from '@/components/Navbar'
 
-const dmSans = DM_Sans({ subsets:['latin'],weight:['300','400','500'],style:['normal','italic'],variable:'--font-body',display:'swap' })
-const syneMono = Syne_Mono({ subsets:['latin'],weight:['400'],variable:'--font-mono',display:'swap' })
-const cormorant = Cormorant_Garamond({ subsets:['latin'],weight:['400','500','600','700'],style:['italic'],variable:'--font-script',display:'swap' })
+const dmSans = DM_Sans({
+  subsets: ['latin'], weight: ['300','400','500'],
+  style: ['normal','italic'], variable: '--font-body', display: 'swap',
+})
+const syneMono = Syne_Mono({
+  subsets: ['latin'], weight: ['400'],
+  variable: '--font-mono', display: 'swap',
+})
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'], weight: ['400','500','600','700'],
+  style: ['italic'], variable: '--font-script', display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'Abhijeeth Subhash — Creative Designer Dubai',
-  description: 'Senior Creative Designer | UI/UX | AI Visual | Branding | Dubai, UAE.',
+  title: { default: 'Abhijeeth Subhash — Creative Designer Dubai', template: '%s | Abhijeeth Subhash' },
+  description: 'Senior Creative Designer specialising in Branding, UI/UX, AI Visual Design, Motion & Photography. Based in Dubai, UAE.',
+  keywords: ['creative designer','UI/UX designer','branding','Dubai','AI design','Midjourney','Figma','Abhijeeth Subhash','adesignaerium'],
   metadataBase: new URL('https://adesignaerium.com'),
+  alternates: { canonical: 'https://adesignaerium.com' },
   openGraph: {
     title: 'Abhijeeth Subhash — Creative Designer Dubai',
     description: 'Senior Creative Designer based in Dubai. Branding, UI/UX, AI Visual Design.',
-    url:'https://adesignaerium.com', type:'website',
+    url: 'https://adesignaerium.com', type: 'website',
+    siteName: 'ADesignAerium',
   },
-  alternates: { canonical: 'https://adesignaerium.com' },
+  twitter: { card: 'summary_large_image', title: 'Abhijeeth Subhash — Creative Designer Dubai' },
+  robots: { index: true, follow: true },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`grain ${dmSans.variable} ${syneMono.variable} ${cormorant.variable}`}>
       <head>
-        <link rel="preconnect" href="https://api.fontshare.com"/>
-        <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </head>
       <body>
         <Cursor />
