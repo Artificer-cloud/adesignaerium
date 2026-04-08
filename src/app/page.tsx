@@ -98,7 +98,7 @@ function FontCycleName({ mounted }: { mounted: boolean }) {
   const { fs, done, vis } = useFontCycle(mounted)
   return (
     <div style={{opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(36px)',transition:'opacity .5s .2s, transform .5s .2s'}}>
-      <span style={{fontFamily:'Cormorant Garamond,Georgia,serif',fontStyle:'italic',fontWeight:500,fontSize:'clamp(18px,2.5vw,28px)',color:'var(--muted)',display:'block',marginBottom:'4px',letterSpacing:'1px',opacity:vis?1:0,transition:'opacity .4s ease'}}>
+      <span style={{fontFamily:'Cormorant Garamond,Georgia,serif',fontStyle:'italic',fontWeight:500,fontSize:'clamp(16px,2.5vw,28px)',color:'var(--muted)',display:'block',marginBottom:'4px',letterSpacing:'1px',opacity:vis?1:0,transition:'opacity .4s ease'}}>
         Hi, I&apos;m
       </span>
       <h1 style={{lineHeight:.86,margin:0,position:'relative'}}>
@@ -107,7 +107,7 @@ function FontCycleName({ mounted }: { mounted: boolean }) {
           fontFamily:fs.font,
           fontWeight:fs.weight,
           fontStyle:fs.style,
-          fontSize:'clamp(54px,11vw,150px)',
+          fontSize:'clamp(52px,10vw,150px)',
           letterSpacing:done?'-4px':'-2px',
           color:fs.color,
           opacity:vis?1:0,
@@ -122,7 +122,7 @@ function FontCycleName({ mounted }: { mounted: boolean }) {
           position:'absolute',bottom:'-4px',left:0,
           height:'3px',borderRadius:'2px',
           background:'var(--orange)',
-          width:done?'clamp(54px,11vw,150px)':'0px',
+          width:done?'clamp(52px,10vw,150px)':'0px',
           display:'block',
           transition:done?'width .6s cubic-bezier(.23,1,.32,1) .1s':'none',
         }}/>
@@ -189,8 +189,8 @@ export default function HomePage() {
           <rect x="920" y="40" width="56" height="56" fill="none" stroke="#ede8dd" strokeWidth=".8" strokeDasharray="4 4" transform="rotate(18 948 68)"/>
         </svg>
 
-        {/* Spinning badge */}
-        <div className="animate-spin-slow" aria-hidden style={{position:'absolute',top:'clamp(72px,10vh,92px)',right:'clamp(16px,4vw,56px)',width:'80px',height:'80px',opacity:.2}}>
+        {/* Spinning badge — hidden on mobile */}
+        <div className="spinning-badge animate-spin-slow" aria-hidden>
           <svg viewBox="0 0 100 100">
             <path id="circ" d="M50,6 a44,44 0 1,1 -0.01,0" fill="none"/>
             <text style={{fontFamily:'var(--font-mono)',fontSize:'10.5px',fill:'var(--orange)',letterSpacing:'1.5px'}}>
@@ -199,50 +199,56 @@ export default function HomePage() {
           </svg>
         </div>
 
-        {/* Two-column layout */}
-        <div style={{display:'grid',gridTemplateColumns:'1fr clamp(200px,32vw,460px)',gap:'clamp(24px,4vw,60px)',padding:'clamp(90px,12vh,130px) clamp(20px,6vw,80px) clamp(60px,8vh,100px)',maxWidth:'1400px',margin:'0 auto',width:'100%',alignItems:'center'}}>
+        {/* ── HERO CONTENT ── */}
+        <div className="hero-grid">
 
-          {/* LEFT */}
-          <div>
-            <div style={{display:'inline-flex',alignItems:'center',gap:'8px',background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'100px',padding:'6px 16px',marginBottom:'32px',fontFamily:'var(--font-mono)',fontSize:'10px',letterSpacing:'2px',color:'var(--muted)',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(16px)',transition:'all .7s cubic-bezier(.23,1,.32,1) .1s'}}>
+          {/* LEFT — Text content */}
+          <div className="hero-text">
+            {/* Available badge */}
+            <div style={{display:'inline-flex',alignItems:'center',gap:'8px',background:'rgba(255,255,255,0.03)',border:'1px solid rgba(255,255,255,0.07)',borderRadius:'100px',padding:'6px 16px',marginBottom:'24px',fontFamily:'var(--font-mono)',fontSize:'10px',letterSpacing:'2px',color:'var(--muted)',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(16px)',transition:'all .7s cubic-bezier(.23,1,.32,1) .1s',whiteSpace:'nowrap'}}>
               <span style={{width:'7px',height:'7px',background:'#22c55e',borderRadius:'50%',flexShrink:0,animation:'blink 2s ease-in-out infinite'}}/>
               AVAILABLE · DUBAI, UAE
             </div>
 
+            {/* Font cycle name */}
             <FontCycleName mounted={mounted}/>
 
-            <div style={{height:'clamp(28px,3.5vw,44px)',overflow:'hidden',marginTop:'20px',opacity:mounted?1:0,transition:'opacity .9s .55s'}}>
-              <p style={{fontFamily:'Cormorant Garamond,Georgia,serif',fontStyle:'italic',fontSize:'clamp(16px,2vw,26px)',fontWeight:500,color:'var(--orange)',lineHeight:1.3,opacity:tagVis?1:0,transform:tagVis?'translateY(0)':'translateY(-12px)',transition:'all .4s cubic-bezier(.23,1,.32,1)'}}>
+            {/* Rotating tagline */}
+            <div style={{height:'clamp(24px,3.5vw,44px)',overflow:'hidden',marginTop:'16px',opacity:mounted?1:0,transition:'opacity .9s .55s'}}>
+              <p style={{fontFamily:'Cormorant Garamond,Georgia,serif',fontStyle:'italic',fontSize:'clamp(15px,2vw,26px)',fontWeight:500,color:'var(--orange)',lineHeight:1.3,opacity:tagVis?1:0,transform:tagVis?'translateY(0)':'translateY(-12px)',transition:'all .4s cubic-bezier(.23,1,.32,1)'}}>
                 {TAGLINES[tagIdx]}
               </p>
             </div>
 
-            <p style={{fontFamily:'var(--font-body)',fontSize:'clamp(14px,1.6vw,18px)',color:'var(--muted)',lineHeight:1.7,marginTop:'20px',maxWidth:'520px',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(24px)',transition:'all .9s cubic-bezier(.23,1,.32,1) .65s'}}>
+            {/* Description */}
+            <p style={{fontFamily:'var(--font-body)',fontSize:'clamp(14px,1.6vw,18px)',color:'var(--muted)',lineHeight:1.7,marginTop:'16px',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(24px)',transition:'all .9s cubic-bezier(.23,1,.32,1) .65s'}}>
               Senior Creative Designer · 7+ years turning brands into visual worlds. Based in{' '}
               <span style={{color:'var(--bone)'}}>Dubai, UAE</span>.
             </p>
 
-            <div style={{display:'flex',gap:'12px',flexWrap:'wrap',marginTop:'36px',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(24px)',transition:'all .9s cubic-bezier(.23,1,.32,1) .78s'}}>
+            {/* CTAs */}
+            <div style={{display:'flex',gap:'12px',flexWrap:'wrap',marginTop:'28px',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(24px)',transition:'all .9s cubic-bezier(.23,1,.32,1) .78s'}}>
               <Magnetic href="/work">
-                <span style={{display:'block',background:'var(--orange)',color:'var(--ink)',fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:600,fontSize:'12px',letterSpacing:'2px',textTransform:'uppercase',padding:'clamp(12px,1.5vh,16px) clamp(24px,3vw,40px)',borderRadius:'2px'}}>View Work ↗</span>
+                <span style={{display:'block',background:'var(--orange)',color:'var(--ink)',fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:600,fontSize:'12px',letterSpacing:'2px',textTransform:'uppercase',padding:'14px 32px',borderRadius:'2px'}}>View Work ↗</span>
               </Magnetic>
               <Magnetic href="/contact">
-                <span style={{display:'block',border:'1px solid rgba(255,255,255,0.12)',color:'var(--bone)',fontFamily:'var(--font-mono)',fontSize:'11px',letterSpacing:'2px',textTransform:'uppercase',padding:'clamp(12px,1.5vh,16px) clamp(24px,3vw,40px)',borderRadius:'2px'}}>Let&apos;s Talk</span>
+                <span style={{display:'block',border:'1px solid rgba(255,255,255,0.12)',color:'var(--bone)',fontFamily:'var(--font-mono)',fontSize:'11px',letterSpacing:'2px',textTransform:'uppercase',padding:'14px 32px',borderRadius:'2px'}}>Let&apos;s Talk</span>
               </Magnetic>
             </div>
 
-            <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:0,marginTop:'clamp(40px,6vh,72px)',borderTop:'1px solid var(--border)',paddingTop:'24px',maxWidth:'480px',opacity:mounted?1:0,transition:'opacity .9s 1.1s'}}>
+            {/* Stats */}
+            <div className="stats-grid" style={{opacity:mounted?1:0,transition:'opacity .9s 1.1s'}}>
               {STATS.map(({n,l})=>(
                 <div key={l}>
-                  <div style={{fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,fontSize:'clamp(22px,3.5vw,44px)',color:'var(--orange)',lineHeight:1}}>{n}</div>
-                  <div style={{fontFamily:'var(--font-mono)',fontSize:'9px',color:'var(--dim)',letterSpacing:'1px',marginTop:'4px'}}>{l}</div>
+                  <div style={{fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,fontSize:'clamp(24px,3.5vw,44px)',color:'var(--orange)',lineHeight:1}}>{n}</div>
+                  <div style={{fontFamily:'var(--font-mono)',fontSize:'9px',color:'var(--dim)',letterSpacing:'1px',marginTop:'4px',whiteSpace:'nowrap'}}>{l}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* RIGHT — Hero portrait, completely frameless */}
-          <div style={{position:'relative',width:'100%',aspectRatio:'3/4',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(40px)',transition:'all 1.1s cubic-bezier(.23,1,.32,1) .6s'}}>
+          {/* RIGHT — Portrait */}
+          <div className="hero-portrait" style={{opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(40px)',transition:'all 1.1s cubic-bezier(.23,1,.32,1) .6s'}}>
             <svg aria-hidden className="animate-spin-slow" style={{position:'absolute',inset:'-8%',width:'116%',height:'116%',opacity:.1,pointerEvents:'none',zIndex:0}} viewBox="0 0 400 400">
               <circle cx="200" cy="200" r="190" fill="none" stroke="#ff4d00" strokeWidth="1" strokeDasharray="8 8"/>
             </svg>
@@ -254,8 +260,8 @@ export default function HomePage() {
               style={{objectFit:'cover',objectPosition:'center top',zIndex:1}}
               onError={()=>{}}
             />
-            <div style={{position:'absolute',bottom:0,left:0,right:0,height:'45%',background:'linear-gradient(to bottom, transparent, var(--ink))',zIndex:2,pointerEvents:'none'}}/>
-            <div className="animate-float" style={{position:'absolute',bottom:'14%',left:'-8%',zIndex:3,background:'rgba(255,77,0,0.12)',border:'1px solid rgba(255,77,0,0.3)',borderRadius:'100px',padding:'6px 16px',fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)'}}>
+            <div style={{position:'absolute',bottom:0,left:0,right:0,height:'40%',background:'linear-gradient(to bottom, transparent, var(--ink))',zIndex:2,pointerEvents:'none'}}/>
+            <div className="animate-float" style={{position:'absolute',bottom:'12%',left:'-8%',zIndex:3,background:'rgba(255,77,0,0.12)',border:'1px solid rgba(255,77,0,0.3)',borderRadius:'100px',padding:'6px 16px',fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',whiteSpace:'nowrap'}}>
               CREATIVE DIRECTOR
             </div>
           </div>
@@ -296,7 +302,7 @@ export default function HomePage() {
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,280px),1fr))',gap:'10px'}}>
           {FEATURED.map((p,i)=>(
             <Link key={p.id} href={`/work/${p.id}`} className="project-card"
-              style={{background:p.bg,border:'1px solid var(--border)',borderRadius:'6px',minHeight:i===0?'clamp(320px,40vw,460px)':'clamp(240px,30vw,360px)',padding:'clamp(20px,2.5vw,28px)',display:'flex',flexDirection:'column',justifyContent:'space-between',position:'relative',overflow:'hidden',opacity:0,animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`}}>
+              style={{background:p.bg,border:'1px solid var(--border)',borderRadius:'6px',minHeight:i===0?'clamp(280px,40vw,460px)':'clamp(220px,30vw,360px)',padding:'clamp(20px,2.5vw,28px)',display:'flex',flexDirection:'column',justifyContent:'space-between',position:'relative',overflow:'hidden',opacity:0,animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`}}>
               <svg aria-hidden style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.06,pointerEvents:'none'}} viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
                 <circle cx="340" cy="40" r="70" fill="none" stroke="#ff4d00" strokeWidth="1" strokeDasharray="5 5"/>
               </svg>
@@ -360,7 +366,96 @@ export default function HomePage() {
         </div>
       </footer>
 
-      <style>{`.skill-cell{transition:background .3s}.skill-cell:hover{background:rgba(255,77,0,0.04)}`}</style>
+      {/* ── RESPONSIVE STYLES ────────────────────────────────── */}
+      <style>{`
+        .skill-cell { transition: background .3s; }
+        .skill-cell:hover { background: rgba(255,77,0,0.04); }
+
+        /* Spinning badge */
+        .spinning-badge {
+          position: absolute;
+          top: clamp(72px,10vh,92px);
+          right: clamp(16px,4vw,56px);
+          width: 80px; height: 80px;
+          opacity: .2;
+        }
+
+        /* Hero grid — desktop: side by side */
+        .hero-grid {
+          display: grid;
+          grid-template-columns: 1fr clamp(200px,32vw,460px);
+          gap: clamp(24px,4vw,60px);
+          padding: clamp(90px,12vh,130px) clamp(20px,6vw,80px) clamp(60px,8vh,100px);
+          max-width: 1400px;
+          margin: 0 auto;
+          width: 100%;
+          align-items: center;
+        }
+
+        /* Hero portrait wrapper */
+        .hero-portrait {
+          position: relative;
+          width: 100%;
+          aspect-ratio: 3/4;
+        }
+
+        /* Stats grid */
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(4,1fr);
+          gap: 0;
+          margin-top: clamp(32px,5vh,60px);
+          border-top: 1px solid var(--border);
+          padding-top: 20px;
+          max-width: 480px;
+        }
+
+        /* ── TABLET ── */
+        @media (max-width: 900px) {
+          .hero-grid {
+            grid-template-columns: 1fr clamp(180px,40vw,320px);
+            gap: 24px;
+          }
+          .spinning-badge { display: none; }
+        }
+
+        /* ── MOBILE ── */
+        @media (max-width: 640px) {
+          /* Stack: portrait on top, text below */
+          .hero-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            padding: 90px 20px 40px;
+            gap: 0;
+          }
+
+          /* Portrait goes FIRST on mobile (top) */
+          .hero-portrait {
+            order: -1;
+            aspect-ratio: 1/1;
+            width: 100%;
+            max-height: 340px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 28px;
+          }
+
+          /* Text content */
+          .hero-text {
+            order: 1;
+          }
+
+          /* Stats — 2x2 on mobile */
+          .stats-grid {
+            grid-template-columns: repeat(2,1fr);
+            max-width: 100%;
+            gap: 16px 0;
+          }
+
+          /* Spinning badge — hide on mobile */
+          .spinning-badge { display: none; }
+        }
+      `}</style>
     </main>
   )
 }
