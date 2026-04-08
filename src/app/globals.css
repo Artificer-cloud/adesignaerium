@@ -152,19 +152,15 @@ h1,h2,h3,h4 { overflow-wrap: break-word; word-break: break-word; }
 .skill-cell:hover { background: rgba(255,77,0,0.04); }
 
 /* ── HERO SECTION MOBILE ────────────────────────────────────────── */
-/* The hero-section uses CSS background-image on mobile */
-/* The ::before overlay uses --hero-overlay which changes with theme */
-.hero-section::before {
-  content: none; /* off by default on desktop */
-}
-
 @media (max-width: 640px) {
+  /* Set bg image ONLY on mobile via CSS — desktop never sees this */
   .hero-section {
+    background-image: url('/images/hero-portrait.png') !important;
     background-size: cover !important;
     background-position: center 20% !important;
     background-repeat: no-repeat !important;
   }
-  /* Overlay that respects theme */
+  /* Theme-aware overlay on top of photo — 95% opacity = 5% photo shows */
   .hero-section::before {
     content: '';
     position: absolute;
@@ -174,8 +170,9 @@ h1,h2,h3,h4 { overflow-wrap: break-word; word-break: break-word; }
     pointer-events: none;
     transition: background 0.4s cubic-bezier(.23,1,.32,1);
   }
-  .hide-mobile { display: none !important; }
-  .hero-portrait { display: none !important; }
+  .hide-mobile    { display: none !important; }
+  .hero-portrait  { display: none !important; }
+  .spinning-badge { display: none !important; }
   .hero-text {
     position: relative;
     z-index: 2;
@@ -195,7 +192,6 @@ h1,h2,h3,h4 { overflow-wrap: break-word; word-break: break-word; }
     max-width: 100% !important;
     gap: 12px 0 !important;
   }
-  .spinning-badge { display: none !important; }
 }
 
 /* ── RESPONSIVE ────────────────────────────────────────────────── */

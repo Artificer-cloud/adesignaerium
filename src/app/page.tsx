@@ -178,7 +178,7 @@ export default function HomePage() {
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section ref={heroRef} onMouseMove={handleHeroMouse}
         className="hero-section"
-        style={{minHeight:'100svh',background:'var(--ink)',position:'relative',overflow:'hidden',display:'flex',alignItems:'center',backgroundImage:"url('/images/hero-portrait.png')"}}>
+        style={{minHeight:'100svh',background:'var(--ink)',position:'relative',overflow:'hidden',display:'flex',alignItems:'center'}}>
         <SectionArt v={0}/>
 
         <svg className="pl" aria-hidden style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.06,pointerEvents:'none',transition:'transform .08s ease-out'}} viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
