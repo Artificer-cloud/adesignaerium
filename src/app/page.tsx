@@ -260,7 +260,9 @@ export default function HomePage() {
               style={{objectFit:'cover',objectPosition:'center 15%',zIndex:1}}
               onError={()=>{}}
             />
-            <div style={{position:'absolute',bottom:0,left:0,right:0,height:'40%',background:'linear-gradient(to bottom, transparent, var(--ink))',zIndex:2,pointerEvents:'none'}}/>
+            {/* Full dark overlay — only strong on mobile via CSS */}
+            <div className="portrait-overlay" style={{position:'absolute',inset:0,background:'rgba(8,8,8,0)',zIndex:2,pointerEvents:'none',transition:'background 0.3s'}}/>
+            <div style={{position:'absolute',bottom:0,left:0,right:0,height:'40%',background:'linear-gradient(to bottom, transparent, var(--ink))',zIndex:3,pointerEvents:'none'}}/>
             <div className="animate-float hide-mobile" style={{position:'absolute',bottom:'12%',left:'-8%',zIndex:3,background:'rgba(255,77,0,0.12)',border:'1px solid rgba(255,77,0,0.3)',borderRadius:'100px',padding:'6px 16px',fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',whiteSpace:'nowrap'}}>
               CREATIVE DIRECTOR
             </div>
@@ -372,6 +374,13 @@ export default function HomePage() {
         .skill-cell:hover { background: rgba(255,77,0,0.04); }
         @media (max-width: 640px) {
           .hide-mobile { display: none !important; }
+          /* Strong dark overlay on mobile to suppress photo */
+          .portrait-overlay {
+            background: rgba(8,8,8,0.82) !important;
+          }
+          [data-theme="light"] .portrait-overlay {
+            background: rgba(246,238,227,0.85) !important;
+          }
         }
 
         /* Spinning badge */
@@ -440,7 +449,7 @@ export default function HomePage() {
             width: 100% !important;
             height: 100% !important;
             aspect-ratio: unset !important;
-            opacity: 0.08;
+            opacity: 0.06;
             z-index: 0;
             border-radius: 0;
             pointer-events: none;
