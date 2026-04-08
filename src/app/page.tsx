@@ -257,11 +257,11 @@ export default function HomePage() {
               alt="Abhijeeth Subhash — Senior Creative Designer Dubai"
               fill
               priority
-              style={{objectFit:'cover',objectPosition:'center top',zIndex:1}}
+              style={{objectFit:'cover',objectPosition:'center 15%',zIndex:1}}
               onError={()=>{}}
             />
             <div style={{position:'absolute',bottom:0,left:0,right:0,height:'40%',background:'linear-gradient(to bottom, transparent, var(--ink))',zIndex:2,pointerEvents:'none'}}/>
-            <div className="animate-float" style={{position:'absolute',bottom:'12%',left:'-8%',zIndex:3,background:'rgba(255,77,0,0.12)',border:'1px solid rgba(255,77,0,0.3)',borderRadius:'100px',padding:'6px 16px',fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',whiteSpace:'nowrap'}}>
+            <div className="animate-float hide-mobile" style={{position:'absolute',bottom:'12%',left:'-8%',zIndex:3,background:'rgba(255,77,0,0.12)',border:'1px solid rgba(255,77,0,0.3)',borderRadius:'100px',padding:'6px 16px',fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',whiteSpace:'nowrap'}}>
               CREATIVE DIRECTOR
             </div>
           </div>
@@ -370,6 +370,9 @@ export default function HomePage() {
       <style>{`
         .skill-cell { transition: background .3s; }
         .skill-cell:hover { background: rgba(255,77,0,0.04); }
+        @media (max-width: 640px) {
+          .hide-mobile { display: none !important; }
+        }
 
         /* Spinning badge */
         .spinning-badge {
@@ -421,43 +424,34 @@ export default function HomePage() {
 
         /* ── MOBILE ── */
         @media (max-width: 640px) {
-          /* Single column, min-height for full screen feel */
           .hero-grid {
             grid-template-columns: 1fr;
             grid-template-rows: 1fr;
-            padding: 80px 20px 48px;
+            padding: 80px 24px 48px;
             gap: 0;
             position: relative;
             min-height: 100svh;
           }
 
-          /* Portrait — fixed behind text as subtle bg overlay */
+          /* Portrait — very subtle dark overlay behind text */
           .hero-portrait {
             position: absolute !important;
             inset: 0;
             width: 100% !important;
             height: 100% !important;
             aspect-ratio: unset !important;
-            opacity: 0.18;
+            opacity: 0.08;
             z-index: 0;
             border-radius: 0;
+            pointer-events: none;
           }
 
-          /* Stronger bottom fade on mobile overlay */
-          .hero-portrait::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-              to bottom,
-              rgba(8,8,8,0.3) 0%,
-              rgba(8,8,8,0.5) 50%,
-              rgba(8,8,8,0.95) 100%
-            );
-            z-index: 2;
+          /* Hide the floating tag on mobile — too noisy */
+          .hero-portrait .animate-float {
+            display: none !important;
           }
 
-          /* Text sits on top of the overlay */
+          /* Text on top */
           .hero-text {
             position: relative;
             z-index: 2;
@@ -471,16 +465,15 @@ export default function HomePage() {
           .stats-grid {
             grid-template-columns: repeat(2,1fr);
             max-width: 100%;
-            gap: 16px 0;
+            gap: 12px 0;
           }
 
-          /* Spinning badge — hide on mobile */
           .spinning-badge { display: none; }
         }
 
-        /* Light theme mobile — lighter overlay */
-        [data-theme="light"] .hero-portrait {
-          opacity: 0.12;
+        /* Light theme mobile — even lighter */
+        [data-theme="light"] @media (max-width: 640px) .hero-portrait {
+          opacity: 0.05;
         }
       `}</style>
     </main>
