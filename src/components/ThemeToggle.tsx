@@ -54,12 +54,12 @@ export default function ThemeToggle() {
     }
   }
 
-  if (!mounted) return <div style={{width:'28px',height:'56px'}}/>
+  if (!mounted) return <div style={{width:'28px',height:'60px'}}/>
 
-  const isDark  = theme === 'dark'
-  const lineLen = 24 + stretch * 32
-  const bumpY   = stretch * 8
-  const cordColor = isDark ? '#ff4d00' : '#444'
+  const isDark    = theme === 'dark'
+  const lineLen   = 24 + stretch * 32
+  const bumpY     = stretch * 8
+  const cordColor = isDark ? '#ff4d00' : '#333'
   const bulbFill  = isDark
     ? (glow ? '#fff9e6' : '#ede8dd')
     : (glow ? '#ff4d00' : '#0a0a0a')
@@ -68,64 +68,116 @@ export default function ThemeToggle() {
     <div
       aria-label={`Switch to ${isDark?'light':'dark'} mode`}
       title={`Switch to ${isDark?'light':'dark'} mode`}
-      style={{ position:'relative', width:'28px', height:'60px', display:'flex', flexDirection:'column', alignItems:'center', cursor:pulling?'grabbing':'grab', userSelect:'none', touchAction:'none', flexShrink:0 }}
+      style={{
+        position: 'relative',
+        width: '28px',
+        height: '60px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        cursor: pulling ? 'grabbing' : 'grab',
+        userSelect: 'none',
+        touchAction: 'none',
+        flexShrink: 0,
+      }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <svg width="28" height="60" viewBox="0 0 28 60" style={{ overflow:'visible', transition:snap?'all 0.35s cubic-bezier(0.34,1.56,0.64,1)':'none' }}>
-        {/* Glow burst */}
+      <svg
+        width="28"
+        height="60"
+        viewBox="0 0 28 60"
+        style={{
+          overflow: 'visible',
+          transition: snap ? 'all 0.35s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
+        }}
+      >
+        {/* Glow burst on toggle */}
         {glow && (
-          <circle cx="14" cy={8+lineLen} r="18" fill={isDark?'rgba(255,249,200,0.5)':'rgba(255,77,0,0.35)'}
-            style={{animation:'glowPulse 0.6s ease-out forwards'}}/>
+          <circle cx="14" cy={8+lineLen} r="18"
+            fill={isDark ? 'rgba(255,249,200,0.5)' : 'rgba(255,77,0,0.35)'}
+            style={{animation:'glowPulse 0.6s ease-out forwards'}}
+          />
         )}
 
         {/* Cord */}
         <path
           d={`M 14 0 Q ${14+bumpY*1.5} ${lineLen*0.5} 14 ${lineLen}`}
-          stroke={cordColor} strokeWidth={pulling?'2.5':'2'} strokeLinecap="round" fill="none"
-          style={{transition:snap?'all 0.4s cubic-bezier(0.34,1.56,0.64,1)':'stroke-width 0.2s'}}
+          stroke={cordColor}
+          strokeWidth={pulling ? '2.5' : '2'}
+          strokeLinecap="round"
+          fill="none"
+          style={{
+            transition: snap
+              ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)'
+              : 'stroke-width 0.2s',
+          }}
         />
 
-        {/* Handle */}
-        <g style={{ transition:snap?'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)':'none', transform:`translateY(${lineLen}px)` }}>
-          {/* Outer ring — pulses when idle to indicate it's interactive */}
-          <circle cx="14" cy="8" r={pulling?9:8} fill={bulbFill} stroke={cordColor} strokeWidth="2"
-            style={{transition:'r 0.15s, fill 0.4s ease'}}/>
-          {/* Blink ring — always visible, draws attention */}
-          <circle cx="14" cy="8" r="12" fill="none" stroke={cordColor} strokeWidth="1" opacity="0.4"
-            style={{animation:'cordBlink 2s ease-in-out infinite'}}/>
+        {/* Handle group */}
+        <g style={{
+          transition: snap ? 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
+          transform: `translateY(${lineLen}px)`,
+        }}>
+          {/* Always-on pulsing blink ring — visible on ALL screens */}
+          <circle cx="14" cy="8" r="13"
+            fill="none"
+            stroke={cordColor}
+            strokeWidth="1"
+            style={{animation:'cordBlink 2s ease-in-out infinite'}}
+          />
+          {/* Second outer ring for extra visibility */}
+          <circle cx="14" cy="8" r="17"
+            fill="none"
+            stroke={cordColor}
+            strokeWidth="0.5"
+            opacity="0.3"
+            style={{animation:'cordBlink 2s ease-in-out infinite 0.5s'}}
+          />
 
-          {/* Icon inside handle */}
+          {/* Handle fill */}
+          <circle cx="14" cy="8" r={pulling ? 9 : 8}
+            fill={bulbFill}
+            stroke={cordColor}
+            strokeWidth="2"
+            style={{transition:'r 0.15s, fill 0.4s ease'}}
+          />
+
+          {/* Icon — sun or moon */}
           {isDark ? (
-            /* Sun — press to go light */
             <>
               <circle cx="14" cy="8" r="3" fill={cordColor}/>
-              {[0,45,90,135,180,225,270,315].map((deg,i)=>{
-                const rad=(deg*Math.PI)/180
-                return <line key={i}
-                  x1={14+Math.cos(rad)*5} y1={8+Math.sin(rad)*5}
-                  x2={14+Math.cos(rad)*6.5} y2={8+Math.sin(rad)*6.5}
-                  stroke={cordColor} strokeWidth="1.2" strokeLinecap="round"/>
+              {[0,45,90,135,180,225,270,315].map((deg,i) => {
+                const rad = (deg*Math.PI)/180
+                return (
+                  <line key={i}
+                    x1={14+Math.cos(rad)*5} y1={8+Math.sin(rad)*5}
+                    x2={14+Math.cos(rad)*6.5} y2={8+Math.sin(rad)*6.5}
+                    stroke={cordColor} strokeWidth="1.2" strokeLinecap="round"
+                  />
+                )
               })}
             </>
           ) : (
-            /* Moon — press to go dark */
-            <path d="M 15.5 4.5 A 4 4 0 1 1 12 11 A 2.8 2.8 0 0 0 15.5 4.5 Z"
-              fill={bulbFill === '#0a0a0a' ? '#f6eee3' : cordColor} stroke="none"/>
+            <path
+              d="M 15.5 4.5 A 4 4 0 1 1 12 11 A 2.8 2.8 0 0 0 15.5 4.5 Z"
+              fill={isDark ? '#ede8dd' : '#f6eee3'}
+              stroke="none"
+            />
           )}
         </g>
       </svg>
 
       <style>{`
         @keyframes glowPulse {
-          0%   { opacity:0.8; }
-          100% { opacity:0; }
+          0%   { opacity: 0.8; }
+          100% { opacity: 0; }
         }
         @keyframes cordBlink {
-          0%,100% { opacity:0.4; r:12; }
-          50%     { opacity:0.1; r:15; }
+          0%, 100% { opacity: 0.5; }
+          50%       { opacity: 0.1; }
         }
       `}</style>
     </div>
