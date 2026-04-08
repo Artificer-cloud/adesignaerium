@@ -32,7 +32,7 @@ export default function Navbar() {
         padding:'0 clamp(16px,4vw,40px)',
         display:'flex', alignItems:'center', justifyContent:'space-between',
         height:'72px',
-        background:     scrolled ? 'rgba(var(--nav-rgb,8,8,8),0.92)' : 'transparent',
+        background:     scrolled ? 'rgba(8,8,8,0.92)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
         borderBottom:   scrolled ? '1px solid var(--border)' : '1px solid transparent',
         transition: 'all .5s cubic-bezier(.23,1,.32,1)',
@@ -47,7 +47,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop nav + single ThemeToggle */}
         <div style={{display:'flex',alignItems:'center',gap:'clamp(20px,2.5vw,32px)'}} className="d-nav">
           {LINKS.map(({href,label}) => (
             <Link key={href} href={href}
@@ -55,19 +55,16 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-
-          {/* Pull-cord lamp toggle — sits between nav and hire btn */}
           <div style={{display:'flex',alignItems:'flex-start',paddingTop:'4px'}}>
             <ThemeToggle />
           </div>
-
           <a href="mailto:abhijeethpiyush4@gmail.com" className="hire-btn">
             Hire Me →
           </a>
         </div>
 
-        {/* Mobile right side */}
-        <div style={{display:'flex',alignItems:'center',gap:'10px'}} className="mobile-right">
+        {/* Mobile: only hamburger + ThemeToggle once */}
+        <div style={{display:'none',alignItems:'center',gap:'10px'}} className="mobile-right">
           <ThemeToggle />
           <button onClick={()=>setOpen(o=>!o)} aria-label="Toggle menu" className="ham-btn">
             {[0,1,2].map(i=>(
@@ -124,7 +121,7 @@ export default function Navbar() {
 
       <style>{`
         .d-nav       { display: flex; }
-        .mobile-right{ display: none; }
+        .mobile-right{ display: none !important; }
         .ham-btn     { display: none; background: transparent; border: none; cursor: pointer; padding: 4px; }
         .hire-btn {
           font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px;
@@ -135,7 +132,7 @@ export default function Navbar() {
         .hire-btn:hover { background: var(--orange); color: var(--ink); }
         @media (max-width: 768px) {
           .d-nav        { display: none !important; }
-          .mobile-right { display: flex !important; align-items: center; gap: 10px; }
+          .mobile-right { display: flex !important; }
           .ham-btn      { display: block !important; }
         }
       `}</style>
