@@ -230,7 +230,7 @@ export default function HomePage() {
             {/* CTAs */}
             <div style={{display:'flex',gap:'12px',flexWrap:'wrap',marginTop:'28px',opacity:mounted?1:0,transform:mounted?'translateY(0)':'translateY(24px)',transition:'all .9s cubic-bezier(.23,1,.32,1) .78s'}}>
               <Magnetic href="/work">
-                <span style={{display:'block',background:'var(--orange)',color:'var(--ink)',fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:600,fontSize:'12px',letterSpacing:'2px',textTransform:'uppercase',padding:'14px 32px',borderRadius:'2px'}}>View Work ↗</span>
+                <span style={{display:'block',background:'var(--orange)',color:'var(--ink)',fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:600,fontSize:'12px',letterSpacing:'2px',textTransform:'uppercase',padding:'14px 32px',borderRadius:'2px'}}>View Work</span>
               </Magnetic>
               <Magnetic href="/contact">
                 <span style={{display:'block',border:'1px solid rgba(255,255,255,0.12)',color:'var(--bone)',fontFamily:'var(--font-mono)',fontSize:'11px',letterSpacing:'2px',textTransform:'uppercase',padding:'14px 32px',borderRadius:'2px'}}>Let&apos;s Talk</span>
