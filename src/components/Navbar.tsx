@@ -29,9 +29,10 @@ export default function Navbar() {
     <>
       <nav style={{
         position:'fixed', top:0, left:0, right:0, zIndex:50,
-        padding:'clamp(14px,2vh,20px) clamp(16px,4vw,40px)',
+        padding:'0 clamp(16px,4vw,40px)',
         display:'flex', alignItems:'center', justifyContent:'space-between',
-        background:     scrolled ? 'rgba(var(--nav-bg, 8,8,8),0.92)' : 'transparent',
+        height:'72px',
+        background:     scrolled ? 'rgba(var(--nav-rgb,8,8,8),0.92)' : 'transparent',
         backdropFilter: scrolled ? 'blur(20px)' : 'none',
         borderBottom:   scrolled ? '1px solid var(--border)' : '1px solid transparent',
         transition: 'all .5s cubic-bezier(.23,1,.32,1)',
@@ -49,19 +50,25 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div style={{display:'flex',alignItems:'center',gap:'clamp(20px,2.5vw,32px)'}} className="d-nav">
           {LINKS.map(({href,label}) => (
-            <Link key={href} href={href} className={`nav-link hover-line${pathname===href?' active':''}`}>
+            <Link key={href} href={href}
+              className={`nav-link hover-line${pathname===href?' active':''}`}>
               {label}
             </Link>
           ))}
-          <ThemeToggle />
+
+          {/* Pull-cord lamp toggle — sits between nav and hire btn */}
+          <div style={{display:'flex',alignItems:'flex-start',paddingTop:'4px'}}>
+            <ThemeToggle />
+          </div>
+
           <a href="mailto:abhijeethpiyush4@gmail.com" className="hire-btn">
             Hire Me →
           </a>
         </div>
 
-        {/* Hamburger */}
-        <div style={{display:'flex',alignItems:'center',gap:'12px'}}>
-          <div className="mobile-theme"><ThemeToggle /></div>
+        {/* Mobile right side */}
+        <div style={{display:'flex',alignItems:'center',gap:'10px'}} className="mobile-right">
+          <ThemeToggle />
           <button onClick={()=>setOpen(o=>!o)} aria-label="Toggle menu" className="ham-btn">
             {[0,1,2].map(i=>(
               <span key={i} style={{
@@ -84,7 +91,8 @@ export default function Navbar() {
       <div style={{
         position:'fixed', inset:0, zIndex:40,
         background:'var(--ink)',
-        display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+        display:'flex', flexDirection:'column',
+        alignItems:'center', justifyContent:'center',
         opacity:open?1:0, pointerEvents:open?'auto':'none',
         transform:open?'translateY(0)':'translateY(-20px)',
         transition:'all .5s cubic-bezier(.23,1,.32,1)',
@@ -104,9 +112,10 @@ export default function Navbar() {
             </Link>
           ))}
           <a href="mailto:abhijeethpiyush4@gmail.com" style={{
-            fontFamily:'var(--font-mono)', fontSize:'12px', letterSpacing:'3px',
-            color:'var(--orange)', marginTop:'8px',
-            opacity:open?1:0, transition:'opacity .5s .38s',
+            fontFamily:'var(--font-mono)', fontSize:'12px',
+            letterSpacing:'3px', color:'var(--orange)',
+            marginTop:'8px', opacity:open?1:0,
+            transition:'opacity .5s .38s',
           }}>
             HIRE ME →
           </a>
@@ -114,20 +123,20 @@ export default function Navbar() {
       </div>
 
       <style>{`
-        .d-nav      { display: flex; }
-        .ham-btn    { display: none; background: transparent; border: none; cursor: pointer; padding: 4px; }
-        .mobile-theme { display: none; }
+        .d-nav       { display: flex; }
+        .mobile-right{ display: none; }
+        .ham-btn     { display: none; background: transparent; border: none; cursor: pointer; padding: 4px; }
         .hire-btn {
           font-family: var(--font-mono); font-size: 10px; letter-spacing: 2px;
           color: var(--orange); border: 1px solid rgba(255,77,0,0.4);
           padding: 8px 18px; border-radius: 2px; transition: all .3s;
-          text-transform: uppercase;
+          text-transform: uppercase; white-space: nowrap;
         }
         .hire-btn:hover { background: var(--orange); color: var(--ink); }
         @media (max-width: 768px) {
           .d-nav        { display: none !important; }
+          .mobile-right { display: flex !important; align-items: center; gap: 10px; }
           .ham-btn      { display: block !important; }
-          .mobile-theme { display: block !important; }
         }
       `}</style>
     </>
