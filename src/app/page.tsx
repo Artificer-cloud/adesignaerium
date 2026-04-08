@@ -421,28 +421,50 @@ export default function HomePage() {
 
         /* ── MOBILE ── */
         @media (max-width: 640px) {
-          /* Stack: portrait on top, text below */
+          /* Single column, min-height for full screen feel */
           .hero-grid {
             grid-template-columns: 1fr;
-            grid-template-rows: auto auto;
-            padding: 90px 20px 40px;
+            grid-template-rows: 1fr;
+            padding: 80px 20px 48px;
             gap: 0;
+            position: relative;
+            min-height: 100svh;
           }
 
-          /* Portrait goes FIRST on mobile (top) */
+          /* Portrait — fixed behind text as subtle bg overlay */
           .hero-portrait {
-            order: -1;
-            aspect-ratio: 1/1;
-            width: 100%;
-            max-height: 340px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 28px;
+            position: absolute !important;
+            inset: 0;
+            width: 100% !important;
+            height: 100% !important;
+            aspect-ratio: unset !important;
+            opacity: 0.18;
+            z-index: 0;
+            border-radius: 0;
           }
 
-          /* Text content */
+          /* Stronger bottom fade on mobile overlay */
+          .hero-portrait::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+              to bottom,
+              rgba(8,8,8,0.3) 0%,
+              rgba(8,8,8,0.5) 50%,
+              rgba(8,8,8,0.95) 100%
+            );
+            z-index: 2;
+          }
+
+          /* Text sits on top of the overlay */
           .hero-text {
-            order: 1;
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: calc(100svh - 128px);
           }
 
           /* Stats — 2x2 on mobile */
@@ -454,6 +476,11 @@ export default function HomePage() {
 
           /* Spinning badge — hide on mobile */
           .spinning-badge { display: none; }
+        }
+
+        /* Light theme mobile — lighter overlay */
+        [data-theme="light"] .hero-portrait {
+          opacity: 0.12;
         }
       `}</style>
     </main>
