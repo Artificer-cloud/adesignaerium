@@ -177,6 +177,7 @@ export default function HomePage() {
     <main>
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section ref={heroRef} onMouseMove={handleHeroMouse}
+        className="hero-section"
         style={{minHeight:'100svh',background:'var(--ink)',position:'relative',overflow:'hidden',display:'flex',alignItems:'center'}}>
         <SectionArt v={0}/>
 
@@ -442,25 +443,29 @@ export default function HomePage() {
             min-height: 100svh;
           }
 
-          /* Portrait — very subtle dark overlay behind text */
+          /* Hide portrait completely on mobile — bg-image handles it */
           .hero-portrait {
-            position: absolute !important;
-            inset: 0;
-            width: 100% !important;
-            height: 100% !important;
-            aspect-ratio: unset !important;
-            opacity: 0.06;
-            z-index: 0;
-            border-radius: 0;
-            pointer-events: none;
-          }
-
-          /* Hide the floating tag on mobile — too noisy */
-          .hero-portrait .animate-float {
             display: none !important;
           }
 
-          /* Text on top */
+          /* Hero section uses photo as CSS bg at 5% opacity on mobile */
+          .hero-section {
+            background-image: url('/images/hero-portrait.png') !important;
+            background-size: cover !important;
+            background-position: center 20% !important;
+            background-repeat: no-repeat !important;
+          }
+          /* Dark overlay via pseudo element — bg at 5%, rest is dark */
+          .hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(8,8,8,0.95);
+            z-index: 1;
+            pointer-events: none;
+          }
+
+          /* Text on top of overlay */
           .hero-text {
             position: relative;
             z-index: 2;
