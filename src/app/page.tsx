@@ -178,7 +178,7 @@ export default function HomePage() {
       {/* ── HERO ─────────────────────────────────────────────── */}
       <section ref={heroRef} onMouseMove={handleHeroMouse}
         className="hero-section"
-        style={{minHeight:'100svh',background:'var(--ink)',position:'relative',overflow:'hidden',display:'flex',alignItems:'center'}}>
+        style={{minHeight:'100svh',background:'var(--ink)',position:'relative',overflow:'hidden',display:'flex',alignItems:'center',backgroundImage:"url('/images/hero-portrait.png')"}}>
         <SectionArt v={0}/>
 
         <svg className="pl" aria-hidden style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.06,pointerEvents:'none',transition:'transform .08s ease-out'}} viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
@@ -261,8 +261,7 @@ export default function HomePage() {
               style={{objectFit:'cover',objectPosition:'center 15%',zIndex:1}}
               onError={()=>{}}
             />
-            {/* Full dark overlay — only strong on mobile via CSS */}
-            <div className="portrait-overlay" style={{position:'absolute',inset:0,background:'rgba(8,8,8,0)',zIndex:2,pointerEvents:'none',transition:'background 0.3s'}}/>
+
             <div style={{position:'absolute',bottom:0,left:0,right:0,height:'40%',background:'linear-gradient(to bottom, transparent, var(--ink))',zIndex:3,pointerEvents:'none'}}/>
             <div className="animate-float hide-mobile" style={{position:'absolute',bottom:'12%',left:'-8%',zIndex:3,background:'rgba(255,77,0,0.12)',border:'1px solid rgba(255,77,0,0.3)',borderRadius:'100px',padding:'6px 16px',fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',whiteSpace:'nowrap'}}>
               CREATIVE DIRECTOR
@@ -432,63 +431,7 @@ export default function HomePage() {
           .spinning-badge { display: none; }
         }
 
-        /* ── MOBILE ── */
-        @media (max-width: 640px) {
-          .hero-grid {
-            grid-template-columns: 1fr;
-            grid-template-rows: 1fr;
-            padding: 80px 24px 48px;
-            gap: 0;
-            position: relative;
-            min-height: 100svh;
-          }
-
-          /* Hide portrait completely on mobile — bg-image handles it */
-          .hero-portrait {
-            display: none !important;
-          }
-
-          /* Hero section uses photo as CSS bg at 5% opacity on mobile */
-          .hero-section {
-            background-image: url('/images/hero-portrait.png') !important;
-            background-size: cover !important;
-            background-position: center 20% !important;
-            background-repeat: no-repeat !important;
-          }
-          /* Dark overlay via pseudo element — bg at 5%, rest is dark */
-          .hero-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(8,8,8,0.95);
-            z-index: 1;
-            pointer-events: none;
-          }
-
-          /* Text on top of overlay */
-          .hero-text {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            min-height: calc(100svh - 128px);
-          }
-
-          /* Stats — 2x2 on mobile */
-          .stats-grid {
-            grid-template-columns: repeat(2,1fr);
-            max-width: 100%;
-            gap: 12px 0;
-          }
-
-          .spinning-badge { display: none; }
-        }
-
-        /* Light theme mobile — even lighter */
-        [data-theme="light"] @media (max-width: 640px) .hero-portrait {
-          opacity: 0.05;
-        }
+        /* Mobile styles moved to globals.css */
       `}</style>
     </main>
   )
