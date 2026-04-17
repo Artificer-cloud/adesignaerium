@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useState } from 'react'
 import { projects, categories } from '@/lib/projects'
 
@@ -32,22 +33,36 @@ export default function WorkPage() {
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,280px),1fr))', gap:'10px' }}>
           {filtered.map((project, i) => (
             <Link key={project.id} href={`/work/${project.id}`} className="project-card"
-              style={{ background:project.color||'#1a1a1a', border:'1px solid var(--border)', borderRadius:'6px', minHeight:i%5===0?'clamp(320px,40vw,480px)':'clamp(240px,30vw,340px)', padding:'clamp(20px,2.5vw,28px)', display:'flex', flexDirection:'column', justifyContent:'space-between', position:'relative', overflow:'hidden' }}>
-              <svg aria-hidden style={{ position:'absolute',inset:0,width:'100%',height:'100%',opacity:.06,pointerEvents:'none' }} viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
-                <circle cx="340" cy="40" r="70" fill="none" stroke="#ff4d00" strokeWidth="1" strokeDasharray="5 5"/>
-              </svg>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
-                <div style={{ display:'flex', flexWrap:'wrap', gap:'4px' }}>
-                  {project.category.slice(0,2).map(cat => (
-                    <span key={cat} style={{ fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'1.5px', color:'var(--orange)', background:'rgba(255,77,0,0.08)', border:'1px solid rgba(255,77,0,0.2)', padding:'3px 8px', borderRadius:'2px' }}>{cat.toUpperCase()}</span>
-                  ))}
+              style={{ background:project.color||'#1a1a1a', border:'1px solid var(--border)', borderRadius:'6px', minHeight:i%5===0?'clamp(320px,40vw,480px)':'clamp(240px,30vw,340px)', display:'flex', flexDirection:'column', justifyContent:'space-between', position:'relative', overflow:'hidden' }}>
+
+              {/* Cover image */}
+              {project.coverImage && (
+                <div style={{ position:'absolute', inset:0, zIndex:0 }}>
+                  <Image
+                    src={project.coverImage}
+                    alt={project.title}
+                    fill
+                    style={{ objectFit:'cover', objectPosition:'center', opacity:0.35 }}
+                    onError={() => {}}
+                  />
+                  <div style={{ position:'absolute', inset:0, background:`linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, ${project.color||'#1a1a1a'} 70%)` }}/>
                 </div>
-                <span style={{ fontFamily:'var(--font-mono)', fontSize:'18px', color:'var(--dim)' }}>↗</span>
-              </div>
-              <div>
-                <h2 style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(22px,3.5vw,36px)', letterSpacing:'-1px', color:'var(--bone)', lineHeight:.95 }}>{project.title}</h2>
-                <p style={{ fontFamily:'var(--font-body)', fontSize:'13px', fontStyle:'italic', color:'var(--muted)', marginTop:'8px', lineHeight:1.5 }}>{project.description}</p>
-                <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--dim)', letterSpacing:'1px', marginTop:'12px' }}>{project.year}</div>
+              )}
+
+              <div style={{ position:'relative', zIndex:1, padding:'clamp(20px,2.5vw,28px)', display:'flex', flexDirection:'column', height:'100%', justifyContent:'space-between' }}>
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                  <div style={{ display:'flex', flexWrap:'wrap', gap:'4px' }}>
+                    {project.category.slice(0,2).map(cat => (
+                      <span key={cat} style={{ fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'1.5px', color:'var(--orange)', background:'rgba(255,77,0,0.1)', border:'1px solid rgba(255,77,0,0.25)', padding:'3px 8px', borderRadius:'2px' }}>{cat.toUpperCase()}</span>
+                    ))}
+                  </div>
+                  <span style={{ fontFamily:'var(--font-mono)', fontSize:'18px', color:'var(--dim)' }}>↗</span>
+                </div>
+                <div>
+                  <h2 style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(22px,3.5vw,36px)', letterSpacing:'-1px', color:'var(--bone)', lineHeight:.95 }}>{project.title}</h2>
+                  <p style={{ fontFamily:'var(--font-body)', fontSize:'13px', fontStyle:'italic', color:'var(--muted)', marginTop:'8px', lineHeight:1.5 }}>{project.description}</p>
+                  <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--dim)', letterSpacing:'1px', marginTop:'12px' }}>{project.year}</div>
+                </div>
               </div>
             </Link>
           ))}
