@@ -11,10 +11,21 @@ type GalleryImage = {
   height:   number
 }
 
+// Snap to nearest standard ratio
+function getAspectRatio(w: number, h: number): string {
+  const r = h / w
+  if (r < 0.6)  return '16/9'   // wide landscape
+  if (r < 0.85) return '4/3'    // standard landscape
+  if (r < 1.15) return '1/1'    // square
+  if (r < 1.5)  return '3/4'    // portrait
+  return '9/16'                  // tall portrait (stories/reels)
+}
+
 function GalleryCard({ item, index, onOpen }: { item: GalleryImage; index: number; onOpen: () => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const [vis, setVis] = useState(false)
   const [hov, setHov] = useState(false)
+  const ratio = getAspectRatio(item.width, item.height)
 
   useEffect(() => {
     const obs = new IntersectionObserver(
@@ -24,9 +35,6 @@ function GalleryCard({ item, index, onOpen }: { item: GalleryImage; index: numbe
     if (ref.current) obs.observe(ref.current)
     return () => obs.disconnect()
   }, [])
-
-  // Alternating sizes for editorial feel
-  const isFeatured = index % 7 === 0
 
   return (
     <div
@@ -39,11 +47,11 @@ function GalleryCard({ item, index, onOpen }: { item: GalleryImage; index: numbe
         overflow:    'hidden',
         cursor:      'pointer',
         background:  'var(--surface)',
-        aspectRatio: isFeatured ? '4/3' : '1/1',
-        gridColumn:  isFeatured ? 'span 2' : 'span 1',
+        aspectRatio: ratio,
+        borderRadius: '4px',
         opacity:     vis ? 1 : 0,
-        transform:   vis ? 'translateY(0) scale(1)' : 'translateY(32px) scale(0.97)',
-        transition:  `opacity .8s cubic-bezier(.23,1,.32,1) ${(index % 6) * 0.07}s, transform .8s cubic-bezier(.23,1,.32,1) ${(index % 6) * 0.07}s`,
+        transform:   vis ? 'translateY(0)' : 'translateY(28px)',
+        transition:  `opacity .7s cubic-bezier(.23,1,.32,1) ${(index % 6) * 0.06}s, transform .7s cubic-bezier(.23,1,.32,1) ${(index % 6) * 0.06}s`,
       }}
     >
       {/* Image */}
@@ -51,78 +59,95 @@ function GalleryCard({ item, index, onOpen }: { item: GalleryImage; index: numbe
         src={item.src}
         alt={item.alt}
         fill
-        sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
+        sizes="(max-width:640px) 50vw,(max-width:1024px) 33vw,25vw"
         style={{
           objectFit:  'cover',
-          transition: 'transform .8s cubic-bezier(.23,1,.32,1)',
-          transform:  hov ? 'scale(1.08)' : 'scale(1)',
+          objectPosition: 'center',
+          transition: 'transform .7s cubic-bezier(.23,1,.32,1)',
+          transform:  hov ? 'scale(1.07)' : 'scale(1)',
         }}
         onError={() => {}}
       />
 
-      {/* Dark overlay — slides up on hover */}
+      {/* Gradient overlay on hover */}
       <div style={{
         position:   'absolute',
         inset:      0,
-        background: 'linear-gradient(to top, rgba(8,8,8,0.95) 0%, rgba(8,8,8,0.4) 50%, transparent 100%)',
+        background: 'linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(8,8,8,0.3) 50%, rgba(8,8,8,0.05) 100%)',
         opacity:    hov ? 1 : 0,
         transition: 'opacity .5s cubic-bezier(.23,1,.32,1)',
       }}/>
 
-      {/* Content that appears on hover */}
+      {/* Info slides up on hover */}
       <div style={{
         position:   'absolute',
         bottom:     0,
         left:       0,
         right:      0,
-        padding:    'clamp(16px,2vw,28px)',
-        transform:  hov ? 'translateY(0)' : 'translateY(16px)',
+        padding:    'clamp(14px,2vw,22px)',
+        transform:  hov ? 'translateY(0)' : 'translateY(12px)',
         opacity:    hov ? 1 : 0,
         transition: 'all .4s cubic-bezier(.23,1,.32,1)',
       }}>
-        <span style={{ fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'3px', color:'var(--orange)', display:'block', marginBottom:'6px', textTransform:'uppercase' }}>
+        <span style={{ fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'3px', color:'var(--orange)', display:'block', marginBottom:'5px', textTransform:'uppercase' }}>
           {item.category}
         </span>
-        <p style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:600, fontSize:'clamp(16px,2vw,22px)', color:'var(--bone)', letterSpacing:'-0.5px', lineHeight:1.1 }}>
+        <p style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:600, fontSize:'clamp(13px,1.6vw,18px)', color:'var(--bone)', letterSpacing:'-0.3px', lineHeight:1.1, margin:0 }}>
           {item.alt}
         </p>
-        <div style={{ width:'24px', height:'2px', background:'var(--orange)', marginTop:'10px', borderRadius:'2px' }}/>
+        <div style={{ width:'20px', height:'2px', background:'var(--orange)', marginTop:'8px', borderRadius:'2px' }}/>
       </div>
 
-      {/* Top-left category dot — always visible */}
+      {/* Category dot — idle state */}
       <div style={{
         position:   'absolute',
-        top:        '14px',
-        left:       '14px',
+        top:        '12px',
+        left:       '12px',
         display:    'flex',
         alignItems: 'center',
-        gap:        '6px',
+        gap:        '5px',
         opacity:    hov ? 0 : 1,
         transition: 'opacity .3s',
       }}>
-        <span style={{ width:'6px', height:'6px', borderRadius:'50%', background:'var(--orange)', display:'block', flexShrink:0 }}/>
-        <span style={{ fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'2px', color:'rgba(255,255,255,0.7)', textTransform:'uppercase' }}>
-          {item.category}
-        </span>
+        <span style={{ width:'5px', height:'5px', borderRadius:'50%', background:'var(--orange)', display:'block' }}/>
+        <span style={{ fontFamily:'var(--font-mono)', fontSize:'7px', letterSpacing:'2px', color:'rgba(255,255,255,0.65)', textTransform:'uppercase' }}>{item.category}</span>
       </div>
 
-      {/* Arrow icon on hover top-right */}
+      {/* Ratio badge */}
       <div style={{
         position:   'absolute',
-        top:        '14px',
-        right:      '14px',
-        width:      '32px',
-        height:     '32px',
-        borderRadius: '50%',
-        background: 'rgba(255,77,0,0.9)',
-        display:    'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        opacity:    hov ? 1 : 0,
-        transform:  hov ? 'scale(1) rotate(0deg)' : 'scale(0.6) rotate(-45deg)',
-        transition: 'all .4s cubic-bezier(.23,1,.32,1)',
+        top:        '12px',
+        right:      '12px',
+        fontFamily: 'var(--font-mono)',
+        fontSize:   '8px',
+        letterSpacing: '1px',
+        color:      'rgba(255,255,255,0.4)',
+        background: 'rgba(8,8,8,0.5)',
+        padding:    '2px 6px',
+        borderRadius: '2px',
+        opacity:    hov ? 0 : 0.7,
+        transition: 'opacity .3s',
       }}>
-        <span style={{ color:'var(--ink)', fontSize:'14px', lineHeight:1 }}>↗</span>
+        {ratio}
+      </div>
+
+      {/* Orange arrow on hover */}
+      <div style={{
+        position:       'absolute',
+        top:            '12px',
+        right:          '12px',
+        width:          '30px',
+        height:         '30px',
+        borderRadius:   '50%',
+        background:     'var(--orange)',
+        display:        'flex',
+        alignItems:     'center',
+        justifyContent: 'center',
+        opacity:        hov ? 1 : 0,
+        transform:      hov ? 'scale(1) rotate(0deg)' : 'scale(0.5) rotate(-45deg)',
+        transition:     'all .4s cubic-bezier(.23,1,.32,1)',
+      }}>
+        <span style={{ color:'var(--ink)', fontSize:'13px', lineHeight:1 }}>↗</span>
       </div>
     </div>
   )
@@ -166,16 +191,16 @@ export default function VaultClient({ images }: { images: GalleryImage[] }) {
             <span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600, color:'var(--orange)' }}>Archives.</span>
           </h1>
           <div style={{ textAlign:'right' }}>
-            <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(13px,1.4vw,16px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'320px', lineHeight:1.7, marginBottom:'8px' }}>
-              Raw visuals, photography, hand-painted work, AI art.
+            <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(13px,1.4vw,16px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'300px', lineHeight:1.7, marginBottom:'6px' }}>
+              Raw visuals, photography, AI art, and everything in between.
             </p>
             <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--dim)', letterSpacing:'1px' }}>
-              {filtered.length} {active === 'All' ? 'images' : active.toLowerCase()}
+              {filtered.length} images
             </span>
           </div>
         </div>
 
-        {/* Filters */}
+        {/* Category filters */}
         <div style={{ display:'flex', flexWrap:'wrap', gap:'8px' }}>
           {allCats.map(cat => (
             <button key={cat} onClick={() => setActive(cat)} style={{
@@ -192,23 +217,21 @@ export default function VaultClient({ images }: { images: GalleryImage[] }) {
         </div>
       </section>
 
-      {/* Editorial Grid */}
+      {/* Masonry-style grid using CSS columns */}
       <section style={{ padding:'0 clamp(20px,6vw,80px) clamp(60px,8vh,100px)', maxWidth:'1600px', margin:'0 auto' }}>
         {filtered.length === 0 ? (
           <div style={{ textAlign:'center', padding:'80px 0' }}>
             <p style={{ fontFamily:'var(--font-mono)', fontSize:'12px', color:'var(--dim)', letterSpacing:'2px' }}>ADD WEBP IMAGES TO /public/images/gallery/</p>
           </div>
         ) : (
-          <div style={{
-            display:             'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap:                 'clamp(6px,0.8vw,10px)',
-            alignItems:          'start',
-          }}>
-            {filtered.map((item, i) => (
-              <GalleryCard key={item.id} item={item} index={i} onOpen={() => setLightbox(item)} />
-            ))}
-          </div>
+          <>
+            {/* Desktop: 4 columns CSS masonry */}
+            <div className="vault-grid">
+              {filtered.map((item, i) => (
+                <GalleryCard key={item.id} item={item} index={i} onOpen={() => setLightbox(item)} />
+              ))}
+            </div>
+          </>
         )}
       </section>
 
@@ -221,7 +244,7 @@ export default function VaultClient({ images }: { images: GalleryImage[] }) {
           <button onClick={e => { e.stopPropagation(); const idx=filtered.findIndex(i=>i.id===lightbox.id); setLightbox(filtered[(idx+1)%filtered.length]) }}
             style={{ position:'absolute', right:'clamp(12px,3vw,40px)', top:'50%', transform:'translateY(-50%)', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)', color:'var(--bone)', fontSize:'18px', cursor:'pointer', width:'44px', height:'44px', borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center' }}>→</button>
           <div onClick={e => e.stopPropagation()} style={{ position:'relative', maxWidth:'min(90vw,1000px)', maxHeight:'90vh', borderRadius:'4px', overflow:'hidden' }}>
-            <Image src={lightbox.src} alt={lightbox.alt} width={1080} height={1080}
+            <Image src={lightbox.src} alt={lightbox.alt} width={lightbox.width} height={lightbox.height}
               style={{ width:'100%', height:'auto', maxHeight:'85vh', objectFit:'contain', display:'block' }}
               onError={() => {}}
             />
@@ -232,6 +255,20 @@ export default function VaultClient({ images }: { images: GalleryImage[] }) {
           </div>
         </div>
       )}
+
+      <style>{`
+        .vault-grid {
+          columns: 4;
+          column-gap: clamp(6px,0.8vw,10px);
+        }
+        .vault-grid > div {
+          break-inside: avoid;
+          margin-bottom: clamp(6px,0.8vw,10px);
+          display: block;
+        }
+        @media (max-width: 1024px) { .vault-grid { columns: 3; } }
+        @media (max-width: 640px)  { .vault-grid { columns: 2; } }
+      `}</style>
     </main>
   )
 }
