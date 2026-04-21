@@ -1,10 +1,8 @@
 import VaultClient from './VaultClient'
 import fs from 'fs'
 import path from 'path'
-import sizeOf from 'image-size'
 
 export const dynamic = 'force-static'
-export const revalidate = 0
 
 function getGalleryImages() {
   try {
@@ -20,12 +18,14 @@ function getGalleryImages() {
       let height = 800
 
       try {
-        const dims = sizeOf(filePath)
+        // Read file as buffer then get dimensions
+        const buffer = fs.readFileSync(filePath)
+        const sizeOf = require('image-size')
+        const dims = sizeOf(buffer)
         width  = dims.width  || 800
         height = dims.height || 800
       } catch {}
 
-      // Auto-detect category from filename prefix
       const name = filename.toLowerCase()
       let category = 'Other'
       if (name.startsWith('social'))  category = 'Social'
@@ -37,25 +37,18 @@ function getGalleryImages() {
       if (name.startsWith('ai'))      category = 'AI Visual'
       if (name.startsWith('motion'))  category = 'Motion'
       if (name.startsWith('brand'))   category = 'Branding'
-      if (name.startsWith('print'))   category = 'Print'
       if (name.startsWith('web'))     category = 'Web'
+      if (name.startsWith('print'))   category = 'Print'
+      if (name.startsWith('logo'))    category = 'Branding'
+      if (name.startsWith('pack'))    category = 'Packaging'
 
-      // Clean up alt text from filename
       const alt = filename
         .replace('.webp', '')
         .replace(/-/g, ' ')
         .replace(/_/g, ' ')
-        .replace(/\d+$/, '')
         .trim()
 
-      return {
-        id:       filename,
-        src:      `/images/gallery/${filename}`,
-        alt:      alt || filename,
-        category,
-        width,
-        height,
-      }
+      return { id: filename, src: `/images/gallery/${filename}`, alt, category, width, height }
     })
   } catch (err) {
     console.error('Gallery read error:', err)
