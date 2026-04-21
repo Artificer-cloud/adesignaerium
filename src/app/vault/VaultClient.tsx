@@ -71,7 +71,7 @@ function GalleryCard({ item, onOpen, delay }: { item: GalleryImage; onOpen: () =
 }
 
 export default function VaultClient({ images }: { images: GalleryImage[] }) {
-  const allCats   = ['All', ...Array.from(new Set(images.map(i => i.category))).sort()]
+  const allCats   = ['All', ...Array.from(new Set<string>(images.map(i => i.category))).sort()]
   const [active,   setActive]   = useState('All')
   const [lightbox, setLightbox] = useState<GalleryImage | null>(null)
 
