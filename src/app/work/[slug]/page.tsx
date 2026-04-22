@@ -1,5 +1,4 @@
-$file = "src\app\work\[slug]\page.tsx"
-$code = @"
+
 import { projects } from '@/lib/projects'
 import Image from 'next/image'
 import Link from 'next/link'
