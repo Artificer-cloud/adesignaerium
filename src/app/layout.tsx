@@ -3,6 +3,8 @@ import { DM_Sans, Syne_Mono, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
 import Cursor from '@/components/Cursor'
 import Navbar from '@/components/Navbar'
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const dmSans = DM_Sans({ subsets:['latin'], weight:['300','400','500'], style:['normal','italic'], variable:'--font-body', display:'swap' })
 const syneMono = Syne_Mono({ subsets:['latin'], weight:['400'], variable:'--font-mono', display:'swap' })
@@ -32,6 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Cursor />
         <Navbar />
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
