@@ -1,9 +1,10 @@
+import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import type { Metadata } from 'next'
 import { DM_Sans, Syne_Mono, Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
 import Cursor from '@/components/Cursor'
 import Navbar from '@/components/Navbar'
-
 const dmSans = DM_Sans({
   subsets:['latin'], weight:['300','400','500'],
   style:['normal','italic'], variable:'--font-body', display:'swap',
@@ -52,10 +53,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
       </head>
       <body>
-        <Cursor />
-        <Navbar />
-        {children}
-      </body>
-    </html>
+  <Analytics />
+  <SpeedInsights />
+  <Cursor />
+  <Navbar />
+  {children}
+</body>
   )
 }
