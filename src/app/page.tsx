@@ -134,9 +134,9 @@ function FontCycleName({ mounted }: { mounted: boolean }) {
 const TICKER   = ['BRANDING','UI/UX DESIGN','AI VISUAL','PACKAGING','MOTION','PHOTOGRAPHY','E-COMMERCE','EDITORIAL','PROMPT ENGINEERING','ART DIRECTION']
 const TAGLINES = ["If it looks average, I didn't make it.","Not trends. Timeless impact.","Every pixel has a purpose.","Where ideas become visual worlds."]
 const FEATURED = [
-  {id:'sipple',       title:'SIPPLE',       cat:'Branding · UI/UX · Web',  bg:'#060d18'},
-  {id:'maison-valer', title:'MAISON VALÉR', cat:'Luxury · Editorial',       bg:'#100d04'},
-  {id:'ecora',        title:'ECORA',        cat:'Sustainable · Web Design', bg:'#040f07'},
+  {id:'sipple',       title:'SIPPLE',       cat:'Branding · UI/UX · Web',  bg:'#060d18', cover:'/images/work/sipple-cover.webp'},
+  {id:'maison-valer', title:'MAISON VALÉR', cat:'Luxury · Editorial',       bg:'#100d04', cover:'/images/work/maison-valer-cover.webp'},
+  {id:'ecora',        title:'ECORA',        cat:'Sustainable · Web Design', bg:'#040f07', cover:'/images/work/ecora-cover.webp'},
 ]
 const STATS  = [{n:'7+',l:'Years'},{n:'100+',l:'Brands'},{n:'50+',l:'Projects'},{n:'100%',l:'Delivery'}]
 const SKILLS = [
@@ -304,15 +304,14 @@ export default function HomePage() {
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,280px),1fr))',gap:'10px'}}>
           {FEATURED.map((p,i)=>(
             <Link key={p.id} href={`/work/${p.id}`} className="project-card"
-              style={{background:p.bg,border:'1px solid var(--border)',borderRadius:'6px',minHeight:i===0?'clamp(280px,40vw,460px)':'clamp(220px,30vw,360px)',padding:'clamp(20px,2.5vw,28px)',display:'flex',flexDirection:'column',justifyContent:'space-between',position:'relative',overflow:'hidden',opacity:0,animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`}}>
-              <svg aria-hidden style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.06,pointerEvents:'none'}} viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
-                <circle cx="340" cy="40" r="70" fill="none" stroke="#ff4d00" strokeWidth="1" strokeDasharray="5 5"/>
-              </svg>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
-                <span style={{fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',background:'rgba(255,77,0,0.08)',border:'1px solid rgba(255,77,0,0.2)',padding:'4px 10px',borderRadius:'2px'}}>{p.cat}</span>
-                <span style={{fontFamily:'var(--font-mono)',fontSize:'18px',color:'var(--dim)'}}>↗</span>
+              style={{background:p.bg,border:'1px solid var(--border)',borderRadius:'6px',minHeight:i===0?'clamp(280px,40vw,460px)':'clamp(220px,30vw,360px)',display:'flex',flexDirection:'column',justifyContent:'space-between',position:'relative',overflow:'hidden',opacity:0,animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`}}>
+              <Image src={p.cover} alt={p.title} fill sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw" style={{objectFit:'cover',objectPosition:'center',transition:'transform .6s cubic-bezier(.23,1,.32,1)'}}/>
+              <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom,rgba(0,0,0,0.08) 0%,rgba(0,0,0,0.25) 45%,rgba(0,0,0,0.85) 100%)'}}/>
+              <div style={{position:'relative',zIndex:1,padding:'clamp(20px,2.5vw,28px)',display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
+                <span style={{fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',background:'rgba(255,77,0,0.12)',border:'1px solid rgba(255,77,0,0.3)',padding:'4px 10px',borderRadius:'2px'}}>{p.cat}</span>
+                <span style={{fontFamily:'var(--font-mono)',fontSize:'18px',color:'rgba(255,255,255,0.5)'}}>↗</span>
               </div>
-              <h3 style={{fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,fontSize:'clamp(24px,4vw,52px)',letterSpacing:'-2px',color:'var(--bone)',lineHeight:.9}}>{p.title}</h3>
+              <h3 style={{position:'relative',zIndex:1,padding:'clamp(20px,2.5vw,28px)',fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,fontSize:'clamp(24px,4vw,52px)',letterSpacing:'-2px',color:'var(--bone)',lineHeight:.9}}>{p.title}</h3>
             </Link>
           ))}
         </div>
