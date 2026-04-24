@@ -102,69 +102,63 @@ function FlipbookModal({ catalogue, onClose }: { catalogue: Catalogue; onClose: 
       onClick={onClose}
       style={{
         position: 'fixed', inset: 0, zIndex: 9999,
-        background: 'rgba(8,8,8,0.96)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        background: 'rgba(8,8,8,0.97)',
+        display: 'flex', flexDirection: 'column',
         animation: 'fadeIn .3s cubic-bezier(.23,1,.32,1)',
-        backdropFilter: 'blur(12px)',
       }}
     >
+      {/* Top bar */}
       <div
         onClick={e => e.stopPropagation()}
         style={{
-          maxWidth: '520px', width: '90%',
-          background: '#0d0d0d',
-          border: '1px solid rgba(255,77,0,0.2)',
-          borderRadius: '6px',
-          overflow: 'hidden',
-          boxShadow: '0 40px 120px rgba(0,0,0,0.8)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '14px 24px', flexShrink: 0,
+          borderBottom: '1px solid rgba(255,255,255,0.06)',
+          background: 'rgba(8,8,8,0.98)',
         }}
       >
-        {/* Thumbnail preview */}
-        <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden', background: '#111' }}>
-          <img src={catalogue.thumbnail} alt={catalogue.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.7 }} />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(8,8,8,0.95) 100%)' }} />
-          <div style={{ position: 'absolute', bottom: '20px', left: '24px' }}>
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '2px', color: 'var(--orange)', marginBottom: '6px' }}>DIGITAL PUBLICATION</div>
-            <div style={{ fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700, fontSize: '28px', letterSpacing: '-1px', color: 'var(--bone)', lineHeight: 1 }}>{catalogue.title}</div>
-            <div style={{ fontFamily: 'Cormorant Garamond,Georgia,serif', fontStyle: 'italic', fontSize: '16px', color: 'var(--muted)' }}>{catalogue.subtitle}</div>
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '2px', color: 'var(--orange)', background: 'rgba(255,77,0,0.1)', border: '1px solid rgba(255,77,0,0.3)', padding: '3px 10px', borderRadius: '2px' }}>
+            DIGITAL PUBLICATION
+          </span>
+          <span style={{ fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700, fontSize: '16px', letterSpacing: '-0.5px', color: 'var(--bone)' }}>
+            {catalogue.title} — {catalogue.subtitle}
+          </span>
         </div>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          <a
+            href={catalogue.flipbookUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={e => e.stopPropagation()}
+            style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: 'var(--orange)', border: '1px solid rgba(255,77,0,0.4)', padding: '8px 16px', borderRadius: '2px', textDecoration: 'none' }}
+          >
+            OPEN FULL ↗
+          </a>
+          <button
+            onClick={onClose}
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--bone)', fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '1px', padding: '8px 16px', borderRadius: '2px', cursor: 'pointer' }}
+          >
+            CLOSE ✕
+          </button>
+        </div>
+      </div>
 
-        {/* Actions */}
-        <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>
-            This flipbook opens in a new tab for the best reading experience — full page flip animations, zoom, and download options.
-          </p>
-          <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
-            <a
-              href={catalogue.flipbookUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                flex: 1, textAlign: 'center',
-                fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px',
-                color: 'var(--ink)', background: 'var(--orange)',
-                border: 'none', padding: '14px', borderRadius: '2px',
-                cursor: 'pointer', textTransform: 'uppercase', textDecoration: 'none',
-                display: 'block', transition: 'all .2s',
-              }}
-            >
-              ▶ Open Flipbook ↗
-            </a>
-            <button
-              onClick={onClose}
-              style={{
-                fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px',
-                color: 'var(--dim)', background: 'transparent',
-                border: '1px solid var(--border)',
-                padding: '14px 20px', borderRadius: '2px', cursor: 'pointer',
-                textTransform: 'uppercase',
-              }}
-            >
-              CLOSE
-            </button>
-          </div>
-        </div>
+      {/* Iframe embed */}
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', background: '#0a0a0a' }}
+      >
+        <iframe
+          src={catalogue.flipbookUrl}
+          style={{ width: '100%', height: '100%', border: 'none', borderRadius: '4px', maxWidth: '1200px' }}
+          seamless
+          scrolling="no"
+          frameBorder="0"
+          allowTransparency={true}
+          allowFullScreen={true}
+          title={catalogue.title}
+        />
       </div>
     </div>
   )
