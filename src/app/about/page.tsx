@@ -94,8 +94,7 @@ export default function AboutPage() {
 
           {/* Photo */}
           <div className="reveal-left" style={{ position: 'relative' }}>
-            {/* FIX: background changed from var(--surface) to var(--ink) to remove white placeholder line */}
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '4/5', borderRadius: '4px', overflow: 'hidden', background: 'var(--ink)' }}>
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '4/5', borderRadius: '4px', overflow: 'hidden', background: 'var(--surface)' }}>
               <Image
                 src="/images/about-portrait.webp"
                 alt="Abhijeeth Subhash — Senior Creative Designer Dubai"
