@@ -83,7 +83,7 @@ export default function AboutPage() {
         }}>
           ABOUT<br />
           <span style={{ fontFamily: 'Cormorant Garamond,Georgia,serif', fontStyle: 'italic', fontWeight: 600, color: 'var(--orange)' }}>
-            Abhijeeth.
+            Me.
           </span>
         </h1>
       </section>
@@ -102,13 +102,7 @@ export default function AboutPage() {
                 style={{ objectFit: 'cover', objectPosition: 'center top' }}
                 onError={() => {}}
               />
-              {/* Placeholder */}
-              <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '6px', pointerEvents: 'none', zIndex: 1 }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '2px', color: 'rgba(255,255,255,0.15)', textAlign: 'center', lineHeight: 2 }}>
-                  YOUR PHOTO HERE<br />
-                  <span style={{ fontSize: '9px' }}>about-photo.webp · 800×1000px</span>
-                </span>
-              </div>
+              
               {/* Bottom fade */}
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '25%', background: 'linear-gradient(transparent,var(--surface))', pointerEvents: 'none', zIndex: 2 }} />
             </div>
@@ -264,3 +258,5 @@ export default function AboutPage() {
     </main>
   )
 }
+
+
