@@ -83,7 +83,7 @@ export default function AboutPage() {
         }}>
           ABOUT<br />
           <span style={{ fontFamily: 'Cormorant Garamond,Georgia,serif', fontStyle: 'italic', fontWeight: 600, color: 'var(--orange)' }}>
-            Me.
+            Abhijeeth.
           </span>
         </h1>
       </section>
@@ -94,7 +94,8 @@ export default function AboutPage() {
 
           {/* Photo */}
           <div className="reveal-left" style={{ position: 'relative' }}>
-            <div style={{ position: 'relative', width: '100%', aspectRatio: '4/5', borderRadius: '4px', overflow: 'hidden', background: 'var(--surface)' }}>
+            {/* FIX: background changed from var(--surface) to var(--ink) to remove white placeholder line */}
+            <div style={{ position: 'relative', width: '100%', aspectRatio: '4/5', borderRadius: '4px', overflow: 'hidden', background: 'var(--ink)' }}>
               <Image
                 src="/images/about-portrait.webp"
                 alt="Abhijeeth Subhash — Senior Creative Designer Dubai"
@@ -102,7 +103,7 @@ export default function AboutPage() {
                 style={{ objectFit: 'cover', objectPosition: 'center top' }}
                 onError={() => {}}
               />
-              
+
               {/* Bottom fade */}
               <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '25%', background: 'linear-gradient(transparent,var(--surface))', pointerEvents: 'none', zIndex: 2 }} />
             </div>
@@ -258,5 +259,3 @@ export default function AboutPage() {
     </main>
   )
 }
-
-
