@@ -83,7 +83,7 @@ export default function AboutPage() {
         }}>
           ABOUT<br />
           <span style={{ fontFamily: 'Cormorant Garamond,Georgia,serif', fontStyle: 'italic', fontWeight: 600, color: 'var(--orange)' }}>
-            Abhijeeth.
+            Me.
           </span>
         </h1>
       </section>
@@ -258,3 +258,4 @@ export default function AboutPage() {
     </main>
   )
 }
+
