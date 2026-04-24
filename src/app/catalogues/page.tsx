@@ -177,7 +177,8 @@ function CatalogueCard({ cat, index, onPreview }: { cat: Catalogue; index: numbe
         overflow: 'hidden',
         background: '#0d0d0d',
         isolation: 'isolate',
-        border: `1px solid ${hover ? 'rgba(255,77,0,0.4)' : 'var(--border)'}`,
+        // FIX: normal state border changed from var(--border) to transparent — removes white line
+        border: `1px solid ${hover ? 'rgba(255,77,0,0.4)' : 'transparent'}`,
         transition: 'all .4s cubic-bezier(.23,1,.32,1)',
         transform: hover ? 'translateY(-8px)' : 'translateY(0)',
         boxShadow: hover ? '0 24px 60px rgba(0,0,0,0.5)' : 'none',
