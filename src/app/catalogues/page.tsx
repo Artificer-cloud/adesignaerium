@@ -176,6 +176,7 @@ function CatalogueCard({ cat, index, onPreview }: { cat: Catalogue; index: numbe
         borderRadius: '4px',
         overflow: 'hidden',
         background: '#0d0d0d',
+        isolation: 'isolate',
         border: `1px solid ${hover ? 'rgba(255,77,0,0.4)' : 'var(--border)'}`,
         transition: 'all .4s cubic-bezier(.23,1,.32,1)',
         transform: hover ? 'translateY(-8px)' : 'translateY(0)',
@@ -185,7 +186,7 @@ function CatalogueCard({ cat, index, onPreview }: { cat: Catalogue; index: numbe
       }}
     >
       {/* Thumbnail */}
-      <div style={{ position: 'relative', aspectRatio: '3/4', overflow: 'hidden', background: '#111' }}>
+      <div style={{ position: 'relative', aspectRatio: '3/4', overflow: 'hidden', background: '#0d0d0d', margin: 0, padding: 0 }}>
         <Image
           src={cat.thumbnail}
           alt={cat.title}
@@ -193,6 +194,7 @@ function CatalogueCard({ cat, index, onPreview }: { cat: Catalogue; index: numbe
           sizes="(max-width:640px) 100vw,(max-width:1024px) 50vw,33vw"
           style={{
             objectFit: 'cover',
+            objectPosition: 'center center',
             transition: 'transform .6s cubic-bezier(.23,1,.32,1)',
             transform: hover ? 'scale(1.06)' : 'scale(1)',
           }}
