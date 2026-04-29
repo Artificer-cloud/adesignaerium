@@ -20,21 +20,32 @@ export default function ThemeToggle() {
   }, [])
 
   const onPointerDown = (e: React.PointerEvent) => {
-    isDragging.current = true; startY.current = e.clientY
-    setPulling(true); setSnap(false)
+    isDragging.current = true
+    startY.current = e.clientY
+    setPulling(true)
+    setSnap(false)
     ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
   }
+
   const onPointerMove = (e: React.PointerEvent) => {
     if (!isDragging.current) return
-    setStretch(Math.min(1, Math.max(0, e.clientY - startY.current) / 80))
+    const delta = Math.max(0, e.clientY - startY.current)
+    setStretch(Math.min(1, delta / 80))
   }
+
   const onPointerUp = () => {
     if (!isDragging.current) return
-    isDragging.current = false; setPulling(false)
+    isDragging.current = false
+    setPulling(false)
     if (stretch > 0.35) {
-      setSnap(true); setGlow(true)
+      setSnap(true)
+      setGlow(true)
       const next = theme === 'dark' ? 'light' : 'dark'
-      setTimeout(() => { setTheme(next); document.documentElement.setAttribute('data-theme',next); localStorage.setItem('theme',next) }, 120)
+      setTimeout(() => {
+        setTheme(next)
+        document.documentElement.setAttribute('data-theme', next)
+        localStorage.setItem('theme', next)
+      }, 120)
       setTimeout(() => { setSnap(false); setStretch(0) }, 400)
       setTimeout(() => setGlow(false), 700)
     } else {
@@ -43,40 +54,140 @@ export default function ThemeToggle() {
     }
   }
 
-  if (!mounted) return <div style={{width:'28px',height:'60px'}}/>
+  if (!mounted) return <div style={{ width: '44px', height: '80px' }} />
 
-  const isDark    = theme === 'dark'
-  const lineLen   = 24 + stretch * 32
-  const bumpY     = stretch * 8
-  const cordColor = isDark ? '#ff4d00' : '#333'
-  const bulbFill  = isDark ? (glow ? '#fff9e6' : '#ede8dd') : (glow ? '#ff4d00' : '#0a0a0a')
+  const isDark  = theme === 'dark'
+  const pull    = stretch * 36
+  const cordLen = 32 + pull
 
   return (
     <div
-      aria-label={`Switch to ${isDark?'light':'dark'} mode`}
-      style={{ position:'relative', width:'28px', height:'60px', display:'flex', flexDirection:'column', alignItems:'center', cursor:pulling?'grabbing':'grab', userSelect:'none', touchAction:'none', flexShrink:0 }}
-      onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={onPointerUp} onPointerCancel={onPointerUp}
+      aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+      title="Drag down to switch theme"
+      style={{
+        position: 'relative',
+        width: '44px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        cursor: pulling ? 'grabbing' : 'grab',
+        userSelect: 'none',
+        touchAction: 'none',
+        flexShrink: 0,
+        paddingTop: '4px',
+      }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={onPointerUp}
+      onPointerCancel={onPointerUp}
     >
-      <svg width="28" height="60" viewBox="0 0 28 60" style={{ overflow:'visible', transition:snap?'all 0.35s cubic-bezier(0.34,1.56,0.64,1)':'none' }}>
-        {glow && <circle cx="14" cy={8+lineLen} r="18" fill={isDark?'rgba(255,249,200,0.5)':'rgba(255,77,0,0.35)'} style={{animation:'glowPulse 0.6s ease-out forwards'}}/>}
-        <path d={`M 14 0 Q ${14+bumpY*1.5} ${lineLen*0.5} 14 ${lineLen}`} stroke={cordColor} strokeWidth={pulling?'2.5':'2'} strokeLinecap="round" fill="none" style={{transition:snap?'all 0.4s cubic-bezier(0.34,1.56,0.64,1)':'stroke-width 0.2s'}}/>
-        <g style={{transition:snap?'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)':'none', transform:`translateY(${lineLen}px)`}}>
-          <circle cx="14" cy="8" r="13" fill="none" stroke={cordColor} strokeWidth="1" style={{animation:'cordBlink 2s ease-in-out infinite'}}/>
-          <circle cx="14" cy="8" r="17" fill="none" stroke={cordColor} strokeWidth="0.5" opacity="0.3" style={{animation:'cordBlink 2s ease-in-out infinite 0.5s'}}/>
-          <circle cx="14" cy="8" r={pulling?9:8} fill={bulbFill} stroke={cordColor} strokeWidth="2" style={{transition:'r 0.15s, fill 0.4s ease'}}/>
-          {isDark ? (
-            <>
-              <circle cx="14" cy="8" r="3" fill={cordColor}/>
-              {[0,45,90,135,180,225,270,315].map((deg,i) => {
-                const rad=(deg*Math.PI)/180
-                return <line key={i} x1={14+Math.cos(rad)*5} y1={8+Math.sin(rad)*5} x2={14+Math.cos(rad)*6.5} y2={8+Math.sin(rad)*6.5} stroke={cordColor} strokeWidth="1.2" strokeLinecap="round"/>
-              })}
-            </>
-          ) : (
-            <path d="M 15.5 4.5 A 4 4 0 1 1 12 11 A 2.8 2.8 0 0 0 15.5 4.5 Z" fill={isDark?'#ede8dd':'#f6eee3'} stroke="none"/>
-          )}
+      <svg
+        width="44"
+        height="120"
+        viewBox="0 0 44 120"
+        style={{ overflow: 'visible' }}
+      >
+        {/* Ceiling dot */}
+        <rect x="16" y="0" width="12" height="3" rx="1.5" fill="var(--border)" />
+
+        {/* Swinging lamp group */}
+        <g
+          style={{
+            transformOrigin: '22px 0px',
+            animation: pulling ? 'none' : 'lampSwing 2.6s cubic-bezier(.45,.05,.55,.95) infinite',
+            transform: snap ? 'rotate(0deg)' : undefined,
+            transition: snap ? 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
+          }}
+        >
+          {/* Cord — stretches when dragging */}
+          <line
+            x1="22" y1="3"
+            x2="22" y2={3 + cordLen}
+            stroke={isDark ? '#ff4d00' : '#888'}
+            strokeWidth="1.5"
+            strokeDasharray="4,3"
+            strokeLinecap="round"
+            style={{ transition: snap ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none' }}
+          />
+
+          {/* Pull ring */}
+          <circle
+            cx="22" cy={3 + cordLen + 5}
+            r="5"
+            fill="none"
+            stroke="#ff4d00"
+            strokeWidth="2"
+            style={{
+              transition: snap ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
+              animation: pulling ? 'none' : 'ringPulse 2.6s ease-in-out infinite',
+            }}
+          />
+
+          {/* Lamp shade */}
+          <g style={{
+            transform: `translateY(${3 + cordLen + 10}px)`,
+            transition: snap ? 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
+          }}>
+            <path d="M6,0 L0,28 L44,28 L38,0 Z" fill="#ff4d00" opacity="0.92" />
+            <path d="M6,0 L38,0" stroke="#cc3d00" strokeWidth="1.2" />
+            {/* Bulb */}
+            <circle cx="22" cy="34" r="8"
+              fill={glow ? '#fff9e6' : (isDark ? '#ffe066' : '#555')}
+              style={{ transition: 'fill 0.4s ease' }}
+            />
+            {/* Glow halo */}
+            <circle cx="22" cy="34" r="16"
+              fill={glow ? 'rgba(255,249,200,0.4)' : (isDark ? 'rgba(255,224,102,0.15)' : 'transparent')}
+              style={{ transition: 'all 0.4s ease' }}
+            />
+          </g>
         </g>
+
+        {/* Bounce arrow hint — below lamp, always visible */}
+        <g style={{ animation: 'arrowBounce 1.6s ease-in-out infinite' }}>
+          <path
+            d="M22,98 L22,108 M17,104 L22,110 L27,104"
+            stroke="#ff4d00"
+            strokeWidth="1.5"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </g>
+
+        {/* DRAG DOWN text */}
+        <text x="22" y="118" textAnchor="middle" fill="#ff4d00"
+          fontSize="7" fontFamily="monospace" letterSpacing="1.5">
+          DRAG DOWN
+        </text>
       </svg>
+
+      {/* "to switch theme" below svg */}
+      <span style={{
+        fontFamily: 'var(--font-mono)',
+        fontSize: '7px',
+        letterSpacing: '1px',
+        color: 'var(--dim)',
+        whiteSpace: 'nowrap',
+        marginTop: '2px',
+      }}>
+        to switch theme
+      </span>
+
+      <style>{`
+        @keyframes lampSwing {
+          0%,100% { transform: rotate(-8deg); }
+          50%      { transform: rotate(8deg);  }
+        }
+        @keyframes ringPulse {
+          0%,100% { opacity: 1;   r: 5; }
+          50%      { opacity: 0.5; r: 6; }
+        }
+        @keyframes arrowBounce {
+          0%,100% { transform: translateY(0px);  }
+          50%      { transform: translateY(5px); }
+        }
+      `}</style>
     </div>
   )
 }
