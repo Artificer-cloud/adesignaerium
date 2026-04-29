@@ -54,11 +54,14 @@ export default function ThemeToggle() {
     }
   }
 
-  if (!mounted) return <div style={{ width: '44px', height: '80px' }} />
+  if (!mounted) return <div style={{ width: '44px', height: '90px' }} />
 
   const isDark  = theme === 'dark'
   const pull    = stretch * 36
-  const cordLen = 32 + pull
+  const cordLen = 28 + pull
+
+  const bulbFill = glow ? '#fffbe6' : (isDark ? '#ffe066' : '#c0b090')
+  const rayColor = glow ? '#ffcc00' : (isDark ? '#ffcc00' : '#8a7a55')
 
   return (
     <div
@@ -81,110 +84,100 @@ export default function ThemeToggle() {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <svg
-        width="44"
-        height="120"
-        viewBox="0 0 44 120"
-        style={{ overflow: 'visible' }}
-      >
-        {/* Ceiling dot */}
-        <rect x="16" y="0" width="12" height="3" rx="1.5" fill="var(--border)" />
+      <svg width="44" height="130" viewBox="0 0 44 130" style={{ overflow: 'visible' }}>
+        {/* Ceiling mount */}
+        <rect x="14" y="0" width="16" height="3" rx="1.5" fill="var(--border)" />
+        <rect x="20" y="3" width="4" height="4" rx="1" fill="var(--dim)" />
 
         {/* Swinging lamp group */}
-        <g
-          style={{
-            transformOrigin: '22px 0px',
-            animation: pulling ? 'none' : 'lampSwing 2.6s cubic-bezier(.45,.05,.55,.95) infinite',
-            transform: snap ? 'rotate(0deg)' : undefined,
-            transition: snap ? 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
-          }}
-        >
-          {/* Cord — stretches when dragging */}
-          <line
-            x1="22" y1="3"
-            x2="22" y2={3 + cordLen}
-            stroke={isDark ? '#ff4d00' : '#888'}
-            strokeWidth="1.5"
-            strokeDasharray="4,3"
-            strokeLinecap="round"
+        <g style={{
+          transformOrigin: '22px 0px',
+          animation: pulling ? 'none' : 'lampSwing 3s cubic-bezier(.45,.05,.55,.95) infinite',
+          transform: snap ? 'rotate(0deg)' : undefined,
+          transition: snap ? 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
+        }}>
+          {/* Cord */}
+          <line x1="22" y1="6" x2="22" y2={6 + cordLen}
+            stroke={isDark ? '#ff4d00' : '#777'}
+            strokeWidth="1.5" strokeDasharray="3,3" strokeLinecap="round"
             style={{ transition: snap ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none' }}
           />
-
           {/* Pull ring */}
-          <circle
-            cx="22" cy={3 + cordLen + 5}
-            r="5"
-            fill="none"
-            stroke="#ff4d00"
-            strokeWidth="2"
+          <circle cx="22" cy={6 + cordLen + 5} r="4.5"
+            fill="none" stroke="#ff4d00" strokeWidth="1.8"
             style={{
               transition: snap ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
-              animation: pulling ? 'none' : 'ringPulse 2.6s ease-in-out infinite',
+              animation: pulling ? 'none' : 'ringPulse 3s ease-in-out infinite',
             }}
           />
 
-          {/* Lamp shade */}
+          {/* Lamp shade + bulb group */}
           <g style={{
-            transform: `translateY(${3 + cordLen + 10}px)`,
+            transform: `translateY(${6 + cordLen + 10}px)`,
             transition: snap ? 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
           }}>
-            <path d="M6,0 L0,28 L44,28 L38,0 Z" fill="#ff4d00" opacity="0.92" />
-            <path d="M6,0 L38,0" stroke="#cc3d00" strokeWidth="1.2" />
-            {/* Bulb */}
-            <circle cx="22" cy="34" r="8"
-              fill={glow ? '#fff9e6' : (isDark ? '#ffe066' : '#555')}
-              style={{ transition: 'fill 0.4s ease' }}
+            {/* Shade */}
+            <path d="M8,0 L2,24 L42,24 L36,0 Z" fill="#ff4d00" opacity="0.93" />
+            <path d="M8,0 L36,0" stroke="#cc3d00" strokeWidth="1" />
+            <path d="M2,24 L42,24" stroke="rgba(0,0,0,0.25)" strokeWidth="1" />
+            {glow && <path d="M8,0 L2,24 L42,24 L36,0 Z" fill="rgba(255,249,200,0.15)" />}
+
+            {/* Glow halo behind bulb */}
+            <circle cx="22" cy="35" r={glow ? 18 : (isDark ? 13 : 9)}
+              fill={glow ? 'rgba(255,249,200,0.3)' : (isDark ? 'rgba(255,224,102,0.1)' : 'transparent')}
+              style={{ transition: 'all 0.5s ease' }}
             />
-            {/* Glow halo */}
-            <circle cx="22" cy="34" r="16"
-              fill={glow ? 'rgba(255,249,200,0.4)' : (isDark ? 'rgba(255,224,102,0.15)' : 'transparent')}
-              style={{ transition: 'all 0.4s ease' }}
-            />
+
+            {/* BULB — sun icon (dark mode) */}
+            {isDark && (
+              <g>
+                {[0,45,90,135,180,225,270,315].map((angle) => {
+                  const rad = (angle * Math.PI) / 180
+                  return <line key={angle}
+                    x1={22 + Math.cos(rad) * 11} y1={35 + Math.sin(rad) * 11}
+                    x2={22 + Math.cos(rad) * 14.5} y2={35 + Math.sin(rad) * 14.5}
+                    stroke={rayColor} strokeWidth="1.5" strokeLinecap="round"
+                    style={{ transition: 'stroke 0.4s ease' }}
+                  />
+                })}
+                <circle cx="22" cy="35" r="8" fill={bulbFill}
+                  style={{ transition: 'fill 0.4s ease', filter: glow ? 'drop-shadow(0 0 5px #ffe066)' : 'none' }}
+                />
+              </g>
+            )}
+
+            {/* BULB — moon icon (light mode) */}
+            {!isDark && (
+              <g>
+                <circle cx="22" cy="35" r="8" fill={bulbFill} style={{ transition: 'fill 0.4s ease' }} />
+                <circle cx="25.5" cy="32" r="6.5" fill="var(--surface)" style={{ transition: 'fill 0.4s ease' }} />
+                <circle cx="33" cy="28" r="0.9" fill="#8a8070" opacity="0.6" />
+                <circle cx="30" cy="23" r="0.6" fill="#8a8070" opacity="0.4" />
+              </g>
+            )}
           </g>
         </g>
 
-        {/* Bounce arrow hint — below lamp, always visible */}
+        {/* Bounce arrow */}
         <g style={{ animation: 'arrowBounce 1.6s ease-in-out infinite' }}>
-          <path
-            d="M22,98 L22,108 M17,104 L22,110 L27,104"
-            stroke="#ff4d00"
-            strokeWidth="1.5"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
+          <line x1="22" y1="102" x2="22" y2="111" stroke="#ff4d00" strokeWidth="1.4" strokeLinecap="round" />
+          <polyline points="17,107 22,113 27,107" fill="none" stroke="#ff4d00" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
         </g>
 
-        {/* DRAG DOWN text */}
-        <text x="22" y="118" textAnchor="middle" fill="#ff4d00"
-          fontSize="7" fontFamily="monospace" letterSpacing="1.5">
-          DRAG DOWN
-        </text>
+        <text x="22" y="127" textAnchor="middle" fill="#ff4d00" fontSize="7" fontFamily="monospace" letterSpacing="1.5">DRAG</text>
       </svg>
-
-      {/* "to switch theme" below svg */}
-      <span style={{
-        fontFamily: 'var(--font-mono)',
-        fontSize: '7px',
-        letterSpacing: '1px',
-        color: 'var(--dim)',
-        whiteSpace: 'nowrap',
-        marginTop: '2px',
-      }}>
-        to switch theme
-      </span>
 
       <style>{`
         @keyframes lampSwing {
-          0%,100% { transform: rotate(-8deg); }
-          50%      { transform: rotate(8deg);  }
+          0%,100% { transform: rotate(-7deg); }
+          50%      { transform: rotate(7deg);  }
         }
         @keyframes ringPulse {
-          0%,100% { opacity: 1;   r: 5; }
-          50%      { opacity: 0.5; r: 6; }
+          0%,100% { opacity: 1; }
+          50%      { opacity: 0.4; }
         }
         @keyframes arrowBounce {
-          0%,100% { transform: translateY(0px);  }
+          0%,100% { transform: translateY(0px); }
           50%      { transform: translateY(5px); }
         }
       `}</style>

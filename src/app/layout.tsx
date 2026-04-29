@@ -15,7 +15,18 @@ export const metadata: Metadata = {
   description: 'Senior Creative Designer specialising in Branding, UI/UX, AI Visual Design, Motion & Photography. Based in Dubai, UAE.',
   keywords: ['creative designer','UI/UX designer','branding','Dubai','AI design','Midjourney','Figma','Abhijeeth Subhash'],
   metadataBase: new URL('https://adesignaerium.com'),
-  openGraph: { title:'Abhijeeth Subhash — Creative Designer Dubai', description:'Senior Creative Designer based in Dubai.', url:'https://adesignaerium.com', type:'website', siteName:'ADesignAerium' },
+  openGraph: {
+    title: 'Abhijeeth Subhash — Creative Designer Dubai',
+    description: 'Senior Creative Designer based in Dubai. Branding, UI/UX, AI Visual Design, Motion & Photography.',
+    url: 'https://adesignaerium.com',
+    type: 'website',
+    siteName: 'ADesignAerium',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Abhijeeth Subhash — Creative Designer Dubai',
+    description: 'Senior Creative Designer based in Dubai. Branding, UI/UX, AI Visual Design.',
+  },
   robots: { index:true, follow:true },
 }
 
