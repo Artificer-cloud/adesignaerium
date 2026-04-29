@@ -60,8 +60,29 @@ export default function ThemeToggle() {
   const pull    = stretch * 36
   const cordLen = 28 + pull
 
-  const bulbFill = glow ? '#fffbe6' : (isDark ? '#ffe066' : '#c0b090')
-  const rayColor = glow ? '#ffcc00' : (isDark ? '#ffcc00' : '#8a7a55')
+  // Icon sits at this center inside the swinging group
+  const cx = 22
+  const cy = 42
+
+  // Colours
+  const O  = '#ff4d00'                          // orange
+  const Od = isDark ? O : 'rgba(255,77,0,0.5)' // orange dimmed in light mode
+
+  // Cog: 10 teeth, inner radius 10, outer 13.5, body fill orange
+  const COG_TEETH    = 10
+  const COG_INNER    = 10
+  const COG_OUTER    = 13.5
+  const TOOTH_HALF   = (Math.PI / COG_TEETH) * 0.42  // tooth arc half-width
+
+  const cogPath = Array.from({ length: COG_TEETH }, (_, i) => {
+    const a0 = (i / COG_TEETH) * Math.PI * 2 - Math.PI / 2
+    const a1 = a0 + TOOTH_HALF
+    const a2 = a0 + (Math.PI / COG_TEETH) - TOOTH_HALF
+    const a3 = a0 + (Math.PI / COG_TEETH)
+    const p = (r: number, a: number) => `${(cx + Math.cos(a) * r).toFixed(2)},${(cy + Math.sin(a) * r).toFixed(2)}`
+    return `L${p(COG_INNER, a0)} L${p(COG_OUTER, a1)} L${p(COG_OUTER, a2)} L${p(COG_INNER, a3)}`
+  }).join(' ')
+  const cogD = `M${(cx + COG_INNER).toFixed(2)},${cy.toFixed(2)} ${cogPath} Z`
 
   return (
     <div
@@ -84,87 +105,139 @@ export default function ThemeToggle() {
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      <svg width="44" height="130" viewBox="0 0 44 130" style={{ overflow: 'visible' }}>
-        {/* Ceiling mount */}
-        <rect x="14" y="0" width="16" height="3" rx="1.5" fill="var(--border)" />
-        <rect x="20" y="3" width="4" height="4" rx="1" fill="var(--dim)" />
+      <svg width="44" height="136" viewBox="0 0 44 136" style={{ overflow: 'visible' }}>
 
-        {/* Swinging lamp group */}
+        {/* ── Ceiling mount ── */}
+        <rect x="13" y="0" width="18" height="3" rx="1.5" fill="var(--border)" />
+        <rect x="20" y="3" width="4"  height="4" rx="1"   fill="var(--dim)"    />
+
+        {/* ── Swinging group ── */}
         <g style={{
           transformOrigin: '22px 0px',
           animation: pulling ? 'none' : 'lampSwing 3s cubic-bezier(.45,.05,.55,.95) infinite',
           transform: snap ? 'rotate(0deg)' : undefined,
           transition: snap ? 'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
         }}>
+
           {/* Cord */}
           <line x1="22" y1="6" x2="22" y2={6 + cordLen}
-            stroke={isDark ? '#ff4d00' : '#777'}
+            stroke={isDark ? O : '#666'}
             strokeWidth="1.5" strokeDasharray="3,3" strokeLinecap="round"
             style={{ transition: snap ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none' }}
           />
+
           {/* Pull ring */}
           <circle cx="22" cy={6 + cordLen + 5} r="4.5"
-            fill="none" stroke="#ff4d00" strokeWidth="1.8"
+            fill="none" stroke={O} strokeWidth="1.8"
             style={{
               transition: snap ? 'all 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
               animation: pulling ? 'none' : 'ringPulse 3s ease-in-out infinite',
             }}
           />
 
-          {/* Lamp shade + bulb group */}
+          {/* ── Icon group — translates down with cord ── */}
           <g style={{
             transform: `translateY(${6 + cordLen + 10}px)`,
             transition: snap ? 'transform 0.4s cubic-bezier(0.34,1.56,0.64,1)' : 'none',
           }}>
-            {/* Shade */}
-            <path d="M8,0 L2,24 L42,24 L36,0 Z" fill="#ff4d00" opacity="0.93" />
-            <path d="M8,0 L36,0" stroke="#cc3d00" strokeWidth="1" />
-            <path d="M2,24 L42,24" stroke="rgba(0,0,0,0.25)" strokeWidth="1" />
-            {glow && <path d="M8,0 L2,24 L42,24 L36,0 Z" fill="rgba(255,249,200,0.15)" />}
 
-            {/* Glow halo behind bulb */}
-            <circle cx="22" cy="35" r={glow ? 18 : (isDark ? 13 : 9)}
-              fill={glow ? 'rgba(255,249,200,0.3)' : (isDark ? 'rgba(255,224,102,0.1)' : 'transparent')}
+            {/* ① Vertical stem connecting cord to icon */}
+            <line x1={cx} y1="0" x2={cx} y2="28"
+              stroke={Od} strokeWidth="1.8" strokeLinecap="round"
+              style={{ transition: 'stroke 0.4s ease' }}
+            />
+
+            {/* ② Three concentric halo rings */}
+            <circle cx={cx} cy={cy} r="20"
+              fill="none"
+              stroke={isDark ? 'rgba(255,77,0,0.18)' : 'rgba(255,77,0,0.08)'}
+              strokeWidth="1"
+              style={{ transition: 'all 0.5s ease' }}
+            />
+            <circle cx={cx} cy={cy} r="16.5"
+              fill="none"
+              stroke={isDark ? 'rgba(255,77,0,0.28)' : 'rgba(255,77,0,0.12)'}
+              strokeWidth="1"
+              style={{ transition: 'all 0.5s ease' }}
+            />
+            <circle cx={cx} cy={cy} r="13.5"
+              fill="none"
+              stroke={isDark ? 'rgba(255,77,0,0.42)' : 'rgba(255,77,0,0.2)'}
+              strokeWidth="1.2"
               style={{ transition: 'all 0.5s ease' }}
             />
 
-            {/* BULB — sun icon (dark mode) */}
+            {/* ③ Glow halo burst on toggle */}
+            {glow && (
+              <circle cx={cx} cy={cy} r="22"
+                fill="rgba(255,100,0,0.18)"
+                style={{ transition: 'all 0.5s ease' }}
+              />
+            )}
+
+            {/* ④ Cog/gear shape — solid orange, teeth on outside */}
+            <path d={cogD}
+              fill={Od}
+              style={{ transition: 'fill 0.4s ease' }}
+            />
+
+            {/* ⑤ Inner circle cutout (dark hole inside cog) */}
+            <circle cx={cx} cy={cy} r="7.5"
+              fill={isDark ? '#0a0808' : '#f0ede8'}
+              style={{ transition: 'fill 0.4s ease' }}
+            />
+
+            {/* ⑥ SUN — shown in dark mode */}
             {isDark && (
               <g>
-                {[0,45,90,135,180,225,270,315].map((angle) => {
-                  const rad = (angle * Math.PI) / 180
-                  return <line key={angle}
-                    x1={22 + Math.cos(rad) * 11} y1={35 + Math.sin(rad) * 11}
-                    x2={22 + Math.cos(rad) * 14.5} y2={35 + Math.sin(rad) * 14.5}
-                    stroke={rayColor} strokeWidth="1.5" strokeLinecap="round"
-                    style={{ transition: 'stroke 0.4s ease' }}
-                  />
+                {/* 8 rays */}
+                {Array.from({ length: 8 }, (_, i) => {
+                  const a = (i / 8) * Math.PI * 2 - Math.PI / 2
+                  return (
+                    <line key={i}
+                      x1={cx + Math.cos(a) * 3.5} y1={cy + Math.sin(a) * 3.5}
+                      x2={cx + Math.cos(a) * 6.2} y2={cy + Math.sin(a) * 6.2}
+                      stroke={glow ? '#ffe066' : O}
+                      strokeWidth="1.3" strokeLinecap="round"
+                      style={{ transition: 'stroke 0.4s ease' }}
+                    />
+                  )
                 })}
-                <circle cx="22" cy="35" r="8" fill={bulbFill}
-                  style={{ transition: 'fill 0.4s ease', filter: glow ? 'drop-shadow(0 0 5px #ffe066)' : 'none' }}
+                {/* Sun core */}
+                <circle cx={cx} cy={cy} r="2.8"
+                  fill={glow ? '#ffe066' : O}
+                  style={{ transition: 'fill 0.4s ease', filter: glow ? 'drop-shadow(0 0 3px #ffe066)' : 'none' }}
                 />
               </g>
             )}
 
-            {/* BULB — moon icon (light mode) */}
+            {/* ⑦ MOON — shown in light mode */}
             {!isDark && (
               <g>
-                <circle cx="22" cy="35" r="8" fill={bulbFill} style={{ transition: 'fill 0.4s ease' }} />
-                <circle cx="25.5" cy="32" r="6.5" fill="var(--surface)" style={{ transition: 'fill 0.4s ease' }} />
-                <circle cx="33" cy="28" r="0.9" fill="#8a8070" opacity="0.6" />
-                <circle cx="30" cy="23" r="0.6" fill="#8a8070" opacity="0.4" />
+                {/* Moon body */}
+                <circle cx={cx - 0.8} cy={cy} r="4.2"
+                  fill="rgba(255,77,0,0.5)"
+                  style={{ transition: 'fill 0.4s ease' }}
+                />
+                {/* Crescent cutout */}
+                <circle cx={cx + 1.8} cy={cy - 1.2} r="3.2"
+                  fill={isDark ? '#0a0808' : '#f0ede8'}
+                  style={{ transition: 'fill 0.4s ease' }}
+                />
               </g>
             )}
+
           </g>
         </g>
 
-        {/* Bounce arrow */}
+        {/* ── Bounce arrow ── */}
         <g style={{ animation: 'arrowBounce 1.6s ease-in-out infinite' }}>
-          <line x1="22" y1="102" x2="22" y2="111" stroke="#ff4d00" strokeWidth="1.4" strokeLinecap="round" />
-          <polyline points="17,107 22,113 27,107" fill="none" stroke="#ff4d00" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          <line x1="22" y1="108" x2="22" y2="117" stroke={O} strokeWidth="1.4" strokeLinecap="round" />
+          <polyline points="17,113 22,119 27,113" fill="none" stroke={O} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
         </g>
 
-        <text x="22" y="127" textAnchor="middle" fill="#ff4d00" fontSize="7" fontFamily="monospace" letterSpacing="1.5">DRAG</text>
+        <text x="22" y="132" textAnchor="middle" fill={O} fontSize="7" fontFamily="monospace" letterSpacing="1.5">DRAG</text>
+
       </svg>
 
       <style>{`
@@ -173,8 +246,8 @@ export default function ThemeToggle() {
           50%      { transform: rotate(7deg);  }
         }
         @keyframes ringPulse {
-          0%,100% { opacity: 1; }
-          50%      { opacity: 0.4; }
+          0%,100% { opacity: 1;   }
+          50%      { opacity: 0.3; }
         }
         @keyframes arrowBounce {
           0%,100% { transform: translateY(0px); }
