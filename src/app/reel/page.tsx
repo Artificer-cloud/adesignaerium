@@ -1,7 +1,21 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { videos, VIDEO_CATEGORIES, type VideoCategory, type Video } from '@/lib/videos'
+
+type VideoCategory = 'All' | 'AI Generated' | 'Product' | 'Social Content' | 'Brand Film'
+
+type YTVideo = {
+  id:          string
+  title:       string
+  description: string
+  thumbnail:   string
+  publishedAt: string
+  category:    string
+  duration:    string
+  views:       string
+}
+
+const CATEGORIES: VideoCategory[] = ['All','AI Generated','Product','Social Content','Brand Film']
 
 const CAT_COLORS: Record<string, string> = {
   'All':           'var(--orange)',
@@ -11,10 +25,8 @@ const CAT_COLORS: Record<string, string> = {
   'Brand Film':    '#d97706',
 }
 
-function VideoCard({ v, onPlay }: { v: Video; onPlay: (v: Video) => void }) {
+function VideoCard({ v, onPlay }: { v: YTVideo; onPlay: (v: YTVideo) => void }) {
   const [hovered, setHovered] = useState(false)
-  const hasId  = v.id && !v.id.startsWith('REPLACE')
-  const thumb  = hasId ? `https://img.youtube.com/vi/${v.id}/maxresdefault.jpg` : null
 
   return (
     <div
@@ -25,19 +37,25 @@ function VideoCard({ v, onPlay }: { v: Video; onPlay: (v: Video) => void }) {
         position:'relative', aspectRatio:'16/9',
         borderRadius:'4px', overflow:'hidden', cursor:'pointer',
         background:'#0a0a0a',
-        border:`1px solid ${hovered ? 'rgba(255,77,0,0.4)' : 'var(--border)'}`,
+        border:`1px solid ${hovered ? 'rgba(255,77,0,0.45)' : 'var(--border)'}`,
         transform: hovered ? 'translateY(-3px)' : 'none',
-        transition:'border-color .25s ease, transform .3s cubic-bezier(.23,1,.32,1)',
+        transition:'border-color .25s, transform .3s cubic-bezier(.23,1,.32,1)',
       }}
     >
       {/* Thumbnail */}
-      {thumb
-        ? <img src={thumb} alt={v.title} style={{ position:'absolute', inset:0, width:'100%', height:'100%', objectFit:'cover', opacity: hovered ? 0.55 : 0.42, transition:'opacity .35s ease' }}/>
-        : <div style={{ position:'absolute', inset:0, background:'repeating-linear-gradient(45deg,#0d0d0d 0,#0d0d0d 8px,#111 8px,#111 16px)', opacity:.7 }}/>
-      }
+      <img
+        src={v.thumbnail}
+        alt={v.title}
+        style={{
+          position:'absolute', inset:0, width:'100%', height:'100%',
+          objectFit:'cover',
+          opacity: hovered ? 0.55 : 0.42,
+          transition:'opacity .35s ease',
+        }}
+      />
 
       {/* Gradient */}
-      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,rgba(0,0,0,0.78) 100%)' }}/>
+      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0.02) 0%,rgba(0,0,0,0.8) 100%)' }}/>
 
       {/* Play button */}
       <div style={{
@@ -46,8 +64,7 @@ function VideoCard({ v, onPlay }: { v: Video; onPlay: (v: Video) => void }) {
         width:'48px', height:'48px',
         background: hovered ? 'var(--orange)' : 'rgba(255,255,255,0.1)',
         border:`2px solid ${hovered ? 'var(--orange)' : 'rgba(255,255,255,0.28)'}`,
-        borderRadius:'50%',
-        display:'flex', alignItems:'center', justifyContent:'center',
+        borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
         transition:'all .25s ease',
       }}>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
@@ -55,17 +72,17 @@ function VideoCard({ v, onPlay }: { v: Video; onPlay: (v: Video) => void }) {
         </svg>
       </div>
 
-      {/* Duration */}
+      {/* Duration badge */}
       {v.duration && (
         <div style={{
           position:'absolute', top:'12px', right:'12px',
           fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'1px',
-          color:'rgba(255,255,255,0.85)', background:'rgba(0,0,0,0.65)',
+          color:'rgba(255,255,255,0.9)', background:'rgba(0,0,0,0.7)',
           padding:'3px 8px', borderRadius:'2px',
         }}>{v.duration}</div>
       )}
 
-      {/* Category */}
+      {/* Category badge */}
       <div style={{
         position:'absolute', top:'12px', left:'12px',
         fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'1.5px',
@@ -84,109 +101,136 @@ function VideoCard({ v, onPlay }: { v: Video; onPlay: (v: Video) => void }) {
           fontSize:'clamp(13px,1.5vw,16px)', letterSpacing:'-0.5px',
           color:'var(--bone)', lineHeight:1.2, marginBottom:'4px',
         }}>{v.title}</div>
-        <div style={{ fontFamily:'var(--font-mono)', fontSize:'9px', color:'rgba(255,255,255,0.32)', letterSpacing:'1px' }}>
-          {v.client || (v.project ? v.project.replace(/-/g,' ').toUpperCase() : '')}
-          {v.year ? ` · ${v.year}` : ''}
-        </div>
+        {v.description && (
+          <div style={{
+            fontFamily:'var(--font-mono)', fontSize:'9px',
+            color:'rgba(255,255,255,0.3)', letterSpacing:'0.5px',
+            overflow:'hidden', display:'-webkit-box',
+            WebkitLineClamp:1, WebkitBoxOrient:'vertical',
+          }}>{v.description}</div>
+        )}
       </div>
     </div>
   )
 }
 
-function VideoModal({ video, onClose }: { video: Video; onClose: () => void }) {
-  const hasId = video.id && !video.id.startsWith('REPLACE')
+function VideoModal({ video, onClose }: { video: YTVideo; onClose: () => void }) {
+  // Close on Escape key
+  useEffect(() => {
+    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', fn)
+    return () => window.removeEventListener('keydown', fn)
+  }, [onClose])
 
   return (
-    <div
-      onClick={onClose}
-      style={{
-        position:'fixed', inset:0, zIndex:9999,
-        background:'rgba(0,0,0,0.96)',
-        display:'flex', alignItems:'center', justifyContent:'center',
-        padding:'clamp(16px,4vw,48px)', cursor:'zoom-out',
-      }}
-    >
+    <div onClick={onClose} style={{
+      position:'fixed', inset:0, zIndex:9999,
+      background:'rgba(0,0,0,0.96)',
+      display:'flex', alignItems:'center', justifyContent:'center',
+      padding:'clamp(16px,4vw,48px)', cursor:'zoom-out',
+    }}>
       <div onClick={e => e.stopPropagation()} style={{ width:'100%', maxWidth:'980px', cursor:'default' }}>
 
         {/* Header */}
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'16px' }}>
-          <div>
+          <div style={{ flex:1, paddingRight:'16px' }}>
             <div style={{
               fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700,
-              fontSize:'clamp(18px,3vw,28px)', letterSpacing:'-1px',
-              color:'var(--bone)', lineHeight:1.1, marginBottom:'6px',
+              fontSize:'clamp(16px,2.5vw,26px)', letterSpacing:'-1px',
+              color:'var(--bone)', lineHeight:1.15, marginBottom:'6px',
             }}>{video.title}</div>
-            <div style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--muted)', letterSpacing:'2px' }}>
-              {video.category.toUpperCase()} · {video.year}{video.client ? ` · ${video.client}` : ''}
+            <div style={{ display:'flex', alignItems:'center', gap:'12px', flexWrap:'wrap' }}>
+              <span style={{
+                fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'1.5px',
+                color:'white', background: CAT_COLORS[video.category] || 'var(--orange)',
+                padding:'3px 10px', borderRadius:'2px', textTransform:'uppercase',
+              }}>{video.category}</span>
+              {video.duration && (
+                <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--dim)', letterSpacing:'1px' }}>{video.duration}</span>
+              )}
+              <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', color:'var(--dim)', letterSpacing:'1px' }}>
+                {new Date(video.publishedAt).toLocaleDateString('en-GB', { month:'short', year:'numeric' })}
+              </span>
             </div>
           </div>
           <button onClick={onClose} style={{
-            background:'none', border:'1px solid var(--border)',
-            color:'var(--muted)', cursor:'pointer',
-            width:'36px', height:'36px', borderRadius:'50%',
-            fontSize:'16px', flexShrink:0, marginLeft:'16px',
+            background:'none', border:'1px solid var(--border)', color:'var(--muted)',
+            cursor:'pointer', width:'36px', height:'36px', borderRadius:'50%',
+            fontSize:'16px', flexShrink:0,
           }}>✕</button>
         </div>
 
         {/* Player */}
         <div style={{ position:'relative', aspectRatio:'16/9', background:'#000', borderRadius:'4px', overflow:'hidden', border:'1px solid var(--border)' }}>
-          {hasId ? (
-            <iframe
-              src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1`}
-              allow="autoplay; encrypted-media; fullscreen"
-              allowFullScreen
-              style={{ position:'absolute', inset:0, width:'100%', height:'100%', border:'none' }}
-              title={video.title}
-            />
-          ) : (
-            <div style={{
-              position:'absolute', inset:0,
-              display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:'12px',
-            }}>
-              <div style={{ fontSize:'40px', opacity:.12 }}>▶</div>
-              <p style={{ fontFamily:'monospace', fontSize:'11px', letterSpacing:'2px', color:'#4a4a4a', textAlign:'center', lineHeight:1.8 }}>
-                Replace &quot;{video.id}&quot;<br/>with your YouTube ID in src/lib/videos.ts
-              </p>
-            </div>
-          )}
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1`}
+            allow="autoplay; encrypted-media; fullscreen"
+            allowFullScreen
+            style={{ position:'absolute', inset:0, width:'100%', height:'100%', border:'none' }}
+            title={video.title}
+          />
         </div>
 
-        {/* Footer */}
-        <div style={{ marginTop:'16px', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:'12px' }}>
+        {/* Description */}
+        {video.description && (
           <p style={{
+            marginTop:'16px',
             fontFamily:'var(--font-body)', fontSize:'14px', fontStyle:'italic',
-            color:'var(--muted)', lineHeight:1.65, maxWidth:'540px',
+            color:'var(--muted)', lineHeight:1.65,
           }}>{video.description}</p>
-          {video.project && (
-            <Link href={`/work/${video.project}`} onClick={onClose} style={{
-              fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px',
-              color:'var(--orange)', border:'1px solid rgba(255,77,0,0.3)',
-              padding:'8px 16px', borderRadius:'2px', whiteSpace:'nowrap',
-            }}>
-              VIEW CASE STUDY ↗
-            </Link>
-          )}
-        </div>
+        )}
       </div>
     </div>
   )
 }
 
+function SkeletonCard() {
+  return (
+    <div style={{
+      aspectRatio:'16/9', borderRadius:'4px',
+      background:'var(--surface)', border:'1px solid var(--border)',
+      animation:'pulse 1.5s ease-in-out infinite',
+    }}/>
+  )
+}
+
 export default function ReelPage() {
-  const [cat,        setCat]        = useState<VideoCategory>('All')
-  const [activeVideo,setActiveVideo]= useState<Video | null>(null)
+  const [videos,      setVideos]      = useState<YTVideo[]>([])
+  const [loading,     setLoading]     = useState(true)
+  const [error,       setError]       = useState(false)
+  const [cat,         setCat]         = useState<VideoCategory>('All')
+  const [activeVideo, setActiveVideo] = useState<YTVideo | null>(null)
+  const [channelInfo, setChannelInfo] = useState<{ title:string; thumb:string } | null>(null)
+
+  useEffect(() => {
+    fetch('/api/youtube')
+      .then(r => r.json())
+      .then(data => {
+        if (data.videos?.length) {
+          setVideos(data.videos)
+          if (data.channelTitle) setChannelInfo({ title: data.channelTitle, thumb: data.channelThumb })
+        } else {
+          setError(true)
+        }
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false))
+  }, [])
 
   const filtered = cat === 'All' ? videos : videos.filter(v => v.category === cat)
+
+  const catCount = (c: VideoCategory) => c === 'All' ? videos.length : videos.filter(v => v.category === c).length
 
   return (
     <main style={{ paddingTop:'80px', minHeight:'100vh', background:'var(--ink)' }}>
 
       {/* ── Hero ── */}
       <section style={{ padding:'clamp(48px,8vh,80px) clamp(20px,6vw,80px) clamp(24px,4vh,40px)', maxWidth:'1400px', margin:'0 auto', position:'relative', overflow:'hidden' }}>
-        <svg aria-hidden style={{ position:'absolute', right:0, top:0, opacity:.04, pointerEvents:'none', width:'280px' }} viewBox="0 0 280 280">
-          <circle cx="200" cy="80" r="140" fill="none" stroke="#ff4d00" strokeWidth="1" strokeDasharray="6 6"/>
-          <circle cx="200" cy="80" r="80"  fill="none" stroke="#ff4d00" strokeWidth=".5" strokeDasharray="3 8"/>
+        <svg aria-hidden style={{ position:'absolute', right:0, top:0, opacity:.04, pointerEvents:'none', width:'260px' }} viewBox="0 0 260 260">
+          <circle cx="190" cy="70" r="130" fill="none" stroke="#ff4d00" strokeWidth="1" strokeDasharray="6 6"/>
+          <circle cx="190" cy="70" r="75"  fill="none" stroke="#ff4d00" strokeWidth=".5" strokeDasharray="3 8"/>
         </svg>
+
         <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'3px', color:'var(--orange)', display:'block', marginBottom:'16px' }}>✦ VIDEO WORK</span>
         <h1 style={{
           fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700,
@@ -196,9 +240,22 @@ export default function ReelPage() {
           THE<br/>
           <span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600, color:'var(--orange)', letterSpacing:'-3px' }}>Reel.</span>
         </h1>
-        <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(14px,1.6vw,18px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'500px', lineHeight:1.7 }}>
-          Product videos, AI-generated campaigns, social content and brand films. Click any card to watch.
-        </p>
+        <div style={{ display:'flex', alignItems:'center', gap:'16px', flexWrap:'wrap' }}>
+          <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(14px,1.6vw,18px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'480px', lineHeight:1.7 }}>
+            Product videos, AI-generated campaigns, social content and brand films. Click any card to watch.
+          </p>
+          {channelInfo && (
+            <a href={`https://youtube.com/@adesignaerium`} target="_blank" rel="noopener noreferrer" style={{
+              display:'inline-flex', alignItems:'center', gap:'8px',
+              fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px',
+              color:'var(--dim)', border:'1px solid var(--border)',
+              padding:'8px 16px', borderRadius:'2px', whiteSpace:'nowrap',
+            }}>
+              {channelInfo.thumb && <img src={channelInfo.thumb} alt="" style={{ width:'18px', height:'18px', borderRadius:'50%' }}/>}
+              Subscribe on YouTube ↗
+            </a>
+          )}
+        </div>
       </section>
 
       {/* ── Sticky category filters ── */}
@@ -208,25 +265,29 @@ export default function ReelPage() {
         background:'rgba(8,8,8,0.93)', backdropFilter:'blur(20px)',
       }}>
         <div style={{ padding:'0 clamp(20px,6vw,80px)', maxWidth:'1400px', margin:'0 auto', display:'flex', overflowX:'auto' }}>
-          {VIDEO_CATEGORIES.map(c => {
-            const count = c === 'All' ? videos.length : videos.filter(v => v.category === c).length
+          {CATEGORIES.map(c => {
             const active = cat === c
+            const count  = catCount(c)
             return (
               <button key={c} onClick={() => setCat(c)} style={{
-                fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px', textTransform:'uppercase',
-                padding:'16px 18px', background:'none', border:'none',
+                fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px',
+                textTransform:'uppercase', padding:'16px 18px',
+                background:'none', border:'none',
                 borderBottom:`2px solid ${active ? CAT_COLORS[c] : 'transparent'}`,
                 color: active ? CAT_COLORS[c] : 'var(--dim)',
-                cursor:'pointer', whiteSpace:'nowrap', transition:'all .2s ease',
+                cursor:'pointer', whiteSpace:'nowrap',
+                transition:'all .2s ease',
                 display:'flex', alignItems:'center', gap:'7px',
               }}>
                 {c}
-                <span style={{
-                  background: active ? CAT_COLORS[c] : 'var(--border)',
-                  color:      active ? 'var(--ink)'   : 'var(--dim)',
-                  fontSize:'8px', padding:'1px 5px', borderRadius:'100px',
-                  transition:'all .2s ease', fontFamily:'var(--font-mono)',
-                }}>{count}</span>
+                {!loading && (
+                  <span style={{
+                    background: active ? CAT_COLORS[c] : 'var(--border)',
+                    color:      active ? 'var(--ink)' : 'var(--dim)',
+                    fontSize:'8px', padding:'1px 5px', borderRadius:'100px',
+                    transition:'all .2s ease',
+                  }}>{count}</span>
+                )}
               </button>
             )
           })}
@@ -235,14 +296,43 @@ export default function ReelPage() {
 
       {/* ── Video grid ── */}
       <section style={{ padding:'clamp(36px,5vh,56px) clamp(20px,6vw,80px) clamp(60px,8vh,100px)', maxWidth:'1400px', margin:'0 auto' }}>
-        {filtered.length === 0
-          ? <div style={{ textAlign:'center', padding:'80px 0', color:'var(--dim)', fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'2px' }}>NO VIDEOS IN THIS CATEGORY YET.</div>
-          : (
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,320px),1fr))', gap:'clamp(10px,1.8vw,18px)' }}>
-              {filtered.map(v => <VideoCard key={v.id + v.title} v={v} onPlay={setActiveVideo}/>)}
-            </div>
-          )
-        }
+
+        {/* Loading skeletons */}
+        {loading && (
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,320px),1fr))', gap:'clamp(10px,1.8vw,18px)' }}>
+            {Array.from({ length:6 }).map((_,i) => <SkeletonCard key={i}/>)}
+          </div>
+        )}
+
+        {/* Error state */}
+        {!loading && error && (
+          <div style={{ textAlign:'center', padding:'100px 0' }}>
+            <div style={{ fontSize:'40px', marginBottom:'16px', opacity:.2 }}>📹</div>
+            <p style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'2px', color:'var(--dim)', marginBottom:'8px' }}>
+              NO VIDEOS YET
+            </p>
+            <p style={{ fontFamily:'var(--font-body)', fontSize:'14px', fontStyle:'italic', color:'var(--muted)' }}>
+              Upload your first video to YouTube and it will appear here automatically.
+            </p>
+            <a href="https://youtube.com/@adesignaerium" target="_blank" rel="noopener noreferrer" style={{
+              display:'inline-block', marginTop:'24px',
+              fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px',
+              color:'var(--orange)', border:'1px solid rgba(255,77,0,0.3)',
+              padding:'10px 20px', borderRadius:'2px',
+            }}>Visit Channel ↗</a>
+          </div>
+        )}
+
+        {/* Videos */}
+        {!loading && !error && (
+          filtered.length === 0
+            ? <div style={{ textAlign:'center', padding:'80px 0', color:'var(--dim)', fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'2px' }}>
+                NO VIDEOS IN THIS CATEGORY YET.
+              </div>
+            : <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(min(100%,320px),1fr))', gap:'clamp(10px,1.8vw,18px)' }}>
+                {filtered.map(v => <VideoCard key={v.id} v={v} onPlay={setActiveVideo}/>)}
+              </div>
+        )}
       </section>
 
       {/* ── CTA ── */}
@@ -261,12 +351,17 @@ export default function ReelPage() {
           fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:600,
           fontSize:'12px', letterSpacing:'2px', textTransform:'uppercase',
           padding:'14px 36px', borderRadius:'2px',
-        }}>
-          Start a Project →
-        </Link>
+        }}>Start a Project →</Link>
       </section>
 
       {activeVideo && <VideoModal video={activeVideo} onClose={() => setActiveVideo(null)}/>}
+
+      <style>{`
+        @keyframes pulse {
+          0%,100% { opacity:0.4; }
+          50%      { opacity:0.8; }
+        }
+      `}</style>
     </main>
   )
 }
