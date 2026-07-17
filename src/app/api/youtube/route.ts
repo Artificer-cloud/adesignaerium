@@ -77,12 +77,8 @@ export async function GET() {
         const snippet = item.snippet
         const details = detailMap[id]
         const iso     = details?.contentDetails?.duration || ''
-        const thumb   =
-          snippet.thumbnails?.maxres?.url    ||
-          snippet.thumbnails?.standard?.url  ||
-          snippet.thumbnails?.high?.url      ||
-          snippet.thumbnails?.medium?.url    ||
-          `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+        // YouTube CDN direct — hqdefault always exists for every video + Short
+        const thumb = `https://img.youtube.com/vi/${id}/hqdefault.jpg`
 
         return {
           id,

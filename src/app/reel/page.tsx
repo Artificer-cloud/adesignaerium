@@ -14,80 +14,77 @@ type YTVideo = {
 }
 
 // ── Short card — portrait 9:16 ────────────────────────────────────────────────
-function ShortCard({ v, onPlay }: { v: YTVideo; onPlay: (v: YTVideo) => void }) {
+function ShortCard({ v, onPlay, index = 0 }: { v: YTVideo; onPlay: (v: YTVideo) => void; index?: number }) {
   const [hovered, setHovered] = useState(false)
+
   return (
     <div
       onClick={() => onPlay(v)}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        position: 'relative',
-        width:    'clamp(150px,20vw,210px)',
-        aspectRatio: '9/16',
-        flexShrink: 0,
-        borderRadius: '8px',
-        overflow: 'hidden',
-        cursor: 'pointer',
-        background: '#0a0a0a',
-        border: `1px solid ${hovered ? 'rgba(255,77,0,0.5)' : 'var(--border)'}`,
+        position:'relative',
+        width:'clamp(150px,20vw,210px)', aspectRatio:'9/16',
+        flexShrink:0, borderRadius:'8px', overflow:'hidden', cursor:'pointer',
+        background:'#111',
+        border:`1px solid ${hovered ? 'rgba(255,77,0,0.6)' : 'var(--border)'}`,
         transform: hovered ? 'translateY(-4px) scale(1.02)' : 'none',
-        transition: 'all .3s cubic-bezier(.23,1,.32,1)',
+        transition:'all .3s cubic-bezier(.23,1,.32,1)',
       }}
     >
-      <img src={v.thumbnail} alt={v.title} style={{
-        position: 'absolute', inset: 0, width: '100%', height: '100%',
-        objectFit: 'cover',
-        opacity: hovered ? 0.6 : 0.5,
-        transition: 'opacity .3s ease',
-      }}/>
-      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom,rgba(0,0,0,0) 30%,rgba(0,0,0,0.9) 100%)' }}/>
+      {/* Thumbnail — hqdefault always available from YouTube CDN */}
+      <img
+        src={v.thumbnail}
+        alt={v.title}
+        style={{
+          position:'absolute', inset:0, width:'100%', height:'100%',
+          objectFit:'cover', objectPosition:'center top',
+          opacity: hovered ? 0.75 : 0.65,
+          transition:'opacity .3s ease, transform .4s ease',
+          transform: hovered ? 'scale(1.04)' : 'scale(1)',
+        }}
+      />
 
-      {/* Shorts badge */}
+      {/* Bottom gradient for text legibility */}
+      <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.0) 30%, rgba(0,0,0,0.85) 75%, rgba(0,0,0,0.97) 100%)' }}/>
+
+      {/* Top: badges */}
+      <div style={{ position:'absolute', top:'12px', left:'12px', right:'12px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+        <div style={{ background:'#ff0000', color:'white', fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'1.5px', padding:'3px 8px', borderRadius:'2px', fontWeight:700 }}>SHORT</div>
+        {v.duration && <div style={{ background:'rgba(0,0,0,0.65)', color:'rgba(255,255,255,0.9)', fontFamily:'var(--font-mono)', fontSize:'9px', padding:'3px 7px', borderRadius:'2px' }}>{v.duration}</div>}
+      </div>
+
+      {/* Center: play */}
       <div style={{
-        position:'absolute', top:'10px', left:'10px',
-        background:'#ff0000', color:'white',
-        fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'1px',
-        padding:'3px 8px', borderRadius:'2px', fontWeight:700,
-      }}>SHORT</div>
-
-      {/* Duration */}
-      {v.duration && (
-        <div style={{
-          position:'absolute', top:'10px', right:'10px',
-          background:'rgba(0,0,0,0.7)', color:'rgba(255,255,255,0.85)',
-          fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'1px',
-          padding:'3px 7px', borderRadius:'2px',
-        }}>{v.duration}</div>
-      )}
-
-      {/* Play */}
-      <div style={{
-        position:'absolute', top:'42%', left:'50%',
-        transform:`translate(-50%,-50%) scale(${hovered ? 1.1 : 1})`,
-        width:'44px', height:'44px',
-        background: hovered ? 'var(--orange)' : 'rgba(255,255,255,0.12)',
-        border:`2px solid ${hovered ? 'var(--orange)' : 'rgba(255,255,255,0.3)'}`,
+        position:'absolute', top:'40%', left:'50%',
+        transform:`translate(-50%,-50%) scale(${hovered ? 1.15 : 1})`,
+        width:'46px', height:'46px',
+        background: hovered ? 'var(--orange)' : 'rgba(0,0,0,0.45)',
+        border:`2px solid ${hovered ? 'var(--orange)' : 'rgba(255,255,255,0.5)'}`,
         borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
-        transition:'all .25s ease',
+        transition:'all .25s ease', backdropFilter:'blur(6px)',
       }}>
-        <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-          <path d="M3.5 2L11 6.5L3.5 11V2Z" fill={hovered ? 'var(--ink)' : 'white'}/>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <path d="M4 2L12 7L4 12V2Z" fill={hovered ? 'var(--ink)' : 'white'}/>
         </svg>
       </div>
 
-      {/* Title */}
+      {/* Bottom: title */}
       <div style={{ position:'absolute', bottom:0, left:0, right:0, padding:'14px 12px' }}>
         <div style={{
-          fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:600,
-          fontSize:'12px', color:'var(--bone)', lineHeight:1.3,
+          fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700,
+          fontSize:'12px', color:'#fff', lineHeight:1.3,
           overflow:'hidden', display:'-webkit-box',
           WebkitLineClamp:3, WebkitBoxOrient:'vertical',
         }}>{v.title}</div>
+        <div style={{ fontFamily:'var(--font-mono)', fontSize:'8px', color:'rgba(255,255,255,0.35)', letterSpacing:'1px', marginTop:'5px' }}>
+          {new Date(v.publishedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+        </div>
       </div>
     </div>
   )
 }
+
 
 // ── Regular card — landscape 16:9 ─────────────────────────────────────────────
 function VideoCard({ v, onPlay }: { v: YTVideo; onPlay: (v: YTVideo) => void }) {
@@ -353,7 +350,7 @@ export default function ReelPage() {
                   <span style={{ fontFamily:'var(--font-mono)', fontSize:'9px', color:'var(--dim)', letterSpacing:'1px' }}>{shorts.length} video{shorts.length !== 1 ? 's' : ''}</span>
                 </div>
                 <div style={{ display:'flex', gap:'14px', overflowX:'auto', paddingBottom:'8px', scrollbarWidth:'none' }}>
-                  {shorts.map(v => <ShortCard key={v.id} v={v} onPlay={setActiveVideo}/>)}
+                  {shorts.map((v,i) => <ShortCard key={v.id} v={v} onPlay={setActiveVideo} index={i}/>)}
                 </div>
               </div>
             )}
