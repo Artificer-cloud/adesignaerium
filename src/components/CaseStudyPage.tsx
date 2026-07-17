@@ -1,12 +1,15 @@
 import { Project } from '@/lib/projects'
 import { projects } from '@/lib/projects'
+import { PROJECT_VIDEO_MAP } from '@/lib/videos'
 import Image from 'next/image'
 import Link from 'next/link'
 import CaseStudyGallery from './CaseStudyGallery'
 
 export default function CaseStudyPage({ projectId }: { projectId: string }) {
-  const project = projects.find(p => p.id === projectId)!
-  const others = projects.filter(p => p.id !== projectId).slice(0, 3)
+  const project  = projects.find(p => p.id === projectId)!
+  const others   = projects.filter(p => p.id !== projectId).slice(0, 3)
+  const videoId  = PROJECT_VIDEO_MAP[projectId]
+  const hasVideo = videoId && !videoId.startsWith('REPLACE')
 
   return (
     <main style={{ paddingTop: '80px', minHeight: '100vh' }}>
@@ -68,6 +71,31 @@ export default function CaseStudyPage({ projectId }: { projectId: string }) {
           <p key={i} style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(15px,1.8vw,19px)', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '1.6rem' }}>{para}</p>
         ))}
       </section>
+
+      {/* Project video embed */}
+      {hasVideo && (
+        <section style={{ padding:'0 clamp(20px,6vw,80px) clamp(48px,6vh,72px)', maxWidth:'1100px', margin:'0 auto' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:'16px', marginBottom:'24px' }}>
+            <span style={{ display:'block', width:'32px', height:'2px', background:'var(--orange)', borderRadius:'2px' }}/>
+            <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'3px', color:'var(--orange)', textTransform:'uppercase' }}>Project Video</span>
+          </div>
+          <div style={{ position:'relative', aspectRatio:'16/9', background:'#000', borderRadius:'6px', overflow:'hidden', border:'1px solid var(--border)' }}>
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1`}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+              allowFullScreen
+              loading="lazy"
+              style={{ position:'absolute', inset:0, width:'100%', height:'100%', border:'none' }}
+              title={`${project.title} — Project Video`}
+            />
+          </div>
+          <div style={{ marginTop:'10px', textAlign:'right' }}>
+            <Link href="/reel" style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px', color:'var(--dim)' }}>
+              View all videos →
+            </Link>
+          </div>
+        </section>
+      )}
 
       {/* Gallery */}
       {project.gallery && project.gallery.length > 0 && (
