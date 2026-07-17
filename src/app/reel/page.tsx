@@ -34,10 +34,10 @@ function ShortCard({ v, onPlay, index = 0 }: { v: YTVideo; onPlay: (v: YTVideo) 
     >
       {/* Thumbnail — hqdefault always available from YouTube CDN */}
       <img
-        src={v.thumbnail}
+        src={`/api/thumb?id=${v.id}`}
         alt={v.title}
         style={{
-          position:'absolute', inset:0, width:'100%', height:'100%',
+          position:'absolute', top:0, left:0, right:0, bottom:0, width:'100%', height:'100%',
           objectFit:'cover', objectPosition:'center top',
           opacity: hovered ? 0.75 : 0.65,
           transition:'opacity .3s ease, transform .4s ease',
@@ -106,8 +106,8 @@ function VideoCard({ v, onPlay }: { v: YTVideo; onPlay: (v: YTVideo) => void }) 
         transition: 'all .3s cubic-bezier(.23,1,.32,1)',
       }}
     >
-      <img src={v.thumbnail} alt={v.title} style={{
-        position:'absolute', inset:0, width:'100%', height:'100%',
+      <img src={`/api/thumb?id=${v.id}`} alt={v.title} style={{
+        position:'absolute', top:0, left:0, right:0, bottom:0, width:'100%', height:'100%',
         objectFit:'cover',
         opacity: hovered ? 0.55 : 0.42,
         transition:'opacity .35s ease',
