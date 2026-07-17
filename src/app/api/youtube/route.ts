@@ -27,13 +27,6 @@ function detectShort(iso: string, title: string, desc: string): boolean {
   return secs > 0 && secs <= 90
 }
 
-function inferCategory(title: string, desc: string): string {
-  const text = `${title} ${desc}`.toLowerCase()
-  if (text.match(/\bai\b|midjourney|veo|sora|generated|character|animation|prompt/)) return 'AI Generated'
-  if (text.match(/brand film|commercial|cinematic|campaign|story|launch/))           return 'Brand Film'
-  if (text.match(/social|reel|instagram|tiktok|content|compilation/))                return 'Social Content'
-  return 'Product'
-}
 
 export async function GET() {
   const API_KEY = process.env.YOUTUBE_API_KEY
@@ -114,7 +107,6 @@ export async function GET() {
           description: (snippet.description || '').split('\n')[0],
           thumbnail:   thumb,
           publishedAt: snippet.publishedAt,
-          category:    inferCategory(snippet.title, snippet.description || ''),
           duration:    parseDuration(iso),
           views:       details?.statistics?.viewCount || '0',
           isShort,
