@@ -206,44 +206,24 @@ function VideoModal({ video, onClose }: { video: YTVideo; onClose: () => void })
           }}>✕</button>
         </div>
 
-        {/* Player — Shorts open on YouTube, regular videos embed */}
-        {video.isShort ? (
-          <div style={{
-            background:'var(--surface)', border:'1px solid var(--border)',
-            borderRadius:'8px', padding:'40px 24px', textAlign:'center',
-          }}>
-            <div style={{ fontSize:'48px', marginBottom:'16px' }}>📱</div>
-            <p style={{ fontFamily:'var(--font-body)', fontSize:'15px', fontStyle:'italic', color:'var(--muted)', marginBottom:'24px', lineHeight:1.6 }}>
-              Shorts play best on YouTube directly.
-            </p>
-            <a
-              href={`https://youtube.com/shorts/${video.id}`}
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                display:'inline-block', background:'var(--orange)', color:'var(--ink)',
-                fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:600,
-                fontSize:'12px', letterSpacing:'2px', textTransform:'uppercase',
-                padding:'13px 32px', borderRadius:'2px',
-              }}
-            >
-              Watch on YouTube ↗
-            </a>
-          </div>
-        ) : (
-          <div style={{
-            position:'relative', aspectRatio:'16/9',
-            background:'#000', borderRadius:'8px', overflow:'hidden',
-            border:'1px solid var(--border)',
-          }}>
-            <iframe
-              src={`https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1`}
-              allow="autoplay; encrypted-media; fullscreen"
-              allowFullScreen
-              style={{ position:'absolute', inset:0, width:'100%', height:'100%', border:'none' }}
-              title={video.title}
-            />
-          </div>
-        )}
+        {/* Player — portrait for Shorts, landscape for regular */}
+        <div style={{
+          position:'relative',
+          aspectRatio: video.isShort ? '9/16' : '16/9',
+          background:'#000', borderRadius:'8px', overflow:'hidden',
+          border:'1px solid var(--border)',
+          maxHeight: video.isShort ? '70vh' : 'auto',
+          margin: video.isShort ? '0 auto' : '0',
+          maxWidth: video.isShort ? '400px' : '100%',
+        }}>
+          <iframe
+            src={`https://www.youtube.com/embed/${video.id}?autoplay=1&rel=0&modestbranding=1`}
+            allow="autoplay; encrypted-media; fullscreen"
+            allowFullScreen
+            style={{ position:'absolute', inset:0, width:'100%', height:'100%', border:'none' }}
+            title={video.title}
+          />
+        </div>
 
         {/* Open on YouTube */}
         <div style={{ marginTop:'12px', textAlign:'right' }}>
