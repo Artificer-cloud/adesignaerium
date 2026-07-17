@@ -78,10 +78,11 @@ export async function GET() {
         const details = detailMap[id]
         const iso     = details?.contentDetails?.duration || ''
         const thumb   =
-          snippet.thumbnails?.maxres?.url  ||
-          snippet.thumbnails?.high?.url    ||
-          snippet.thumbnails?.medium?.url  ||
-          `https://img.youtube.com/vi/${id}/hqdefault.jpg`
+          snippet.thumbnails?.maxres?.url    ||
+          snippet.thumbnails?.standard?.url  ||
+          snippet.thumbnails?.high?.url      ||
+          snippet.thumbnails?.medium?.url    ||
+          `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
 
         return {
           id,
