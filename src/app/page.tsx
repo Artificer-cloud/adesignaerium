@@ -91,9 +91,9 @@ function FontCycleName({ mounted }: { mounted: boolean }) {
 const TICKER   = ['BRANDING','UI/UX DESIGN','AI VISUAL','PACKAGING','MOTION','PHOTOGRAPHY','E-COMMERCE','EDITORIAL','PROMPT ENGINEERING','ART DIRECTION']
 const TAGLINES = ["If it looks average, I didn't make it.","Not trends. Timeless impact.","Every pixel has a purpose.","Where ideas become visual worlds."]
 const FEATURED = [
-  {id:'sipple',       title:'SIPPLE',       cat:'Branding · UI/UX · Web',  bg:'#060d18', url:'https://sipple-eta.vercel.app',    cover:'/images/work/sipple-cover.webp'},
-  {id:'maison-valer', title:'MAISON VALÉR', cat:'Luxury · Editorial',       bg:'#100d04', url:'https://maison-valer.vercel.app',   cover:'/images/work/maison-valer-cover.webp'},
-  {id:'ecora',        title:'ECORA',        cat:'Sustainable · Web Design', bg:'#040f07', url:'https://ecora-theta.vercel.app',    cover:'/images/work/ecora-cover.webp'},
+  {id:'sipple',       title:'SIPPLE',       cat:'Branding · UI/UX · Web',  bg:'#060d18', url:'https://sipple-eta.vercel.app',  cover:'/images/work/sipple-cover.webp'},
+  {id:'maison-valer', title:'MAISON VALÉR', cat:'Luxury · Editorial',       bg:'#100d04', url:'https://maison-valer.vercel.app', cover:'/images/work/maison-valer-cover.webp'},
+  {id:'ecora',        title:'ECORA',        cat:'Sustainable · Web Design', bg:'#040f07', url:'https://ecora-theta.vercel.app',  cover:'/images/work/ecora-cover.webp'},
 ]
 const STATS  = [{n:'7+',l:'Years'},{n:'100+',l:'Brands'},{n:'50+',l:'Projects'},{n:'100%',l:'Delivery'}]
 const SKILLS = [
@@ -105,69 +105,60 @@ const SKILLS = [
   {n:'Web Dev',    s:'Next.js · React · Vercel · Tailwind'},
 ]
 
-
 function FeaturedCard({ p, i }: { p: any; i: number }) {
   const [hovered, setHovered] = useState(false)
-  const [imgSrc,  setImgSrc]  = useState(
-    p.url
-      ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
-      : p.cover
-  )
+  const microlinkUrl = p.url
+    ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
+    : null
+  const [imgSrc, setImgSrc] = useState<string>(microlinkUrl || p.cover || '')
+
   return (
     <Link href={`/work/${p.id}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="project-card"
+      className="project-card home-studio-card"
       style={{
-        background: p.bg, border:`1px solid ${hovered?'rgba(255,77,0,0.5)':'var(--border)'}`,
-        borderRadius:'8px', position:'relative', overflow:'hidden',
-        minHeight: i===0 ? 'clamp(320px,38vw,480px)' : 'clamp(260px,28vw,380px)',
-        display:'block', opacity:0,
-        animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`,
+        background:p.bg, borderRadius:'8px', position:'relative',
+        overflow:'hidden', display:'block', cursor:'pointer',
+        border:`1px solid ${hovered?'rgba(255,77,0,0.5)':'var(--border)'}`,
+        opacity:0, animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`,
         transition:'border-color .3s ease',
       }}>
-      {/* Live screenshot via Microlink — falls back to static cover */}
-      <img
-        src={imgSrc}
-        onError={() => setImgSrc(p.cover)}
-        alt={p.title}
-        style={{
-          position:'absolute', top:0, left:0, width:'100%', height:'100%',
-          objectFit:'cover', objectPosition:'center top',
-          opacity: hovered ? 0.72 : 0.52,
-          transform: hovered ? 'scale(1.04)' : 'scale(1)',
-          transition:'opacity .5s ease, transform .7s cubic-bezier(.23,1,.32,1)',
-        }}
-      />
-      {/* Gradient overlay */}
-      <div className="work-card-overlay" style={{
-        position:'absolute', inset:0,
-        background:'linear-gradient(160deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.08) 40%,rgba(0,0,0,0.88) 100%)',
-      }}/>
-      {/* Top row */}
-      <div style={{position:'absolute',top:'16px',left:'16px',right:'16px',display:'flex',justifyContent:'space-between',alignItems:'center',zIndex:2}}>
-        <span style={{fontFamily:'var(--font-mono)',fontSize:'8px',letterSpacing:'1.5px',color:'rgba(255,255,255,0.9)',textTransform:'uppercase',background:'rgba(255,77,0,0.85)',padding:'3px 9px',borderRadius:'2px'}}>{p.cat}</span>
-        <div style={{width:'30px',height:'30px',borderRadius:'50%',background:hovered?'#ff4d00':'rgba(255,255,255,0.1)',border:`1px solid ${hovered?'#ff4d00':'rgba(255,255,255,0.2)'}`,display:'flex',alignItems:'center',justifyContent:'center',backdropFilter:'blur(6px)',transition:'all .3s ease',flexShrink:0}}>
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+      {/* Live screenshot — full website visible */}
+      {imgSrc && (
+        <img src={imgSrc} alt={p.title}
+          onError={() => { if(imgSrc !== p.cover) setImgSrc(p.cover||'') }}
+          style={{
+            position:'absolute', top:0, left:0, width:'100%', height:'100%',
+            objectFit:'contain', objectPosition:'center top',
+            opacity: hovered ? 0.88 : 0.65,
+            transform: hovered ? 'scale(1.02)' : 'scale(1)',
+            transition:'opacity .5s ease, transform .7s cubic-bezier(.23,1,.32,1)',
+          }}
+        />
+      )}
+      {/* Bottom gradient */}
+      <div style={{position:'absolute',bottom:0,left:0,right:0,height:'50%',pointerEvents:'none',background:'linear-gradient(to bottom,transparent,rgba(0,0,0,0.9))'}}/>
+      {/* Top gradient */}
+      <div style={{position:'absolute',top:0,left:0,right:0,height:'30%',pointerEvents:'none',background:'linear-gradient(to bottom,rgba(0,0,0,0.45),transparent)'}}/>
+      {/* Top: category + arrow */}
+      <div style={{position:'absolute',top:'14px',left:'14px',right:'14px',display:'flex',justifyContent:'space-between',alignItems:'center',zIndex:2}}>
+        <span style={{fontFamily:'var(--font-mono)',fontSize:'8px',letterSpacing:'1.5px',color:'white',textTransform:'uppercase',background:'rgba(255,77,0,0.9)',padding:'3px 9px',borderRadius:'2px'}}>{p.cat}</span>
+        <div style={{width:'28px',height:'28px',borderRadius:'50%',background:hovered?'#ff4d00':'rgba(0,0,0,0.4)',border:`1px solid ${hovered?'#ff4d00':'rgba(255,255,255,0.2)'}`,display:'flex',alignItems:'center',justifyContent:'center',backdropFilter:'blur(8px)',transition:'all .3s',flexShrink:0}}>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
             <path d="M2 10L10 2M10 2H4M10 2V8" stroke={hovered?'#080808':'white'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
       </div>
-      {/* Bottom info */}
-      <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:2,padding:'0 20px 20px'}}>
-        <h3 style={{
-          fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,
-          fontSize:'clamp(22px,3.5vw,44px)',letterSpacing:'-1.5px',
-          color:'#ffffff',lineHeight:.92,
-          transform:hovered?'translateY(-4px)':'translateY(0)',
-          transition:'transform .4s cubic-bezier(.23,1,.32,1)',
-        }}>{p.title}</h3>
+      {/* Bottom: title */}
+      <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:2,padding:'0 16px 16px'}}>
+        <h3 style={{fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,fontSize:'clamp(20px,3vw,42px)',letterSpacing:'-1.5px',color:'#fff',lineHeight:.9,transform:hovered?'translateY(-3px)':'translateY(0)',transition:'transform .4s cubic-bezier(.23,1,.32,1)'}}>{p.title}</h3>
       </div>
-      {/* Orange bottom sweep */}
       <div style={{position:'absolute',bottom:0,left:0,right:0,height:'3px',background:'#ff4d00',transform:hovered?'scaleX(1)':'scaleX(0)',transformOrigin:'left',transition:'transform .5s cubic-bezier(.23,1,.32,1)',zIndex:3}}/>
     </Link>
   )
 }
+
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false)
@@ -272,8 +263,11 @@ export default function HomePage() {
           </div>
           <Link href="/work" className="hover-line" style={{fontFamily:'var(--font-mono)',fontSize:'11px',letterSpacing:'2px',color:'var(--muted)',textTransform:'uppercase'}}>All Work →</Link>
         </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'clamp(8px,1vw,12px)'}}>
+        <div className="home-studio-grid">
           {FEATURED.map((p,i)=>(<FeaturedCard key={p.id} p={p} i={i}/>))}
+        </div>
+        <div style={{textAlign:'center',marginTop:'32px'}}>
+          <Link href="/work" className="hover-line" style={{fontFamily:'var(--font-mono)',fontSize:'11px',letterSpacing:'2px',color:'var(--muted)',textTransform:'uppercase'}}>View All Projects →</Link>
         </div>
       </section>
 
@@ -321,7 +315,24 @@ export default function HomePage() {
       <style>{`
         .spinning-badge { position:absolute; top:clamp(72px,10vh,92px); right:clamp(16px,4vw,56px); width:80px; height:80px; opacity:.2; }
         @media(max-width:900px){ .spinning-badge{display:none} }
-      `}</style>
+      
+        /* ── Homepage Studio Wall responsive grid ── */
+        .home-studio-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: clamp(8px, 1vw, 12px);
+        }
+        .home-studio-card { min-height: clamp(280px, 32vw, 460px); }
+
+        @media (max-width: 900px) {
+          .home-studio-grid { grid-template-columns: repeat(2, 1fr); }
+          .home-studio-card { min-height: 300px; }
+        }
+        @media (max-width: 560px) {
+          .home-studio-grid { grid-template-columns: 1fr; gap: 8px; }
+          .home-studio-card { min-height: 260px; }
+        }
+`}</style>
     </main>
   )
 }
