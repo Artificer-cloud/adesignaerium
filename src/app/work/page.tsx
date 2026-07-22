@@ -14,81 +14,86 @@ function WorkCard({ p, index, featured }: { p: any; index: number; featured: boo
     <Link href={`/work/${p.id}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      className={featured ? 'work-card work-card-featured' : 'work-card'}
       style={{
-        gridColumn: featured ? 'span 2' : 'span 1',
         position:'relative', overflow:'hidden', borderRadius:'8px',
         display:'block', background: p.color || '#0a0a0a',
         border:`1px solid ${hovered ? 'rgba(255,77,0,0.5)' : 'var(--border)'}`,
-        transition:'border-color .3s ease',
-        minHeight: featured ? '480px' : '380px',
-        cursor:'pointer',
+        transition:'border-color .3s ease', cursor:'pointer',
         animation:`fadeUp .7s cubic-bezier(.23,1,.32,1) ${.04+index*.06}s both`,
       }}>
 
+      {/* Screenshot — contain shows full website, no cropping */}
       {imgSrc && (
         <img src={imgSrc} alt={p.title}
           onError={() => { if (imgSrc !== p.coverImage) setImgSrc(p.coverImage || '') }}
           style={{
             position:'absolute', top:0, left:0, width:'100%', height:'100%',
-            objectFit:'cover', objectPosition:'center top',
-            opacity: hovered ? 0.75 : 0.55,
-            transform: hovered ? 'scale(1.04)' : 'scale(1)',
+            objectFit:'contain',          // ← full website visible
+            objectPosition:'center top',  // ← header always at top
+            opacity: hovered ? 0.9 : 0.72,
+            transform: hovered ? 'scale(1.02)' : 'scale(1)',
             transition:'opacity .5s ease, transform .7s cubic-bezier(.23,1,.32,1)',
           }}
         />
       )}
 
-      <div className="work-card-overlay" style={{
-        position:'absolute', inset:0,
-        background:'linear-gradient(160deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.08) 40%,rgba(0,0,0,0.88) 100%)',
+      {/* Bottom gradient so text stays readable */}
+      <div style={{
+        position:'absolute', bottom:0, left:0, right:0, height:'55%', zIndex:1, pointerEvents:'none',
+        background:'linear-gradient(to bottom,transparent 0%,rgba(0,0,0,0.92) 100%)',
+      }}/>
+      {/* Top gradient for category badges */}
+      <div style={{
+        position:'absolute', top:0, left:0, right:0, height:'30%', zIndex:1, pointerEvents:'none',
+        background:'linear-gradient(to bottom,rgba(0,0,0,0.5) 0%,transparent 100%)',
       }}/>
 
-      {/* Top — categories + arrow */}
-      <div style={{ position:'absolute', top:'18px', left:'18px', right:'18px', display:'flex', justifyContent:'space-between', alignItems:'flex-start', zIndex:2 }}>
+      {/* Top row */}
+      <div style={{ position:'absolute', top:'16px', left:'16px', right:'16px', display:'flex', justifyContent:'space-between', alignItems:'flex-start', zIndex:2 }}>
         <div style={{ display:'flex', flexWrap:'wrap', gap:'5px' }}>
           {p.category.slice(0,2).map((cat: string) => (
-            <span key={cat} style={{ fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'1.5px', color:'rgba(255,255,255,0.9)', textTransform:'uppercase', background:'rgba(255,77,0,0.85)', padding:'3px 9px', borderRadius:'2px' }}>{cat}</span>
+            <span key={cat} style={{ fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'1.5px', color:'white', textTransform:'uppercase', background:'rgba(255,77,0,0.9)', padding:'3px 9px', borderRadius:'2px' }}>{cat}</span>
           ))}
         </div>
         <div style={{
-          width:'32px', height:'32px', borderRadius:'50%',
-          background: hovered ? '#ff4d00' : 'rgba(255,255,255,0.1)',
-          border:`1px solid ${hovered ? '#ff4d00' : 'rgba(255,255,255,0.2)'}`,
+          width:'30px', height:'30px', borderRadius:'50%',
+          background: hovered ? '#ff4d00' : 'rgba(0,0,0,0.45)',
+          border:`1px solid ${hovered ? '#ff4d00' : 'rgba(255,255,255,0.25)'}`,
           display:'flex', alignItems:'center', justifyContent:'center',
-          backdropFilter:'blur(6px)', transition:'all .3s ease', flexShrink:0,
+          backdropFilter:'blur(8px)', transition:'all .3s ease', flexShrink:0,
         }}>
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
             <path d="M2 10L10 2M10 2H4M10 2V8" stroke={hovered?'#080808':'white'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
       </div>
 
-      {/* Bottom — info */}
-      <div style={{ position:'absolute', bottom:0, left:0, right:0, zIndex:2, padding:'0 22px 22px' }}>
+      {/* Bottom info */}
+      <div style={{ position:'absolute', bottom:0, left:0, right:0, zIndex:2, padding:'0 18px 18px' }}>
         <p style={{
-          fontFamily:'var(--font-body)', fontSize:'clamp(12px,1.2vw,14px)',
-          fontStyle:'italic', color:'rgba(255,255,255,0.65)', lineHeight:1.6, marginBottom:'10px',
-          maxHeight: hovered ? '80px' : '0px', overflow:'hidden',
+          fontFamily:'var(--font-body)', fontSize:'clamp(11px,1.1vw,13px)',
+          fontStyle:'italic', color:'rgba(255,255,255,0.6)', lineHeight:1.5, marginBottom:'8px',
+          maxHeight: hovered ? '60px' : '0px', overflow:'hidden',
           opacity: hovered ? 1 : 0,
           transition:'max-height .4s cubic-bezier(.23,1,.32,1), opacity .3s ease',
         }}>{p.description}</p>
 
-        <h2 style={{
+        <h2 className={featured ? 'work-card-title-lg' : 'work-card-title'} style={{
           fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700,
-          fontSize: featured ? 'clamp(28px,4vw,52px)' : 'clamp(20px,2.5vw,32px)',
-          letterSpacing:'-1.5px', color:'#ffffff', lineHeight:.92, marginBottom:'10px',
-          transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
+          letterSpacing:'-1px', color:'#fff', lineHeight:.92, marginBottom:'8px',
+          transform: hovered ? 'translateY(-3px)' : 'translateY(0)',
           transition:'transform .4s cubic-bezier(.23,1,.32,1)',
         }}>{p.title}</h2>
 
-        <div style={{ display:'flex', alignItems:'center', gap:'10px', opacity: hovered?1:0.6, transition:'opacity .3s ease' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:'8px', opacity: hovered?1:0.5, transition:'opacity .3s' }}>
           <span style={{ fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'1px', color:'rgba(255,255,255,0.5)' }}>{p.year}</span>
-          <span style={{ width:'3px', height:'3px', borderRadius:'50%', background:'rgba(255,77,0,0.7)', flexShrink:0 }}/>
+          <span style={{ width:'3px', height:'3px', borderRadius:'50%', background:'rgba(255,77,0,0.8)', flexShrink:0 }}/>
           <span style={{ fontFamily:'var(--font-mono)', fontSize:'9px', letterSpacing:'1px', color:'rgba(255,255,255,0.5)' }}>{p.client}</span>
         </div>
       </div>
 
-      {/* Orange sweep */}
+      {/* Orange bottom sweep */}
       <div style={{
         position:'absolute', bottom:0, left:0, right:0, height:'3px', background:'#ff4d00',
         transform: hovered ? 'scaleX(1)' : 'scaleX(0)', transformOrigin:'left',
@@ -128,8 +133,8 @@ export default function WorkPage() {
         </div>
       </section>
 
-      <section style={{ padding:'0 clamp(20px,4vw,60px) clamp(60px,8vh,100px)', maxWidth:'1400px', margin:'0 auto' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'clamp(8px,1vw,12px)' }}>
+      <section style={{ padding:'0 clamp(12px,3vw,48px) clamp(60px,8vh,100px)', maxWidth:'1400px', margin:'0 auto' }}>
+        <div className="work-grid">
           {filtered.map((p: any, i: number) => (
             <WorkCard key={p.id} p={p} index={i} featured={active==='All' && (i===0||i===5)}/>
           ))}
@@ -141,7 +146,35 @@ export default function WorkPage() {
 
       <style>{`
         @keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
-        [data-theme="light"] .work-card-overlay{opacity:0.5!important}
+
+        /* ── Responsive bento grid ── */
+        .work-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: clamp(8px, 1vw, 12px);
+        }
+        .work-card          { min-height: 380px; }
+        .work-card-featured { grid-column: span 2; min-height: 480px; }
+        .work-card-title    { font-size: clamp(20px, 2.2vw, 30px); }
+        .work-card-title-lg { font-size: clamp(26px, 3.5vw, 48px); }
+
+        /* Tablet — 2 columns */
+        @media (max-width: 900px) {
+          .work-grid          { grid-template-columns: repeat(2, 1fr); }
+          .work-card          { min-height: 320px; }
+          .work-card-featured { grid-column: span 2; min-height: 400px; }
+        }
+
+        /* Mobile — 1 column, no featured spanning */
+        @media (max-width: 560px) {
+          .work-grid          { grid-template-columns: 1fr; gap: 8px; }
+          .work-card          { min-height: 280px; }
+          .work-card-featured { grid-column: span 1; min-height: 280px; }
+          .work-card-title-lg { font-size: clamp(22px, 6vw, 30px); }
+        }
+
+        /* Light mode overlay */
+        [data-theme="light"] .work-card { border-color: rgba(0,0,0,0.1); }
       `}</style>
     </main>
   )
