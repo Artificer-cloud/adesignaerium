@@ -1,3 +1,67 @@
+
+function FeaturedCard({ p, i }: { p: any; i: number }) {
+  const [hovered, setHovered] = useState(false)
+  const [imgSrc,  setImgSrc]  = useState(
+    p.url
+      ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
+      : p.cover
+  )
+  return (
+    <Link href={`/work/${p.id}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="project-card"
+      style={{
+        background: p.bg, border:`1px solid ${hovered?'rgba(255,77,0,0.5)':'var(--border)'}`,
+        borderRadius:'8px', position:'relative', overflow:'hidden',
+        minHeight: i===0 ? 'clamp(320px,38vw,480px)' : 'clamp(260px,28vw,380px)',
+        display:'block', opacity:0,
+        animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`,
+        transition:'border-color .3s ease',
+      }}>
+      {/* Live screenshot via Microlink — falls back to static cover */}
+      <img
+        src={imgSrc}
+        onError={() => setImgSrc(p.cover)}
+        alt={p.title}
+        style={{
+          position:'absolute', top:0, left:0, width:'100%', height:'100%',
+          objectFit:'cover', objectPosition:'center top',
+          opacity: hovered ? 0.72 : 0.52,
+          transform: hovered ? 'scale(1.04)' : 'scale(1)',
+          transition:'opacity .5s ease, transform .7s cubic-bezier(.23,1,.32,1)',
+        }}
+      />
+      {/* Gradient overlay */}
+      <div className="work-card-overlay" style={{
+        position:'absolute', inset:0,
+        background:'linear-gradient(160deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.08) 40%,rgba(0,0,0,0.88) 100%)',
+      }}/>
+      {/* Top row */}
+      <div style={{position:'absolute',top:'16px',left:'16px',right:'16px',display:'flex',justifyContent:'space-between',alignItems:'center',zIndex:2}}>
+        <span style={{fontFamily:'var(--font-mono)',fontSize:'8px',letterSpacing:'1.5px',color:'rgba(255,255,255,0.9)',textTransform:'uppercase',background:'rgba(255,77,0,0.85)',padding:'3px 9px',borderRadius:'2px'}}>{p.cat}</span>
+        <div style={{width:'30px',height:'30px',borderRadius:'50%',background:hovered?'#ff4d00':'rgba(255,255,255,0.1)',border:`1px solid ${hovered?'#ff4d00':'rgba(255,255,255,0.2)'}`,display:'flex',alignItems:'center',justifyContent:'center',backdropFilter:'blur(6px)',transition:'all .3s ease',flexShrink:0}}>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M2 10L10 2M10 2H4M10 2V8" stroke={hovered?'#080808':'white'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      {/* Bottom info */}
+      <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:2,padding:'0 20px 20px'}}>
+        <h3 style={{
+          fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,
+          fontSize:'clamp(22px,3.5vw,44px)',letterSpacing:'-1.5px',
+          color:'#ffffff',lineHeight:.92,
+          transform:hovered?'translateY(-4px)':'translateY(0)',
+          transition:'transform .4s cubic-bezier(.23,1,.32,1)',
+        }}>{p.title}</h3>
+      </div>
+      {/* Orange bottom sweep */}
+      <div style={{position:'absolute',bottom:0,left:0,right:0,height:'3px',background:'#ff4d00',transform:hovered?'scaleX(1)':'scaleX(0)',transformOrigin:'left',transition:'transform .5s cubic-bezier(.23,1,.32,1)',zIndex:3}}/>
+    </Link>
+  )
+}
+
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -91,9 +155,9 @@ function FontCycleName({ mounted }: { mounted: boolean }) {
 const TICKER   = ['BRANDING','UI/UX DESIGN','AI VISUAL','PACKAGING','MOTION','PHOTOGRAPHY','E-COMMERCE','EDITORIAL','PROMPT ENGINEERING','ART DIRECTION']
 const TAGLINES = ["If it looks average, I didn't make it.","Not trends. Timeless impact.","Every pixel has a purpose.","Where ideas become visual worlds."]
 const FEATURED = [
-  {id:'sipple',       title:'SIPPLE',       cat:'Branding · UI/UX · Web',  bg:'#060d18', cover:'/images/work/sipple-cover.webp'},
-  {id:'maison-valer', title:'MAISON VALÉR', cat:'Luxury · Editorial',       bg:'#100d04', cover:'/images/work/maison-valer-cover.webp'},
-  {id:'ecora',        title:'ECORA',        cat:'Sustainable · Web Design', bg:'#040f07', cover:'/images/work/ecora-cover.webp'},
+  {id:'sipple',       title:'SIPPLE',       cat:'Branding · UI/UX · Web',  bg:'#060d18', url:'https://sipple-eta.vercel.app',    cover:'/images/work/sipple-cover.webp'},
+  {id:'maison-valer', title:'MAISON VALÉR', cat:'Luxury · Editorial',       bg:'#100d04', url:'https://maison-valer.vercel.app',   cover:'/images/work/maison-valer-cover.webp'},
+  {id:'ecora',        title:'ECORA',        cat:'Sustainable · Web Design', bg:'#040f07', url:'https://ecora-theta.vercel.app',    cover:'/images/work/ecora-cover.webp'},
 ]
 const STATS  = [{n:'7+',l:'Years'},{n:'100+',l:'Brands'},{n:'50+',l:'Projects'},{n:'100%',l:'Delivery'}]
 const SKILLS = [
@@ -208,26 +272,8 @@ export default function HomePage() {
           </div>
           <Link href="/work" className="hover-line" style={{fontFamily:'var(--font-mono)',fontSize:'11px',letterSpacing:'2px',color:'var(--muted)',textTransform:'uppercase'}}>All Work →</Link>
         </div>
-        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,280px),1fr))',gap:'10px'}}>
-          {FEATURED.map((p,i)=>(
-            <Link key={p.id} href={`/work/${p.id}`} className="project-card"
-              style={{background:p.bg,border:'1px solid var(--border)',borderRadius:'6px',minHeight:i===0?'clamp(320px,40vw,460px)':'clamp(240px,30vw,360px)',display:'flex',flexDirection:'column',justifyContent:'space-between',position:'relative',overflow:'hidden',opacity:0,animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`}}>
-              <div style={{position:'absolute',inset:0,zIndex:0}}>
-                <div className="work-card-img-wrap" style={{position:'absolute',inset:0}}>
-                  <Image src={p.cover} alt={p.title} fill style={{objectFit:'cover',objectPosition:'center',opacity:0.3}} onError={()=>{}}/>
-                </div>
-                <div className="work-card-overlay" style={{position:'absolute',inset:0,background:`linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,${p.bg} 65%)`}}/>
-              </div>
-              <div style={{position:'relative',zIndex:1,padding:'clamp(20px,2.5vw,28px)',display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
-                <span style={{fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',background:'rgba(255,77,0,0.08)',border:'1px solid rgba(255,77,0,0.2)',padding:'4px 10px',borderRadius:'2px'}}>{p.cat}</span>
-                <span style={{fontFamily:'var(--font-mono)',fontSize:'18px',color:'var(--dim)'}}>↗</span>
-              </div>
-              <h3 style={{position:'relative',zIndex:1,fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,fontSize:'clamp(24px,4vw,52px)',letterSpacing:'-2px',color:'var(--bone)',lineHeight:.9,padding:'0 clamp(20px,2.5vw,28px) clamp(20px,2.5vw,28px)'}}>{p.title}</h3>
-            </Link>
-          ))}
-        </div>
-        <div style={{textAlign:'center',marginTop:'32px'}}>
-          <Link href="/work" className="hover-line" style={{fontFamily:'var(--font-mono)',fontSize:'11px',letterSpacing:'2px',color:'var(--muted)',textTransform:'uppercase'}}>View All Projects →</Link>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'clamp(8px,1vw,12px)'}}>
+          {FEATURED.map((p,i)=>(<FeaturedCard key={p.id} p={p} i={i}/>))}
         </div>
       </section>
 
