@@ -41,7 +41,7 @@ export default function CredentialsPage() {
               <div style={{ width:'36px', height:'36px', background:'#ff4d00', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800, fontSize:'16px', color:'#080808', borderRadius:'3px', flexShrink:0 }}>A</div>
               <span style={{ fontFamily:'monospace', fontSize:'9px', letterSpacing:'4px', color:'#8a8070' }}>DESIGNAERIUM</span>
             </div>
-            <div style={{ fontFamily:'Barlow Condensed, Clash Display, Arial Black, sans-serif', fontWeight:900, fontSize:'36px', color:'#ede8dd', letterSpacing:'-1px', lineHeight:1.05 }}>Abhijeeth Subhash</div>
+            <div style={{ fontFamily:'var(--font-display), Clash Display, Arial Black, sans-serif', fontWeight:900, fontSize:'36px', color:'#ede8dd', letterSpacing:'-1px', lineHeight:1.05 }}>Abhijeeth Subhash</div>
             <div style={{ fontSize:'13px', color:'#ff4d00', marginTop:'5px', letterSpacing:'1px' }}>Senior Creative Designer · Dubai, UAE</div>
           </div>
           <div style={{ textAlign:'right' }}>
@@ -129,8 +129,6 @@ export default function CredentialsPage() {
       </div>
 
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&display=swap');
-
         body { background:#111; }
 
         .credentials-page {

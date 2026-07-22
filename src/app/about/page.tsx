@@ -75,7 +75,7 @@ export default function AboutPage() {
           ✦ THE PERSON
         </span>
         <h1 style={{
-          fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700,
+          fontFamily: 'var(--font-display), 'Clash Display', Arial Black, sans-serif', fontWeight: 900,
           fontSize: 'clamp(52px,10vw,130px)', letterSpacing: '-4px',
           color: 'var(--bone)', lineHeight: .86,
           opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(32px)',

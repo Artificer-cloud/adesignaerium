@@ -1,27 +1,26 @@
 import type { Metadata } from 'next'
-import { DM_Sans, Syne_Mono, Cormorant_Garamond } from 'next/font/google'
+import { DM_Sans, Syne_Mono, Cormorant_Garamond, Barlow_Condensed } from 'next/font/google'
 import './globals.css'
 import Cursor from '@/components/Cursor'
 import Navbar from '@/components/Navbar'
-import { Analytics } from '@vercel/analytics/react'
 import AskAbhi from '@/components/AskAbhi'
+import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
-const dmSans = DM_Sans({ subsets:['latin'], weight:['300','400','500'], style:['normal','italic'], variable:'--font-body', display:'swap' })
-const syneMono = Syne_Mono({ subsets:['latin'], weight:['400'], variable:'--font-mono', display:'swap' })
-const cormorant = Cormorant_Garamond({ subsets:['latin'], weight:['400','500','600','700'], style:['italic'], variable:'--font-script', display:'swap' })
+const dmSans        = DM_Sans({ subsets:['latin'], weight:['300','400','500'], style:['normal','italic'], variable:'--font-body',    display:'swap' })
+const syneMono      = Syne_Mono({ subsets:['latin'], weight:['400'], variable:'--font-mono', display:'swap' })
+const cormorant     = Cormorant_Garamond({ subsets:['latin'], weight:['400','500','600','700'], style:['italic'], variable:'--font-script', display:'swap' })
+const barlowCondensed = Barlow_Condensed({ subsets:['latin'], weight:['700','900'], variable:'--font-display', display:'swap' })
 
 export const metadata: Metadata = {
   title: { default:'Abhijeeth Subhash — Creative Designer Dubai', template:'%s | Abhijeeth Subhash' },
   description: 'Senior Creative Designer specialising in Branding, UI/UX, AI Visual Design, Motion & Photography. Based in Dubai, UAE.',
-  keywords: ['creative designer','UI/UX designer','branding','Dubai','AI design','Midjourney','Figma','Abhijeeth Subhash'],
+  keywords: ['creative designer dubai','UI/UX designer UAE','branding agency dubai','AI video production GCC','Abhijeeth Subhash'],
   metadataBase: new URL('https://adesignaerium.com'),
   openGraph: {
     title: 'Abhijeeth Subhash — Creative Designer Dubai',
     description: 'Senior Creative Designer based in Dubai. Branding, UI/UX, AI Visual Design, Motion & Photography.',
-    url: 'https://adesignaerium.com',
-    type: 'website',
-    siteName: 'ADesignAerium',
+    url: 'https://adesignaerium.com', type:'website', siteName:'ADesignAerium',
   },
   twitter: {
     card: 'summary_large_image',
@@ -35,7 +34,7 @@ const themeScript = `(function(){try{var t=localStorage.getItem('theme')||'dark'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`grain ${dmSans.variable} ${syneMono.variable} ${cormorant.variable}`}>
+    <html lang="en" className={`grain ${dmSans.variable} ${syneMono.variable} ${cormorant.variable} ${barlowCondensed.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="preconnect" href="https://api.fontshare.com" />
