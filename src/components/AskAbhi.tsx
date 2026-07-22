@@ -4,10 +4,10 @@ import { useState, useEffect, useRef } from 'react'
 type Message = { role: 'user' | 'assistant'; content: string }
 
 const STARTERS = [
-  "I need branding for my business",
-  "Can you make an AI video for my product?",
-  "Are you available for a project?",
-  "What makes your work different?",
+  "I need a brand identity — where do we start?",
+  "Can you produce an AI video for my product?",
+  "Are you open for new projects right now?",
+  "What kind of work do you enjoy most?",
 ]
 
 export default function AskAbhi() {
@@ -131,7 +131,7 @@ export default function AskAbhi() {
                 borderRadius:'4px 14px 14px 14px', padding:'13px 15px', maxWidth:'90%',
               }}>
                 <p style={{ fontFamily:'var(--font-body,DM Sans,sans-serif)', fontSize:'13.5px', color:'#ede8dd', lineHeight:1.7, margin:0 }}>
-                  Hey! 👋 I&apos;m Abhi&apos;s AI — trained on his work, his process, his way of thinking. What are you working on?
+                  Hey! 👋 I&apos;m Abhi. Tell me what you&apos;re building — I&apos;m all ears.
                 </p>
               </div>
               <div style={{ display:'flex', flexDirection:'column', gap:'7px', marginTop:'14px' }}>
@@ -198,7 +198,7 @@ export default function AskAbhi() {
           <a href="https://wa.me/971526776884?text=Hi%20Abhi%2C%20I%20visited%20your%20portfolio%20and%20would%20like%20to%20discuss%20a%20project."
             target="_blank" rel="noopener noreferrer"
             style={{ fontFamily:'monospace', fontSize:'9px', letterSpacing:'0.8px', color:'#4a4a4a', textDecoration:'none' }}>
-            Rather talk directly? <span style={{ color:'#ff4d00' }}>WhatsApp Abhi ↗</span>
+            Prefer a direct conversation? <span style={{ color:'#ff4d00' }}>WhatsApp me ↗</span>
           </a>
         </div>
 
