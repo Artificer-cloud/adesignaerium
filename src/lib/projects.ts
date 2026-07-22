@@ -105,8 +105,8 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 'ai-visuals', title: 'AI Visual Design',
-    description: 'AI-accelerated creative production — Midjourney, Sora, Higgsfield, and Nano Banana Pro for lifestyle imagery.',
+    id: 'ai-visuals', title: 'AI Creative Direction',
+    description: 'AI Creative Direction — Midjourney v6.1, Veo3, Seedance, Flux, ElevenLabs. From prompt to polished campaign.',
     longDescription: `A collection of AI-driven visual production work spanning product campaigns, lifestyle imagery, and editorial visuals. I use Midjourney, Sora, Higgsfield, and Nano Banana Pro as creative accelerators.\n\nEvery image starts with a creative brief and ends with a polished, on-brand deliverable.`,
     category: ['AI Design','Art Direction'], color: '#0a0618', year: '2023–Present',
     client: 'Various', role: ['AI Art Director','Creative Director'],
