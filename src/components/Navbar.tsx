@@ -103,7 +103,7 @@ export default function Navbar() {
         <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'20px',padding:'40px 0'}}>
           {LINKS.map(({href,label},i) => (
             <Link key={href} href={href} style={{
-              fontFamily:'var(--font-display), Clash Display, Arial Black, sans-serif',
+              fontFamily:'Clash Display,Arial Black,sans-serif',
               fontWeight:900,
               fontSize:'clamp(28px,8vw,56px)', letterSpacing:'-1.5px',
               color:pathname===href?'var(--orange)':'var(--bone)',
