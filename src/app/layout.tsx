@@ -4,6 +4,7 @@ import './globals.css'
 import Cursor from '@/components/Cursor'
 import Navbar from '@/components/Navbar'
 import { Analytics } from '@vercel/analytics/react'
+import AskAbhi from '@/components/AskAbhi'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const dmSans = DM_Sans({ subsets:['latin'], weight:['300','400','500'], style:['normal','italic'], variable:'--font-body', display:'swap' })
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Cursor />
         <Navbar />
         {children}
+        <AskAbhi />
         <Analytics />
         <SpeedInsights />
       </body>
