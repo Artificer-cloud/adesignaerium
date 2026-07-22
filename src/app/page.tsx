@@ -1,67 +1,3 @@
-
-function FeaturedCard({ p, i }: { p: any; i: number }) {
-  const [hovered, setHovered] = useState(false)
-  const [imgSrc,  setImgSrc]  = useState(
-    p.url
-      ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
-      : p.cover
-  )
-  return (
-    <Link href={`/work/${p.id}`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="project-card"
-      style={{
-        background: p.bg, border:`1px solid ${hovered?'rgba(255,77,0,0.5)':'var(--border)'}`,
-        borderRadius:'8px', position:'relative', overflow:'hidden',
-        minHeight: i===0 ? 'clamp(320px,38vw,480px)' : 'clamp(260px,28vw,380px)',
-        display:'block', opacity:0,
-        animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`,
-        transition:'border-color .3s ease',
-      }}>
-      {/* Live screenshot via Microlink — falls back to static cover */}
-      <img
-        src={imgSrc}
-        onError={() => setImgSrc(p.cover)}
-        alt={p.title}
-        style={{
-          position:'absolute', top:0, left:0, width:'100%', height:'100%',
-          objectFit:'cover', objectPosition:'center top',
-          opacity: hovered ? 0.72 : 0.52,
-          transform: hovered ? 'scale(1.04)' : 'scale(1)',
-          transition:'opacity .5s ease, transform .7s cubic-bezier(.23,1,.32,1)',
-        }}
-      />
-      {/* Gradient overlay */}
-      <div className="work-card-overlay" style={{
-        position:'absolute', inset:0,
-        background:'linear-gradient(160deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.08) 40%,rgba(0,0,0,0.88) 100%)',
-      }}/>
-      {/* Top row */}
-      <div style={{position:'absolute',top:'16px',left:'16px',right:'16px',display:'flex',justifyContent:'space-between',alignItems:'center',zIndex:2}}>
-        <span style={{fontFamily:'var(--font-mono)',fontSize:'8px',letterSpacing:'1.5px',color:'rgba(255,255,255,0.9)',textTransform:'uppercase',background:'rgba(255,77,0,0.85)',padding:'3px 9px',borderRadius:'2px'}}>{p.cat}</span>
-        <div style={{width:'30px',height:'30px',borderRadius:'50%',background:hovered?'#ff4d00':'rgba(255,255,255,0.1)',border:`1px solid ${hovered?'#ff4d00':'rgba(255,255,255,0.2)'}`,display:'flex',alignItems:'center',justifyContent:'center',backdropFilter:'blur(6px)',transition:'all .3s ease',flexShrink:0}}>
-          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-            <path d="M2 10L10 2M10 2H4M10 2V8" stroke={hovered?'#080808':'white'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-      </div>
-      {/* Bottom info */}
-      <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:2,padding:'0 20px 20px'}}>
-        <h3 style={{
-          fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,
-          fontSize:'clamp(22px,3.5vw,44px)',letterSpacing:'-1.5px',
-          color:'#ffffff',lineHeight:.92,
-          transform:hovered?'translateY(-4px)':'translateY(0)',
-          transition:'transform .4s cubic-bezier(.23,1,.32,1)',
-        }}>{p.title}</h3>
-      </div>
-      {/* Orange bottom sweep */}
-      <div style={{position:'absolute',bottom:0,left:0,right:0,height:'3px',background:'#ff4d00',transform:hovered?'scaleX(1)':'scaleX(0)',transformOrigin:'left',transition:'transform .5s cubic-bezier(.23,1,.32,1)',zIndex:3}}/>
-    </Link>
-  )
-}
-
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -168,6 +104,70 @@ const SKILLS = [
   {n:'Branding',   s:'Identity · Packaging · Editorial'},
   {n:'Web Dev',    s:'Next.js · React · Vercel · Tailwind'},
 ]
+
+
+function FeaturedCard({ p, i }: { p: any; i: number }) {
+  const [hovered, setHovered] = useState(false)
+  const [imgSrc,  setImgSrc]  = useState(
+    p.url
+      ? `https://api.microlink.io/?url=${encodeURIComponent(p.url)}&screenshot=true&meta=false&embed=screenshot.url`
+      : p.cover
+  )
+  return (
+    <Link href={`/work/${p.id}`}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      className="project-card"
+      style={{
+        background: p.bg, border:`1px solid ${hovered?'rgba(255,77,0,0.5)':'var(--border)'}`,
+        borderRadius:'8px', position:'relative', overflow:'hidden',
+        minHeight: i===0 ? 'clamp(320px,38vw,480px)' : 'clamp(260px,28vw,380px)',
+        display:'block', opacity:0,
+        animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`,
+        transition:'border-color .3s ease',
+      }}>
+      {/* Live screenshot via Microlink — falls back to static cover */}
+      <img
+        src={imgSrc}
+        onError={() => setImgSrc(p.cover)}
+        alt={p.title}
+        style={{
+          position:'absolute', top:0, left:0, width:'100%', height:'100%',
+          objectFit:'cover', objectPosition:'center top',
+          opacity: hovered ? 0.72 : 0.52,
+          transform: hovered ? 'scale(1.04)' : 'scale(1)',
+          transition:'opacity .5s ease, transform .7s cubic-bezier(.23,1,.32,1)',
+        }}
+      />
+      {/* Gradient overlay */}
+      <div className="work-card-overlay" style={{
+        position:'absolute', inset:0,
+        background:'linear-gradient(160deg,rgba(0,0,0,0) 0%,rgba(0,0,0,0.08) 40%,rgba(0,0,0,0.88) 100%)',
+      }}/>
+      {/* Top row */}
+      <div style={{position:'absolute',top:'16px',left:'16px',right:'16px',display:'flex',justifyContent:'space-between',alignItems:'center',zIndex:2}}>
+        <span style={{fontFamily:'var(--font-mono)',fontSize:'8px',letterSpacing:'1.5px',color:'rgba(255,255,255,0.9)',textTransform:'uppercase',background:'rgba(255,77,0,0.85)',padding:'3px 9px',borderRadius:'2px'}}>{p.cat}</span>
+        <div style={{width:'30px',height:'30px',borderRadius:'50%',background:hovered?'#ff4d00':'rgba(255,255,255,0.1)',border:`1px solid ${hovered?'#ff4d00':'rgba(255,255,255,0.2)'}`,display:'flex',alignItems:'center',justifyContent:'center',backdropFilter:'blur(6px)',transition:'all .3s ease',flexShrink:0}}>
+          <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <path d="M2 10L10 2M10 2H4M10 2V8" stroke={hovered?'#080808':'white'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      {/* Bottom info */}
+      <div style={{position:'absolute',bottom:0,left:0,right:0,zIndex:2,padding:'0 20px 20px'}}>
+        <h3 style={{
+          fontFamily:'Clash Display,Arial Black,sans-serif',fontWeight:700,
+          fontSize:'clamp(22px,3.5vw,44px)',letterSpacing:'-1.5px',
+          color:'#ffffff',lineHeight:.92,
+          transform:hovered?'translateY(-4px)':'translateY(0)',
+          transition:'transform .4s cubic-bezier(.23,1,.32,1)',
+        }}>{p.title}</h3>
+      </div>
+      {/* Orange bottom sweep */}
+      <div style={{position:'absolute',bottom:0,left:0,right:0,height:'3px',background:'#ff4d00',transform:hovered?'scaleX(1)':'scaleX(0)',transformOrigin:'left',transition:'transform .5s cubic-bezier(.23,1,.32,1)',zIndex:3}}/>
+    </Link>
+  )
+}
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false)
