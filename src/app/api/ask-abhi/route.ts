@@ -43,13 +43,7 @@ RULES:
 - Always end with a question OR a clear next action
 - For pricing → discuss scope first, guide to WhatsApp
 - If ready to hire → "WhatsApp is fastest: +971 52 677 6884"
-- If asked if you're AI → be honest: "I'm an AI built on Abhi's knowledge — the real Abhi is one WhatsApp away: +971 52 677 6884 📱"`
-
-const MODELS = [
-  'gemini-1.5-flash',
-  'gemini-1.5-flash-latest',
-  'gemini-pro',
-]
+- If asked if you're AI → "I'm an AI built on Abhi's knowledge — the real Abhi is one WhatsApp away: +971 52 677 6884 📱"`
 
 const requests = new Map<string, number[]>()
 function isRateLimited(ip: string): boolean {
@@ -60,10 +54,71 @@ function isRateLimited(ip: string): boolean {
   return false
 }
 
+async function tryGemini(key: string, history: { role: string; parts: { text: string }[] }[]) {
+  // Method 1 — New Gemini API format (gemini-3.6-flash, v1alpha)
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1alpha/models/gemini-3.6-flash:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: history,
+          generationConfig: { maxOutputTokens: 250, temperature: 0.88 },
+        }),
+      }
+    )
+    const data = await res.json()
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+    if (text) return text
+  } catch {}
+
+  // Method 2 — v1beta with gemini-3.6-flash
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: history,
+          generationConfig: { maxOutputTokens: 250, temperature: 0.88 },
+        }),
+      }
+    )
+    const data = await res.json()
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+    if (text) return text
+  } catch {}
+
+  // Method 3 — v1beta gemini-3.5-flash
+  try {
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${key}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+          contents: history,
+          generationConfig: { maxOutputTokens: 250, temperature: 0.88 },
+        }),
+      }
+    )
+    const data = await res.json()
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+    if (text) return text
+  } catch {}
+
+  return null
+}
+
 export async function POST(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for') || 'unknown'
   if (isRateLimited(ip)) {
-    return NextResponse.json({ reply: "Slow down a little! 😄 If you'd rather chat directly: +971 52 677 6884" })
+    return NextResponse.json({ reply: "Slow down a little! 😄 WhatsApp Abhi directly: +971 52 677 6884" })
   }
 
   const GEMINI_KEY = process.env.GEMINI_API_KEY
@@ -79,42 +134,11 @@ export async function POST(req: NextRequest) {
     parts: [{ text: m.content }],
   }))
 
-  // Try models in order until one works
-  for (const model of MODELS) {
-    try {
-      const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-            contents: history,
-            generationConfig: {
-              maxOutputTokens: 250,
-              temperature: 0.88,
-            },
-          }),
-        }
-      )
+  const reply = await tryGemini(GEMINI_KEY, history)
 
-      const data = await res.json()
-
-      if (data.error) {
-        console.error(`Model ${model} error:`, data.error.message)
-        continue // try next model
-      }
-
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text
-      if (reply) return NextResponse.json({ reply })
-
-    } catch (e) {
-      console.error(`Model ${model} exception:`, e)
-      continue
-    }
-  }
+  if (reply) return NextResponse.json({ reply })
 
   return NextResponse.json({
-    reply: "Having a moment of silence over here 😅 WhatsApp Abhi directly for the fastest response: +971 52 677 6884 📱"
+    reply: "Having a quick moment — WhatsApp Abhi directly for the fastest response: +971 52 677 6884 📱"
   })
 }

@@ -1,29 +1,41 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(req: NextRequest) {
-  const GEMINI_KEY = process.env.GEMINI_API_KEY
+export async function GET() {
+  const key = process.env.GEMINI_API_KEY
+  if (!key) return NextResponse.json({ error: 'GEMINI_API_KEY not set' })
 
-  if (!GEMINI_KEY) return NextResponse.json({ error: 'GEMINI_API_KEY not set in Vercel env vars' })
+  const results: Record<string, string> = { keyPrefix: key.substring(0,14)+'...' }
 
-  const results: Record<string, unknown> = { keyPrefix: GEMINI_KEY.substring(0, 10) + '...' }
+  const combos = [
+    ['v1alpha', 'gemini-3.6-flash'],
+    ['v1beta',  'gemini-3.6-flash'],
+    ['v1beta',  'gemini-3.5-flash'],
+    ['v1beta',  'gemini-3.5-flash-lite'],
+    ['v1alpha', 'gemini-3.5-flash'],
+    ['v1',      'gemini-3.6-flash'],
+  ]
 
-  for (const model of ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-pro']) {
+  for (const [version, model] of combos) {
     try {
       const res = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_KEY}`,
+        `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${key}`,
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            contents: [{ role: 'user', parts: [{ text: 'Say hello in 5 words.' }] }],
+            contents: [{ role: 'user', parts: [{ text: 'Say hi in 3 words.' }] }],
             generationConfig: { maxOutputTokens: 20 },
           }),
         }
       )
       const data = await res.json()
-      results[model] = data.error ? `ERROR: ${data.error.message}` : `OK: ${data.candidates?.[0]?.content?.parts?.[0]?.text}`
+      if (data.error) {
+        results[`${version}/${model}`] = `❌ ${data.error.message?.substring(0,80)}`
+      } else {
+        results[`${version}/${model}`] = `✅ ${data.candidates?.[0]?.content?.parts?.[0]?.text}`
+      }
     } catch (e) {
-      results[model] = `EXCEPTION: ${e}`
+      results[`${version}/${model}`] = `❌ exception: ${e}`
     }
   }
 
