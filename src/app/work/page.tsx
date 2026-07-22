@@ -37,8 +37,10 @@ export default function WorkPage() {
               style={{ background:p.color||'#1a1a1a', border:'1px solid var(--border)', borderRadius:'6px', minHeight:'clamp(240px,30vw,360px)', display:'flex', flexDirection:'column', justifyContent:'space-between', position:'relative', overflow:'hidden', opacity:0, animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.05+i*.07}s forwards` }}>
               {p.coverImage && (
                 <div style={{ position:'absolute', inset:0, zIndex:0 }}>
-                  <Image src={p.coverImage} alt={p.title} fill style={{ objectFit:'cover', objectPosition:'center', opacity:0.35 }} />
-                  <div style={{ position:'absolute', inset:0, background:`linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,${p.color||'#1a1a1a'} 65%)` }}/>
+                  <div className="work-card-img-wrap" style={{ position:'absolute', inset:0 }}>
+                    <Image src={p.coverImage} alt={p.title} fill style={{ objectFit:'cover', objectPosition:'center', opacity:0.35 }} />
+                  </div>
+                  <div className="work-card-overlay" style={{ position:'absolute', inset:0, background:`linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,${p.color||'#1a1a1a'} 65%)` }}/>
                 </div>
               )}
               <div style={{ position:'relative', zIndex:1, padding:'clamp(20px,2.5vw,28px)', display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>

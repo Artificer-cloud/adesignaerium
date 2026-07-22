@@ -2,7 +2,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useRef, useState, useCallback } from 'react'
-import ShowreelSection from '@/components/ShowreelSection'
 
 const FONT_CYCLE = [
   { font:'Georgia,serif',                          weight:'400', style:'normal', color:'var(--bone)'   },
@@ -197,9 +196,6 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* SHOWREEL */}
-      <ShowreelSection />
-
       {/* SELECTED WORK */}
       <section style={{padding:'clamp(60px,8vh,100px) clamp(20px,6vw,80px)',maxWidth:'1400px',margin:'0 auto',position:'relative'}}>
         <SectionArt v={1}/>
@@ -217,8 +213,10 @@ export default function HomePage() {
             <Link key={p.id} href={`/work/${p.id}`} className="project-card"
               style={{background:p.bg,border:'1px solid var(--border)',borderRadius:'6px',minHeight:i===0?'clamp(320px,40vw,460px)':'clamp(240px,30vw,360px)',display:'flex',flexDirection:'column',justifyContent:'space-between',position:'relative',overflow:'hidden',opacity:0,animation:`fadeUp .8s cubic-bezier(.23,1,.32,1) ${.1+i*.12}s forwards`}}>
               <div style={{position:'absolute',inset:0,zIndex:0}}>
-                <Image src={p.cover} alt={p.title} fill style={{objectFit:'cover',objectPosition:'center',opacity:0.3}} onError={()=>{}}/>
-                <div style={{position:'absolute',inset:0,background:`linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,${p.bg} 65%)`}}/>
+                <div className="work-card-img-wrap" style={{position:'absolute',inset:0}}>
+                  <Image src={p.cover} alt={p.title} fill style={{objectFit:'cover',objectPosition:'center',opacity:0.3}} onError={()=>{}}/>
+                </div>
+                <div className="work-card-overlay" style={{position:'absolute',inset:0,background:`linear-gradient(to bottom,rgba(0,0,0,0.05) 0%,${p.bg} 65%)`}}/>
               </div>
               <div style={{position:'relative',zIndex:1,padding:'clamp(20px,2.5vw,28px)',display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
                 <span style={{fontFamily:'var(--font-mono)',fontSize:'9px',letterSpacing:'2px',color:'var(--orange)',background:'rgba(255,77,0,0.08)',border:'1px solid rgba(255,77,0,0.2)',padding:'4px 10px',borderRadius:'2px'}}>{p.cat}</span>
