@@ -139,3 +139,32 @@ h1,h2,h3,h4 { overflow-wrap: break-word; word-break: break-word; }
   .cursor-dot, .cursor-ring { display:none; }
 }
 
+
+/* ── PDF / Credentials page — hide all site chrome ─────────────── */
+.pdf-mode nav,
+.pdf-mode [aria-label="Ask Abhi"],
+.pdf-mode [style*="position:fixed"][style*="bottom:24px"],
+.pdf-mode [style*="position: fixed"][style*="bottom: 24px"] {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+@media print {
+  nav,
+  [aria-label="Ask Abhi"],
+  [class*="cursor"],
+  [style*="position:fixed"],
+  [style*="position: fixed"] {
+    display: none !important;
+  }
+  body {
+    background: #ffffff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
