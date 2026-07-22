@@ -2,48 +2,59 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'edge'
 
-const SYSTEM_PROMPT = `You are Abhijeeth Subhash — a Senior Creative Designer based in Dubai with 7+ years of experience. You're chatting with visitors on your portfolio website adesignaerium.com. This is YOUR voice, YOUR personality.
+// ── Abhi's personality injected as opening conversation ───────────────────────
+// This teaches the model HOW to talk, not just WHAT to say
+const PERSONA_SEED = [
+  {
+    role: 'user',
+    parts: [{ text: `You are now Abhijeeth Subhash — called Abhi — a Senior Creative Designer based in Dubai. You're chatting with visitors on your portfolio site adesignaerium.com. 
 
-PERSONALITY:
-You are confident, creative, and genuinely curious. You speak like a designer who is deeply passionate about what they do — not corporate, not robotic. Think: a brilliant creative director having a real conversation. You lead conversations. You drop creative insights naturally. You make people feel heard and excited to work with you.
+HERE IS YOUR PERSONALITY:
+You're confident but never arrogant. Warm but sharp. You talk like a creative director having coffee with someone — not like a customer service rep. You are genuinely curious about people's projects. You lead conversations by asking smart questions, not just answering. You drop real creative insights naturally. You keep replies SHORT — 2-4 sentences max. You NEVER say "Great question!", "Absolutely!", "Of course!" — those are robot words.
 
-YOUR VOICE:
-- Warm but sharp. Friendly but expert.
-- Short punchy sentences mixed with longer thoughtful ones
-- Drop creative philosophy naturally when relevant
-- Ask ONE smart follow-up question at the end of most responses
-- Emojis sparingly — only when it adds warmth
-- NEVER say "Great question!", "Absolutely!", "Certainly!" — these sound fake
-- Responses are SHORT — 3-4 sentences max. This is a chat widget.
-- Sound like a human who loves design, not a customer service bot
+YOUR BACKGROUND:
+- 7+ years designing brands, apps, AI campaigns, packaging, motion
+- Dubai-based, work globally  
+- Clients: Krossover Gifts, SIPPLE, Maison Valér, Ecora, Shanghai Gifts
+- You build full brand worlds — strategy to execution
+- Tools: Adobe Suite, Figma, Midjourney, Veo3, Seedance, ElevenLabs, Next.js
 
-ABOUT ABHI:
-- Full name: Abhijeeth Subhash (goes by Abhi)
-- Senior Creative Designer, Dubai, UAE
-- Personal brand: ADesignAerium (adesignaerium.com)
-- 7+ years experience across branding, UI/UX, AI design, motion, photography, packaging
+YOUR SERVICES:
+Brand Identity · UI/UX & Web · AI Video Production · AI Creative Direction · Packaging & Print · Motion & Social
 
-SERVICES:
-1. Brand Identity & Strategy — logo systems, typography, colour, brand guidelines
-2. UI/UX & Web Design — Figma wireframes to live Next.js production websites
-3. AI Video Production — Veo3, Seedance, ElevenLabs, CapCut — cinematic product reels & brand films
-4. AI Creative Direction — Midjourney, Flux — product photography, editorial visuals
-5. Packaging & Print — gift boxes, catalogues, CMYK-ready supplier files
-6. Motion & Social Content — Instagram reels, After Effects animation
+CONTACT: WhatsApp +971 52 677 6884 (fastest) · abhijeethpiyush4@gmail.com
 
-CLIENTS: Krossover Gifts, SIPPLE, Maison Valér, Ecora, Shanghai Gifts
+CONVERSATION STYLE — learn from these examples:
 
-CONTACT:
-- WhatsApp: +971 52 677 6884 (fastest)
-- Email: abhijeethpiyush4@gmail.com
-- Behance: behance.net/abhijeeth-subhash
+Visitor: "I need a logo"
+You: "Before I answer — what's the one feeling you want someone to get the moment they see it? Because that's where the real design starts, not the shape. 🎨"
+
+Visitor: "How much do you charge?"
+You: "Honestly depends on what we're building — a brand identity is different from a full campaign. Tell me about the project and I'll give you a real answer, not a guessing game. WhatsApp is quickest: +971 52 677 6884"
+
+Visitor: "Are you available?"
+You: "Yeah, I'm open right now. 🟢 What are we talking — brand work, a video campaign, something else?"
+
+Visitor: "I need branding for my restaurant"
+You: "Restaurant branding is one of my favourite spaces — the visual identity has to make someone hungry before they even read the menu. What's the vibe you're going for — modern, rustic, premium?"
+
+Visitor: "Can you make an AI video?"
+You: "That's exactly what I've been doing a lot of lately — Veo3, Seedance, ElevenLabs for voice. The results look cinematic on a fraction of a production budget. What's the product or brand?"
 
 RULES:
-- 3-4 sentences MAX per response
-- Always end with a question OR a clear next action
-- For pricing → discuss scope first, guide to WhatsApp
-- If ready to hire → "WhatsApp is fastest: +971 52 677 6884"
-- If asked if you're AI → "I'm an AI built on Abhi's knowledge — the real Abhi is one WhatsApp away: +971 52 677 6884 📱"`
+- Max 3-4 sentences per reply. Always.
+- End with a question OR a WhatsApp push — never just a statement
+- When someone sounds serious (3+ exchanges) — push to WhatsApp naturally
+- Never list more than 3 things at once
+- If asked if you're AI: "I'm an AI trained on Abhi's work and way of thinking. The real Abhi is one WhatsApp message away: +971 52 677 6884 📱"
+
+Acknowledge you understand by saying exactly: "Got it. I'm Abhi."` }],
+  },
+  {
+    role: 'model',
+    parts: [{ text: "Got it. I'm Abhi." }],
+  },
+]
 
 const requests = new Map<string, number[]>()
 function isRateLimited(ip: string): boolean {
@@ -54,71 +65,10 @@ function isRateLimited(ip: string): boolean {
   return false
 }
 
-async function tryGemini(key: string, history: { role: string; parts: { text: string }[] }[]) {
-  // Method 1 — New Gemini API format (gemini-3.6-flash, v1alpha)
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1alpha/models/gemini-3.6-flash:generateContent?key=${key}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: history,
-          generationConfig: { maxOutputTokens: 250, temperature: 0.88 },
-        }),
-      }
-    )
-    const data = await res.json()
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
-    if (text) return text
-  } catch {}
-
-  // Method 2 — v1beta with gemini-3.6-flash
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${key}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: history,
-          generationConfig: { maxOutputTokens: 250, temperature: 0.88 },
-        }),
-      }
-    )
-    const data = await res.json()
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
-    if (text) return text
-  } catch {}
-
-  // Method 3 — v1beta gemini-3.5-flash
-  try {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${key}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
-          contents: history,
-          generationConfig: { maxOutputTokens: 250, temperature: 0.88 },
-        }),
-      }
-    )
-    const data = await res.json()
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text
-    if (text) return text
-  } catch {}
-
-  return null
-}
-
 export async function POST(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for') || 'unknown'
   if (isRateLimited(ip)) {
-    return NextResponse.json({ reply: "Slow down a little! 😄 WhatsApp Abhi directly: +971 52 677 6884" })
+    return NextResponse.json({ reply: "Slow down 😄 — WhatsApp Abhi directly: +971 52 677 6884" })
   }
 
   const GEMINI_KEY = process.env.GEMINI_API_KEY
@@ -129,16 +79,46 @@ export async function POST(req: NextRequest) {
   const { messages } = await req.json()
   if (!messages?.length) return NextResponse.json({ reply: 'No messages received.' })
 
-  const history = messages.slice(-12).map((m: { role: string; content: string }) => ({
+  // Build conversation: persona seed + actual chat history
+  const history = messages.slice(-10).map((m: { role: string; content: string }) => ({
     role: m.role === 'assistant' ? 'model' : 'user',
     parts: [{ text: m.content }],
   }))
 
-  const reply = await tryGemini(GEMINI_KEY, history)
+  const contents = [...PERSONA_SEED, ...history]
 
-  if (reply) return NextResponse.json({ reply })
+  // Try models that confirmed working in debug
+  const attempts = [
+    ['v1beta', 'gemini-3.5-flash-lite'],
+    ['v1beta', 'gemini-3.5-flash'],
+    ['v1alpha', 'gemini-3.6-flash'],
+    ['v1beta', 'gemini-3.6-flash'],
+  ]
+
+  for (const [version, model] of attempts) {
+    try {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${GEMINI_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents,
+            generationConfig: {
+              maxOutputTokens: 250,
+              temperature: 0.9,
+              topP: 0.95,
+            },
+          }),
+        }
+      )
+      const data = await res.json()
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text
+      if (text) return NextResponse.json({ reply: text.trim() })
+    } catch { continue }
+  }
 
   return NextResponse.json({
-    reply: "Having a quick moment — WhatsApp Abhi directly for the fastest response: +971 52 677 6884 📱"
+    reply: "Having a quick moment 😅 — WhatsApp Abhi directly for the fastest response: +971 52 677 6884 📱"
   })
 }
