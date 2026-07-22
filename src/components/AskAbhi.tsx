@@ -101,7 +101,7 @@ export default function AskAbhi() {
             <div>
               <div style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'15px', color:'#fff', letterSpacing:'-0.5px' }}>Ask Abhi</div>
               <div style={{ fontSize:'10px', color:'rgba(255,255,255,0.7)', fontFamily:'monospace', letterSpacing:'0.5px' }}>
-                AI · Powered by Gemini
+                Senior Creative Designer · Dubai
               </div>
             </div>
           </div>
