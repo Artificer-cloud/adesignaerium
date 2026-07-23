@@ -90,7 +90,7 @@ export default function AboutPage() {
 
       {/* ── SPLIT — Photo + Bio ─────────────────────────────────── */}
       <section style={{ maxWidth: '1400px', margin: '0 auto', padding: 'clamp(40px,6vh,80px) clamp(20px,6vw,80px)' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'clamp(260px,38%,500px) 1fr', gap: 'clamp(32px,5vw,80px)', alignItems: 'start' }}>
+        <div className="about-split" style={{ display: 'grid', gridTemplateColumns: 'clamp(260px,38%,500px) 1fr', gap: 'clamp(32px,5vw,80px)', alignItems: 'start' }}>
 
           {/* Photo */}
           <div className="reveal-left" style={{ position: 'relative' }}>
@@ -148,7 +148,7 @@ export default function AboutPage() {
             </div>
 
             {/* Quick stats */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
+            <div className="about-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
               {[{ n: '7+', l: 'Years Experience' }, { n: '100+', l: 'Brands Served' }, { n: '100%', l: 'On-time Delivery' }].map(({ n, l }) => (
                 <div key={l} style={{ background: 'var(--surface)', padding: '20px 16px', textAlign: 'center' }}>
                   <div style={{ fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700, fontSize: 'clamp(28px,4vw,42px)', color: 'var(--orange)', lineHeight: 1 }}>{n}</div>
@@ -254,6 +254,25 @@ export default function AboutPage() {
           </a>
         </div>
       </section>
+
+      <style>{`
+        @media (max-width: 767px) {
+          .about-split {
+            grid-template-columns: 1fr !important;
+            gap: 32px !important;
+          }
+          .reveal-left, .reveal-right {
+            transform: none !important;
+            opacity: 1 !important;
+          }
+        }
+        @media (max-width: 900px) and (min-width: 768px) {
+          .about-split {
+            grid-template-columns: 260px 1fr !important;
+            gap: 28px !important;
+          }
+        }
+      `}</style>
 
     </main>
   )
