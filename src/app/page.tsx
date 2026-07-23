@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect, useRef, useState, useCallback } from 'react'
+import ShowreelSection from '@/components/ShowreelSection'
 
 const FONT_CYCLE = [
   { font:'Georgia,serif',                          weight:'400', style:'normal', color:'var(--bone)'   },
@@ -250,6 +251,9 @@ export default function HomePage() {
           ))}
         </div>
       </div>
+
+      {/* SHOWREEL */}
+      <ShowreelSection />
 
       {/* SELECTED WORK */}
       <section style={{padding:'clamp(60px,8vh,100px) clamp(20px,6vw,80px)',maxWidth:'1400px',margin:'0 auto',position:'relative'}}>
