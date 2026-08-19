@@ -75,7 +75,7 @@ export default function AboutPage() {
           ✦ THE PERSON
         </span>
         <h1 style={{
-          fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700,
+          fontFamily: 'var(--font-display), 'Clash Display', Arial Black, sans-serif', fontWeight: 900,
           fontSize: 'clamp(52px,10vw,130px)', letterSpacing: '-4px',
           color: 'var(--bone)', lineHeight: .86,
           opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(32px)',
@@ -90,7 +90,7 @@ export default function AboutPage() {
 
       {/* ── SPLIT — Photo + Bio ─────────────────────────────────── */}
       <section style={{ maxWidth: '1400px', margin: '0 auto', padding: 'clamp(40px,6vh,80px) clamp(20px,6vw,80px)' }}>
-        <div className="about-split" style={{ display: 'grid', gridTemplateColumns: 'clamp(260px,38%,500px) 1fr', gap: 'clamp(32px,5vw,80px)', alignItems: 'start' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'clamp(260px,38%,500px) 1fr', gap: 'clamp(32px,5vw,80px)', alignItems: 'start' }}>
 
           {/* Photo */}
           <div className="reveal-left" style={{ position: 'relative' }}>
@@ -130,7 +130,7 @@ export default function AboutPage() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '40px' }}>
               {[
                 { l: '+971 52 677 6884',           h: 'tel:+971526776884' },
-                { l: 'abhijeethpiyush4@gmail.com', h: 'mailto:abhijeethpiyush4@gmail.com' },
+                { l: 'abhi@adesignaerium.com', h: 'mailto:abhi@adesignaerium.com' },
                 { l: 'LinkedIn',                   h: 'https://linkedin.com/in/abhijeethsubhash' },
                 { l: 'Behance',                    h: 'https://behance.net/abhijeeth-subhash' },
                 { l: 'Dribbble',                   h: 'https://dribbble.com/Artificer_666' },
@@ -148,7 +148,7 @@ export default function AboutPage() {
             </div>
 
             {/* Quick stats */}
-            <div className="about-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1px', background: 'var(--border)', border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
               {[{ n: '7+', l: 'Years Experience' }, { n: '100+', l: 'Brands Served' }, { n: '100%', l: 'On-time Delivery' }].map(({ n, l }) => (
                 <div key={l} style={{ background: 'var(--surface)', padding: '20px 16px', textAlign: 'center' }}>
                   <div style={{ fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700, fontSize: 'clamp(28px,4vw,42px)', color: 'var(--orange)', lineHeight: 1 }}>{n}</div>
@@ -243,7 +243,7 @@ export default function AboutPage() {
           Something great.
         </h2>
         <div className="reveal" style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center' }}>
-          <a href="mailto:abhijeethpiyush4@gmail.com" style={{ fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 600, fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase', background: 'var(--orange)', color: 'var(--ink)', padding: '14px 40px', borderRadius: '2px', textDecoration: 'none', display: 'inline-block', transition: 'opacity .3s' }}>
+          <a href="mailto:abhi@adesignaerium.com" style={{ fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 600, fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase', background: 'var(--orange)', color: 'var(--ink)', padding: '14px 40px', borderRadius: '2px', textDecoration: 'none', display: 'inline-block', transition: 'opacity .3s' }}>
             Email Me →
           </a>
           <Link href="/work" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '2px', textTransform: 'uppercase', border: '1px solid var(--border)', color: 'var(--bone)', padding: '14px 40px', borderRadius: '2px', display: 'inline-block', textDecoration: 'none', transition: 'all .3s' }}>
@@ -254,25 +254,6 @@ export default function AboutPage() {
           </a>
         </div>
       </section>
-
-      <style>{`
-        @media (max-width: 767px) {
-          .about-split {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-          .reveal-left, .reveal-right {
-            transform: none !important;
-            opacity: 1 !important;
-          }
-        }
-        @media (max-width: 900px) and (min-width: 768px) {
-          .about-split {
-            grid-template-columns: 260px 1fr !important;
-            gap: 28px !important;
-          }
-        }
-      `}</style>
 
     </main>
   )

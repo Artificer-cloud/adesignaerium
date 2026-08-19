@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
       },
       body: JSON.stringify({
         from: 'ADesignAerium Contact <contact@adesignaerium.com>',
-        to: ['abhijeethpiyush4@gmail.com'],
+        to: ['abhi@adesignaerium.com'],
         reply_to: email,
         subject: `Portfolio Enquiry from ${name}`,
         html: `

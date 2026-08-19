@@ -29,7 +29,7 @@ export default function ContactPage() {
 
       if (json.fallback) {
         // No Resend key configured — open mailto as fallback
-        window.location.href = `mailto:abhijeethpiyush4@gmail.com?subject=${encodeURIComponent(`Portfolio Enquiry from ${name}`)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`
+        window.location.href = `mailto:abhi@adesignaerium.com?subject=${encodeURIComponent(`Portfolio Enquiry from ${name}`)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`
         setStatus('sent')
       } else if (json.success) {
         setStatus('sent')
@@ -38,7 +38,7 @@ export default function ContactPage() {
       }
     } catch {
       // Network error — fallback to mailto
-      window.location.href = `mailto:abhijeethpiyush4@gmail.com?subject=${encodeURIComponent(`Portfolio Enquiry from ${name}`)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`
+      window.location.href = `mailto:abhi@adesignaerium.com?subject=${encodeURIComponent(`Portfolio Enquiry from ${name}`)}&body=${encodeURIComponent(`From: ${name} (${email})\n\n${message}`)}`
       setStatus('sent')
     }
   }
@@ -91,7 +91,7 @@ export default function ContactPage() {
 
                 {status === 'error' && (
                   <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: '#ef4444', letterSpacing: '1px' }}>
-                    ✕ Something went wrong. Try emailing me directly at abhijeethpiyush4@gmail.com
+                    ✕ Something went wrong. Try emailing me directly at abhi@adesignaerium.com
                   </p>
                 )}
 
@@ -118,7 +118,7 @@ export default function ContactPage() {
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '3px', color: 'var(--orange)', display: 'block', marginBottom: '20px' }}>DIRECT CONTACT</span>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {[
-                  { l: 'Email', v: 'abhijeethpiyush4@gmail.com', h: 'mailto:abhijeethpiyush4@gmail.com' },
+                  { l: 'Email', v: 'abhi@adesignaerium.com', h: 'mailto:abhi@adesignaerium.com' },
                   { l: 'Phone', v: '+971 52 677 6884', h: 'tel:+971526776884' },
                   { l: 'WhatsApp', v: '+971 52 677 6884', h: 'https://wa.me/971526776884' },
                   { l: 'Location', v: 'Dubai, UAE', h: '' },

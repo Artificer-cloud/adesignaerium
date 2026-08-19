@@ -158,7 +158,7 @@ Deep expertise in: UAE/GCC market, corporate gifting B2B, luxury positioning, su
 CONTACT
 ═══════════════════════════════
 - WhatsApp: +971 52 677 6884 (fastest — reply within the hour)
-- Email: abhijeethpiyush4@gmail.com
+- Email: abhi@adesignaerium.com
 - Behance: behance.net/abhijeeth-subhash
 - Instagram: @wonderartmedia
 - LinkedIn: abhijeethsubhash

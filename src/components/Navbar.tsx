@@ -61,7 +61,7 @@ export default function Navbar() {
           <div style={{display:'flex',alignItems:'flex-start',paddingTop:'6px'}}>
             <ThemeToggle />
           </div>
-          <a href="mailto:abhijeethpiyush4@gmail.com" className="hire-btn">
+          <a href="mailto:abhi@adesignaerium.com" className="hire-btn">
             Hire Me →
           </a>
         </div>
@@ -103,7 +103,7 @@ export default function Navbar() {
         <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'20px',padding:'40px 0'}}>
           {LINKS.map(({href,label},i) => (
             <Link key={href} href={href} style={{
-              fontFamily:'Clash Display,Arial Black,sans-serif',
+              fontFamily:'var(--font-display), Clash Display, Arial Black, sans-serif',
               fontWeight:900,
               fontSize:'clamp(28px,8vw,56px)', letterSpacing:'-1.5px',
               color:pathname===href?'var(--orange)':'var(--bone)',
@@ -115,7 +115,7 @@ export default function Navbar() {
               {label}
             </Link>
           ))}
-          <a href="mailto:abhijeethpiyush4@gmail.com" style={{
+          <a href="mailto:abhi@adesignaerium.com" style={{
             fontFamily:'var(--font-mono)',fontSize:'12px',letterSpacing:'3px',
             color:'var(--orange)',marginTop:'8px',
             opacity:open?1:0,transition:'opacity .5s .38s',
