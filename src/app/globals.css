@@ -4,6 +4,8 @@
 
 /* ── DARK THEME (default) ──────────────────────────────────────── */
 :root {
+  /* Barlow Condensed — hero display headings across all pages */
+  --font-display-family: var(--font-display), 'Clash Display', Arial Black, sans-serif;
   --font-clash:  'Clash Display', 'Arial Black', sans-serif;
   --font-script: 'Cormorant Garamond', Georgia, serif;
   --font-body:   'DM Sans', 'Helvetica Neue', sans-serif;
@@ -140,31 +142,65 @@ h1,h2,h3,h4 { overflow-wrap: break-word; word-break: break-word; }
 }
 
 
-/* ── PDF / Credentials page — hide all site chrome ─────────────── */
-.pdf-mode nav,
-.pdf-mode [aria-label="Ask Abhi"],
-.pdf-mode [style*="position:fixed"][style*="bottom:24px"],
-.pdf-mode [style*="position: fixed"][style*="bottom: 24px"] {
-  display: none !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
+/* ═══════════════════════════════════════════════════
+   2026 ANIMATION SYSTEM
+═══════════════════════════════════════════════════ */
+
+/* Character reveal — slides up from below */
+@keyframes charReveal {
+  from { transform:translateY(110%); opacity:0; }
+  to   { transform:translateY(0);    opacity:1; }
+}
+.char-wrap  { display:inline-block; overflow:hidden; vertical-align:bottom; }
+.char-inner { display:inline-block; animation:charReveal 1s cubic-bezier(.16,1,.3,1) both; }
+
+/* Clip reveal — for section headings on scroll */
+@keyframes clipUp {
+  from { clip-path:inset(0 0 100% 0); transform:translateY(24px); opacity:0; }
+  to   { clip-path:inset(0 0 0% 0);   transform:translateY(0);    opacity:1; }
+}
+.clip-reveal         { opacity:0; }
+.clip-reveal.visible { animation:clipUp .9s cubic-bezier(.16,1,.3,1) both; }
+
+/* Fade up — cards, paragraphs */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(28px); }
+  to   { opacity:1; transform:translateY(0);    }
 }
 
-@media print {
-  nav,
-  [aria-label="Ask Abhi"],
-  [class*="cursor"],
-  [style*="position:fixed"],
-  [style*="position: fixed"] {
-    display: none !important;
-  }
-  body {
-    background: #ffffff !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  @page {
-    size: A4;
-    margin: 0;
-  }
+/* Stagger utility — add to parent, children get delays */
+.stagger-children > *:nth-child(1)  { animation-delay:.05s!important; }
+.stagger-children > *:nth-child(2)  { animation-delay:.10s!important; }
+.stagger-children > *:nth-child(3)  { animation-delay:.15s!important; }
+.stagger-children > *:nth-child(4)  { animation-delay:.20s!important; }
+.stagger-children > *:nth-child(5)  { animation-delay:.25s!important; }
+.stagger-children > *:nth-child(6)  { animation-delay:.30s!important; }
+.stagger-children > *:nth-child(7)  { animation-delay:.35s!important; }
+.stagger-children > *:nth-child(8)  { animation-delay:.40s!important; }
+.stagger-children > *:nth-child(9)  { animation-delay:.45s!important; }
+
+/* View transitions — orange wipe between pages */
+@keyframes pageSlideOut {
+  to { clip-path:inset(0 100% 0 0); }
 }
+@keyframes pageSlideIn {
+  from { clip-path:inset(0 0 0 100%); }
+}
+::view-transition-old(root) {
+  animation:pageSlideOut .5s cubic-bezier(.76,0,.24,1) forwards;
+}
+::view-transition-new(root) {
+  animation:pageSlideIn .5s cubic-bezier(.76,0,.24,1) forwards;
+}
+
+/* Orange bar flash on page transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+}
+
+/* Magnetic button reset (JS handles the transform) */
+.magnetic { will-change:transform; display:inline-block; }
+
+/* Scramble nav link — cursor */
+.nav-link { cursor:none; }

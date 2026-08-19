@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { useState, useEffect } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
+import { useState, useEffect, useCallback } from 'react'
 import ThemeToggle from './ThemeToggle'
 
 const LINKS = [
@@ -15,14 +15,65 @@ const LINKS = [
   { href: '/contact',    label: 'Contact'    },
 ]
 
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+function ScrambleLink({ href, label, active }: { href:string; label:string; active:boolean }) {
+  const [display, setDisplay] = useState(label)
+  const router = useRouter()
+  let timer: ReturnType<typeof setInterval> | null = null
+
+  const scramble = () => {
+    let iteration = 0
+    clearInterval(timer!)
+    timer = setInterval(() => {
+      setDisplay(
+        label.split('').map((char, idx) => {
+          if (char === ' ') return ' '
+          if (idx < Math.floor(iteration)) return label[idx]
+          return CHARS[Math.floor(Math.random() * CHARS.length)]
+        }).join('')
+      )
+      iteration += 0.5
+      if (iteration >= label.length) {
+        clearInterval(timer!)
+        setDisplay(label)
+      }
+    }, 28)
+  }
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    // View Transition API for orange wipe
+    if ('startViewTransition' in document) {
+      (document as any).startViewTransition(() => {
+        router.push(href)
+      })
+    } else {
+      router.push(href)
+    }
+  }
+
+  return (
+    <a
+      href={href}
+      onClick={handleClick}
+      onMouseEnter={scramble}
+      className={`nav-link hover-line${active ? ' active' : ''}`}
+      style={{ fontFamily:'var(--font-mono)', letterSpacing:'1px', fontSize:'10.5px' }}
+    >
+      {display}
+    </a>
+  )
+}
+
 export default function Navbar() {
-  const pathname = usePathname()
+  const pathname  = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [open,     setOpen]     = useState(false)
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 30)
-    window.addEventListener('scroll', fn)
+    window.addEventListener('scroll', fn, { passive:true })
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
@@ -53,16 +104,16 @@ export default function Navbar() {
         {/* Desktop nav */}
         <div className="desktop-nav">
           {LINKS.map(({href,label}) => (
-            <Link key={href} href={href}
-              className={`nav-link hover-line${pathname===href?' active':''}`}>
-              {label}
-            </Link>
+            <ScrambleLink key={href} href={href} label={label.toUpperCase()} active={pathname===href}/>
           ))}
           <div style={{display:'flex',alignItems:'flex-start',paddingTop:'6px'}}>
             <ThemeToggle />
           </div>
           <a href="mailto:abhi@adesignaerium.com" className="hire-btn">
-            Hire Me →
+            Hire Me
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="none" style={{marginLeft:'6px'}}>
+              <path d="M1 9L9 1M9 1H3M9 1V7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
           </a>
         </div>
 
@@ -103,8 +154,8 @@ export default function Navbar() {
         <div style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'20px',padding:'40px 0'}}>
           {LINKS.map(({href,label},i) => (
             <Link key={href} href={href} style={{
-              fontFamily:'var(--font-display), Clash Display, Arial Black, sans-serif',
-              fontWeight:900,
+              fontFamily:'Clash Display,Arial Black,sans-serif',
+              fontWeight:700,
               fontSize:'clamp(28px,8vw,56px)', letterSpacing:'-1.5px',
               color:pathname===href?'var(--orange)':'var(--bone)',
               opacity:open?1:0,
@@ -120,7 +171,7 @@ export default function Navbar() {
             color:'var(--orange)',marginTop:'8px',
             opacity:open?1:0,transition:'opacity .5s .38s',
           }}>
-            HIRE ME →
+            abhi@adesignaerium.com
           </a>
         </div>
       </div>
@@ -131,8 +182,9 @@ export default function Navbar() {
         .hire-btn {
           font-family:var(--font-mono); font-size:10px; letter-spacing:2px;
           color:var(--orange); border:1px solid rgba(255,77,0,0.4);
-          padding:8px 18px; border-radius:2px; transition:all .3s;
+          padding:8px 16px; border-radius:2px; transition:all .3s;
           text-transform:uppercase; white-space:nowrap;
+          display:inline-flex; align-items:center;
         }
         .hire-btn:hover { background:var(--orange); color:var(--ink); }
         @media(max-width:900px) {

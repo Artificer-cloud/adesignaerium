@@ -231,8 +231,11 @@ export default function ReelPage() {
           fontSize:'clamp(56px,12vw,140px)', letterSpacing:'-5px',
           color:'var(--bone)', lineHeight:0.86, marginBottom:'20px',
         }}>
-          THE<br/>
-          <span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600, color:'var(--orange)', letterSpacing:'-3px' }}>Reel.</span>
+          <span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.1s'}}>T</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.17s'}}>H</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.24s'}}>E</span></span>
+          <br/>
+          <span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600, color:'var(--orange)', letterSpacing:'-3px' }}>
+            <span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.34s'}}>R</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.40s'}}>e</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.46s'}}>e</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.52s'}}>l</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.58s'}}>.</span></span>
+          </span>
         </h1>
         <div style={{ display:'flex', alignItems:'center', gap:'16px', flexWrap:'wrap' }}>
           <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(14px,1.6vw,18px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'480px', lineHeight:1.7, margin:0 }}>
@@ -262,7 +265,7 @@ export default function ReelPage() {
 
         {!loading && error && (
           <div style={{ textAlign:'center', padding:'100px 0' }}>
-            <div style={{ fontSize:'40px', marginBottom:'16px', opacity:.15 }}>📹</div>
+            <div style={{ fontSize:'40px', marginBottom:'16px', opacity:.15 }}></div>
             <p style={{ fontFamily:'var(--font-mono)', fontSize:'11px', letterSpacing:'2px', color:'var(--dim)', marginBottom:'8px' }}>
               {error === 'no_videos' ? 'NO VIDEOS YET' : 'COULD NOT LOAD VIDEOS'}
             </p>

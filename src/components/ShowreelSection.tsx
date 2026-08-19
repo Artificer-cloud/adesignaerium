@@ -103,7 +103,7 @@ export default function ShowreelSection() {
                 padding:'13px 18px', borderRadius:'2px', cursor:'pointer',
                 display:'flex', alignItems:'center', gap:'8px',
               }}>
-                <span style={{ fontSize:'13px' }}>{muted ? '🔇' : '🔊'}</span>
+                <span style={{ fontSize:'13px' }}>{muted ? (<svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M1 5h2l3-3v10l-3-3H1V5Z' fill='currentColor'/><path d='M11 5l2 2-2 2M13 5l-2 2 2 2' stroke='currentColor' strokeWidth='1.4' strokeLinecap='round'/></svg>) : (<svg width='14' height='14' viewBox='0 0 14 14' fill='none'><path d='M1 5h2l3-3v10l-3-3H1V5Z' fill='currentColor'/><path d='M9 4.5c1.1.6 1.8 1.7 1.8 3s-.7 2.4-1.8 3' stroke='currentColor' strokeWidth='1.4' strokeLinecap='round'/><path d='M11 3c1.7.9 2.8 2.7 2.8 4.5s-1.1 3.6-2.8 4.5' stroke='currentColor' strokeWidth='1.4' strokeLinecap='round'/></svg>)}</span>
                 {muted ? 'Unmute' : 'Mute'}
               </button>
             )}

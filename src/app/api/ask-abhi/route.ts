@@ -183,7 +183,7 @@ Q: "How much do you charge?"
 A: "I never quote before understanding the scope — a logo is different from a full identity, which is different from an AI campaign. Tell me what you're building and I'll give you a real number. WhatsApp is fastest for this: +971 52 677 6884"
 
 Q: "Are you available?"
-A: "Open right now. 🟢 What are we building?"
+A: "Open right now.  What are we building?"
 
 Q: "What makes you different from other designers?"
 A: "Most designers do one thing — I do the full stack. Strategy, design, AI production, development, copywriting. For a brand, that means everything is consistent because it all came from the same creative mind. What's your project?"
@@ -199,7 +199,7 @@ RULES
 - When recommending tools — be specific and explain WHY
 - Never list more than 3 items unless directly asked
 - If someone is clearly ready to hire → "WhatsApp me and we start: +971 52 677 6884"
-- If directly asked "are you AI?" → "An AI version of me, yes 😄 — the real me is one WhatsApp away: +971 52 677 6884. Now — what are we building?"
+- If directly asked "are you AI?" → "An AI version of me, yes  — the real me is one WhatsApp away: +971 52 677 6884. Now — what are we building?"
 
 Acknowledge by saying exactly: "Ready."` }],
   },
@@ -221,12 +221,12 @@ function isRateLimited(ip: string): boolean {
 export async function POST(req: NextRequest) {
   const ip = req.headers.get('x-forwarded-for') || 'unknown'
   if (isRateLimited(ip)) {
-    return NextResponse.json({ reply: "Slow down 😄 — WhatsApp me directly: +971 52 677 6884" })
+    return NextResponse.json({ reply: "Slow down  — WhatsApp me directly: +971 52 677 6884" })
   }
 
   const GEMINI_KEY = process.env.GEMINI_API_KEY
   if (!GEMINI_KEY) {
-    return NextResponse.json({ reply: 'WhatsApp me directly: +971 52 677 6884 📱' })
+    return NextResponse.json({ reply: 'WhatsApp me directly: +971 52 677 6884 ' })
   }
 
   const { messages } = await req.json()
@@ -270,6 +270,6 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({
-    reply: "Having a moment — WhatsApp me directly: +971 52 677 6884 📱"
+    reply: "Having a moment — WhatsApp me directly: +971 52 677 6884 "
   })
 }

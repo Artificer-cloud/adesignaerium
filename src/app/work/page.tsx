@@ -113,7 +113,11 @@ export default function WorkPage() {
         <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'3px', color:'var(--orange)', display:'block', marginBottom:'16px' }}>✦ SELECTED WORK</span>
         <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', flexWrap:'wrap', gap:'24px', marginBottom:'36px' }}>
           <h1 style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(44px,10vw,120px)', letterSpacing:'-4px', color:'var(--bone)', lineHeight:.88, margin:0 }}>
-            THE<br/><span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600, color:'var(--orange)' }}>Work.</span>
+            <span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.1s'}}>T</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.16s'}}>H</span></span><span className="char-wrap" style={{lineHeight:'inherit'}}><span className="char-inner" style={{animationDelay:'0.22s'}}>E</span></span>
+            <br/>
+            <span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600 }}>
+              <span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.32s'}}>W</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.38s'}}>o</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.44s'}}>r</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.50s'}}>k</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.56s'}}>.</span></span>
+            </span>
           </h1>
           <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(13px,1.4vw,16px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'300px', lineHeight:1.7 }}>
             7+ years of branding, UI/UX, AI design, motion, and creative direction.
