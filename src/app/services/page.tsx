@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import MagneticButton from '@/components/MagneticButton'
 import { useState } from 'react'
 
 const SERVICES = [
@@ -126,8 +127,8 @@ export default function ServicesPage() {
           letterSpacing:'-3px', color:'var(--bone)', lineHeight:.82,
           textTransform:'uppercase', margin:'0 0 32px',
         }}>
-          Building Brands<br/>
-          <span style={{ color:'var(--orange)', fontFamily:'Cormorant Garamond, Georgia, serif', fontStyle:'italic', fontWeight:600, textTransform:'none', letterSpacing:'-2px' }}>that mean</span><br/>
+          <span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.1s'}}>B</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.17s'}}>u</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.24s'}}>i</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.31s'}}>l</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.38s'}}>d</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.45s'}}>i</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.52s'}}>n</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.59s'}}>g</span></span> <span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.7s'}}>B</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.77s'}}>r</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.84s'}}>a</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.91s'}}>n</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.98s'}}>d</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'1.05s'}}>s</span></span><br/>
+          <span style={{ color:'var(--orange)', fontFamily:'Cormorant Garamond, Georgia, serif', fontStyle:'italic', fontWeight:600, textTransform:'none', letterSpacing:'-2px' }}><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.4s'}}>t</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.47s'}}>h</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.54s'}}>a</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.61s'}}>t</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.68s'}}> </span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.75s'}}>m</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.82s'}}>e</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.89s'}}>a</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.96s'}}>n</span></span></span><br/>
           Something.
         </h1>
         <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', flexWrap:'wrap', gap:'24px' }}>
@@ -135,9 +136,9 @@ export default function ServicesPage() {
             Seven years. Five brands built from scratch. One creative director who does strategy, design, AI production, and code — all under one roof.
           </p>
           <div style={{ display:'flex', gap:'12px' }}>
-            <Link href="/contact" style={{ fontFamily:'Clash Display, Arial Black, sans-serif', fontWeight:600, fontSize:'11px', letterSpacing:'2px', textTransform:'uppercase', background:'var(--orange)', color:'var(--ink)', padding:'13px 28px', borderRadius:'2px', whiteSpace:'nowrap' }}>
-              Start a Project →
-            </Link>
+            <MagneticButton href="/contact" style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:600, fontSize:'11px', letterSpacing:'2px', textTransform:'uppercase', background:'var(--orange)', color:'var(--ink)', padding:'13px 28px', borderRadius:'2px', whiteSpace:'nowrap', border:'none', cursor:'pointer' }}>
+              Start a Project
+            </MagneticButton>
             <Link href="/credentials" style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'2px', textTransform:'uppercase', border:'1px solid var(--border)', color:'var(--muted)', padding:'13px 20px', borderRadius:'2px', whiteSpace:'nowrap' }}>
               Download PDF ↓
             </Link>
@@ -150,7 +151,7 @@ export default function ServicesPage() {
         <div style={{ maxWidth:'1400px', margin:'0 auto', display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:'0' }}>
           {[['7+','Years Experience'],['100+','Brands Touched'],['5','Built from Scratch'],['100%','Client Retention']].map(([n, l]) => (
             <div key={l} style={{ padding:'8px 0', borderRight:'1px solid rgba(0,0,0,0.15)', textAlign:'center' }}>
-              <div style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(28px,5vw,56px)', color:'#080808', lineHeight:1, letterSpacing:'-2px' }}>{n}</div>
+              <div style={{ fontFamily:`'Barlow Condensed', 'Clash Display', sans-serif`, fontWeight:900, fontSize:'clamp(28px,5vw,56px)', color:'#080808', lineHeight:1, letterSpacing:'-2px' }}>{n}</div>
               <div style={{ fontFamily:'var(--font-mono)', fontSize:'8px', letterSpacing:'2px', color:'rgba(0,0,0,0.55)', marginTop:'3px' }}>{l.toUpperCase()}</div>
             </div>
           ))}
@@ -178,7 +179,7 @@ export default function ServicesPage() {
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(100%,240px),1fr))', gap:'clamp(24px,4vw,48px)' }}>
             {PROCESS.map(p => (
               <div key={p.num}>
-                <div style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(56px,8vw,100px)', color:'var(--orange)', lineHeight:1, letterSpacing:'-3px', marginBottom:'16px', opacity:.85 }}>{p.num}</div>
+                <div style={{ fontFamily:`'Barlow Condensed', 'Clash Display', sans-serif`, fontWeight:900, fontSize:'clamp(56px,8vw,100px)', color:'var(--orange)', lineHeight:1, letterSpacing:'-3px', marginBottom:'16px', opacity:.85 }}>{p.num}</div>
                 <h3 style={{ fontFamily:'Clash Display, Arial Black, sans-serif', fontWeight:700, fontSize:'clamp(18px,2vw,24px)', letterSpacing:'-0.5px', color:'var(--bone)', marginBottom:'10px' }}>{p.title}</h3>
                 <p style={{ fontFamily:'var(--font-body)', fontSize:'14px', fontStyle:'italic', color:'var(--muted)', lineHeight:1.7, margin:0 }}>{p.desc}</p>
               </div>
@@ -245,6 +246,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
+      {/* Load Barlow Condensed */}
       <style>{`
         @media(max-width:560px){
           .stats-grid{grid-template-columns:repeat(2,1fr)!important}

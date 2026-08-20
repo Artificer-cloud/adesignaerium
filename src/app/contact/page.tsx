@@ -48,7 +48,7 @@ export default function ContactPage() {
       <section style={{ padding: 'clamp(40px,6vh,80px) clamp(20px,6vw,80px) clamp(24px,4vh,40px)', maxWidth: '1400px', margin: '0 auto' }}>
         <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '3px', color: 'var(--orange)', display: 'block', marginBottom: '16px' }}>✦ LET&apos;S MAKE STUFF</span>
         <h1 style={{ fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700, fontSize: 'clamp(44px,9vw,120px)', letterSpacing: '-4px', color: 'var(--bone)', lineHeight: .88, marginBottom: '16px' }}>
-          CONTACT<br/><span style={{ fontFamily: 'Cormorant Garamond,Georgia,serif', fontStyle: 'italic', fontWeight: 600, color: 'var(--orange)' }}>Me.</span>
+          <span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.1s'}}>C</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.17s'}}>O</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.24s'}}>N</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.31s'}}>T</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.38s'}}>A</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.45s'}}>C</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.52s'}}>T</span></span><br/><span style={{ fontFamily: 'Cormorant Garamond,Georgia,serif', fontStyle: 'italic', fontWeight: 600 }}><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.75s'}}>M</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.82s'}}>e</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}><span className="char-inner" style={{animationDelay:'0.89s'}}>.</span></span></span>
         </h1>
         <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(14px,1.6vw,18px)', fontStyle: 'italic', color: 'var(--muted)', maxWidth: '480px', lineHeight: 1.7 }}>
           Open to brand projects, UI/UX, AI visual production, freelance, and full-time roles. Dubai-based. Globally wired.
@@ -108,7 +108,7 @@ export default function ContactPage() {
                   }}
                 >
                   {status === 'loading' ? 'Sending...' : 'Send Message →'}
-                </button>
+                </MagneticButton>
               </form>
             )}
           </div>

@@ -1,6 +1,7 @@
 'use client'
 import Image from 'next/image'
 import Link from 'next/link'
+import MagneticButton from '@/components/MagneticButton'
 import { useEffect, useState } from 'react'
 
 function useScrollReveal() {
@@ -78,10 +79,8 @@ export default function AboutPage() {
           fontFamily: 'Clash Display,Arial Black,sans-serif', fontWeight: 700,
           fontSize: 'clamp(52px,10vw,130px)', letterSpacing: '-4px',
           color: 'var(--bone)', lineHeight: .86,
-          opacity: mounted ? 1 : 0, transform: mounted ? 'translateY(0)' : 'translateY(32px)',
-          transition: 'all .9s cubic-bezier(.23,1,.32,1) .2s',
         }}>
-          ABOUT<br />
+          <span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.1s'}}>A</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.17s'}}>B</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.24s'}}>O</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.31s'}}>U</span></span><span className="char-wrap" style={{lineHeight:'inherit',color:'inherit'}}><span className="char-inner" style={{animationDelay:'0.38s'}}>T</span></span><br />
           <span style={{ fontFamily: 'Cormorant Garamond,Georgia,serif', fontStyle: 'italic', fontWeight: 600, color: 'var(--orange)' }}>
             Me.
           </span>
