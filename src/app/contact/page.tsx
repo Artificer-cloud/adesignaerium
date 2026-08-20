@@ -107,8 +107,8 @@ export default function ContactPage() {
                     width: '100%', transition: 'background 0.2s',
                   }}
                 >
-                  {status === 'loading' ? 'Sending...' : 'Send Message →'}
-                </MagneticButton>
+                  {status === 'loading' ? 'Sending...' : 'Send Message'}
+                </button>
               </form>
             )}
           </div>
