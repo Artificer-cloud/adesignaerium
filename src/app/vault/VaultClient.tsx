@@ -70,10 +70,22 @@ export default function VaultClient({ images }: { images:GalleryImage[] }) {
   return (
     <main style={{ paddingTop:'80px', minHeight:'100vh' }}>
       <section style={{ padding:'clamp(40px,6vh,80px) clamp(20px,6vw,80px) clamp(24px,4vh,40px)', maxWidth:'1600px', margin:'0 auto' }}>
-        <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'3px', color:'var(--orange)', display:'block', marginBottom:'16px' }}>✦ THE VAULT</span>
+        <span style={{ fontFamily:'var(--font-mono)', fontSize:'10px', letterSpacing:'3px', color:'var(--orange)', display:'block', marginBottom:'16px' }}>— THE VAULT</span>
         <div style={{ display:'flex', alignItems:'flex-end', justifyContent:'space-between', flexWrap:'wrap', gap:'24px', marginBottom:'32px' }}>
           <h1 style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'clamp(44px,10vw,120px)', letterSpacing:'-4px', color:'var(--bone)', lineHeight:.88, margin:0 }}>
-            VISUAL<br/><span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600, color:'var(--orange)' }}>Archives.</span>
+            {'VISUAL'.split('').map((ch, i) => (
+              <span key={i} className="char-wrap" style={{lineHeight:'inherit'}}>
+                <span className="char-inner" style={{animationDelay:`${0.1 + i * 0.07}s`}}>{ch}</span>
+              </span>
+            ))}
+            <br/>
+            <span style={{ fontFamily:'Cormorant Garamond,Georgia,serif', fontStyle:'italic', fontWeight:600 }}>
+              {'Archives.'.split('').map((ch, i) => (
+                <span key={i} className="char-wrap" style={{lineHeight:'inherit',color:'var(--orange)'}}>
+                  <span className="char-inner" style={{animationDelay:`${0.52 + i * 0.06}s`}}>{ch}</span>
+                </span>
+              ))}
+            </span>
           </h1>
           <div style={{ textAlign:'right' }}>
             <p style={{ fontFamily:'var(--font-body)', fontSize:'clamp(13px,1.4vw,16px)', fontStyle:'italic', color:'var(--muted)', maxWidth:'300px', lineHeight:1.7, marginBottom:'6px' }}>Raw visuals, photography, AI art, and everything in between.</p>
