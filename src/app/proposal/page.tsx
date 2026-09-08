@@ -58,6 +58,16 @@ function getRef() {
 export default function ProposalPage() {
   const [ref] = useState(getRef())
 
+  // Hide navbar on this page
+  useEffect(() => {
+    document.body.classList.add('pdf-mode')
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.classList.remove('pdf-mode')
+      document.body.style.overflow = ''
+    }
+  }, [])
+
   // Client details
   const [clientName,    setClientName]    = useState('')
   const [clientCompany, setClientCompany] = useState('')
@@ -233,15 +243,18 @@ export default function ProposalPage() {
             <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', borderBottom:'1px solid #e8e0d5' }}>
               <div style={{ padding:'16px 28px', borderRight:'1px solid #e8e0d5' }}>
                 <div style={{ fontFamily:'monospace', fontSize:'7px', letterSpacing:'3px', color:'#ff4d00', marginBottom:'8px' }}>PREPARED FOR</div>
-                <div style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'14px', color:'#080808' }}>{clientName || 'Client Name'}</div>
-                <div style={{ fontFamily:'monospace', fontSize:'10px', color:'#6a6060', marginTop:'2px' }}>{clientCompany}</div>
-                <div style={{ fontFamily:'monospace', fontSize:'9px', color:'#8a8070', marginTop:'2px' }}>{clientEmail}</div>
+                <div style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'14px', color:'#080808' }}>
+                  {clientName || <span style={{color:'#ccc'}}>Client Name</span>}
+                </div>
+                {clientCompany && <div style={{ fontFamily:'monospace', fontSize:'10px', color:'#6a6060', marginTop:'2px' }}>{clientCompany}</div>}
+                {clientEmail   && <div style={{ fontFamily:'monospace', fontSize:'9px', color:'#8a8070',  marginTop:'2px' }}>{clientEmail}</div>}
               </div>
               <div style={{ padding:'16px 28px' }}>
                 <div style={{ fontFamily:'monospace', fontSize:'7px', letterSpacing:'3px', color:'#ff4d00', marginBottom:'8px' }}>PREPARED BY</div>
                 <div style={{ fontFamily:'Clash Display,Arial Black,sans-serif', fontWeight:700, fontSize:'14px', color:'#080808' }}>Abhijeeth Subhash</div>
-                <div style={{ fontFamily:'monospace', fontSize:'10px', color:'#6a6060', marginTop:'2px' }}>Senior Creative Designer</div>
+                <div style={{ fontFamily:'monospace', fontSize:'10px', color:'#ff4d00', marginTop:'2px' }}>Senior Creative Designer · Dubai, UAE</div>
                 <div style={{ fontFamily:'monospace', fontSize:'9px', color:'#8a8070', marginTop:'2px' }}>adesignaerium.com</div>
+                <div style={{ fontFamily:'monospace', fontSize:'9px', color:'#8a8070', marginTop:'1px' }}>+971 52 677 6884</div>
               </div>
             </div>
 
@@ -366,6 +379,8 @@ export default function ProposalPage() {
         body { margin:0; background:#111; }
         .proposal-wrapper {
           display:flex; height:100vh; overflow:hidden;
+          position:fixed; inset:0; z-index:100;
+          background:#111;
         }
         .proposal-controls {
           width:320px; min-width:280px; background:#080808;
